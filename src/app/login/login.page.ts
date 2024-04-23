@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
 
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -13,7 +14,7 @@ import { Router } from '@angular/router';
 })
 export class LoginPage implements OnInit {
 
-  UserId : string | undefined;
+  UserName: string | undefined;
   UserPassword : string | undefined;
 
   constructor(private router : Router) { }
@@ -23,17 +24,23 @@ export class LoginPage implements OnInit {
   }
 
   login(){
-    console.log('ID USUARIO : ',this.UserId)
+    console.log('ID USUARIO : ',this.UserName)
     console.log('CONTRASEÑA USUARIO : ',this.UserPassword)
 
 
   }
 
   newUser(){
-    this.router.navigate(['/new-account']);
+    console.log("antes boton")
+    this.router.navigate(['principal-page']);
+    console.log("despues boton")
+  
+
 
 
   }
-  
+
+
+ 
 
 }

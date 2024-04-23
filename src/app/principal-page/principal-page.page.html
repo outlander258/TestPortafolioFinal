@@ -1,0 +1,21 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Bienvenido/as a DriverLink</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">PrincipalPage</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <p>¿eres nuevo? registrate</p>
+  <ion-button class="UserRegister-button"(click)="RegisterUser()"  expand="block">Registro usuario</ion-button>
+  <p>Trabaja con nosotros </p>
+  <ion-button class="DriverRegister-button"(click)="RegisterDriver()"  expand="block">Registro conductor</ion-button>
+  <p> ya posees una cuenta?,conectate !!</p>
+  <ion-button class="Login-button"(click)="Test()"  expand="block"> Sign in</ion-button>
+ 
+
+</ion-content>
