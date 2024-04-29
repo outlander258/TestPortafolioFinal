@@ -24,7 +24,7 @@ export class LoginPage implements OnInit {
   }
 
   login(){
-    console.log('ID USUARIO : ',this.UserName)
+    console.log('Nombre Usuario: ',this.UserName)
     console.log('CONTRASEÑA USUARIO : ',this.UserPassword)
 
 
@@ -34,12 +34,13 @@ export class LoginPage implements OnInit {
     console.log("antes boton")
     this.router.navigate(['principal-page']);
     console.log("despues boton")
-  
 
 
 
   }
-
+GetBack(){
+  this.router.navigate(['principal-page']);
+}
 
  
 

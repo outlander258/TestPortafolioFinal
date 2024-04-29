@@ -11,14 +11,8 @@ export const routes: Routes = [
     path: 'login',
     loadComponent: () => import('./login/login.page').then( m => m.LoginPage)
   },
-  {
-    path: 'new-account',
-    loadComponent: () => import('./new-account/new-account.page').then( m => m.NewAccountPage)
-  },
-  {
-    path: 'login-driver',
-    loadComponent: () => import('./login-driver/login-driver.page').then( m => m.LoginDriverPage)
-  },
+
+
   {
     path: 'principal-page',
     loadComponent: () => import('./principal-page/principal-page.page').then( m => m.PrincipalPagePage)

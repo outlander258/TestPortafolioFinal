@@ -32,7 +32,7 @@ export class RegisterUserPage implements OnInit {
     console.log('Contraseña : ', this.PassUser);
     console.log('Confir Contaseña : ', this.ConfirmUser);
   
-    if (!this.NameUser) {
+    if (!this.NameUser?.trim()) {
       alert('Por favor, ingresa tu nombre.');
       return;
     }
@@ -42,7 +42,7 @@ export class RegisterUserPage implements OnInit {
       return;
     }
   
-    if (!this.AppUser) {
+    if (!this.AppUser?.trim()) {
       alert('Por favor, ingresa tu apellido');
       return;
     }
@@ -52,7 +52,7 @@ export class RegisterUserPage implements OnInit {
       return;
     }
   
-    if (!this.RunUser) {
+    if (!this.RunUser?.trim()) {
       alert('Por favor, ingresa tu RUN ');
       return;
     }
@@ -62,7 +62,7 @@ export class RegisterUserPage implements OnInit {
       return;
     }
   
-    if (!this.PassUser) {
+    if (!this.PassUser?.trim()) {
       alert('Por favor, ingresa tu contraseña.');
       return;
     }

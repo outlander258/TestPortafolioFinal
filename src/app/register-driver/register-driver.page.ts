@@ -14,6 +14,7 @@ export class RegisterDriverPage implements OnInit {
   NameDriver : string | undefined;
   AppDriver :string | undefined;
   RunDriver :string | undefined;
+  DirectDriver :string| undefined;
   PassDriver :string | undefined;
   ConfirmDriver :string | undefined;
 
@@ -30,10 +31,11 @@ export class RegisterDriverPage implements OnInit {
     console.log('Nombre : ', this.NameDriver);
     console.log('Apellido : ', this.AppDriver);
     console.log('RUN : ', this.RunDriver);
+    console.log('Dirección : ', this.DirectDriver)
     console.log('Contraseña : ', this.PassDriver);
     console.log('Confir Contaseña : ', this.ConfirmDriver);
   
-    if (!this.NameDriver) {
+    if (!this.NameDriver?.trim()) {
       alert('Por favor, ingresa tu nombre.');
       return;
     }
@@ -43,7 +45,7 @@ export class RegisterDriverPage implements OnInit {
       return;
     }
   
-    if (!this.AppDriver) {
+    if (!this.AppDriver?.trim()) {
       alert('Por favor, ingresa tu apellido');
       return;
     }
@@ -53,7 +55,7 @@ export class RegisterDriverPage implements OnInit {
       return;
     }
   
-    if (!this.RunDriver) {
+    if (!this.RunDriver?.trim()) {
       alert('Por favor, ingresa tu RUN ');
       return;
     }
@@ -62,8 +64,12 @@ export class RegisterDriverPage implements OnInit {
       alert('Ingresa tu RUN sin dígito verificador : EJEMPLO : 18033767');
       return;
     }
+
+    if (!this.DirectDriver?.trim()){
+      alert('Ingresa tu dirección')
+    }
   
-    if (!this.PassDriver) {
+    if (!this.PassDriver?.trim()) {
       alert('Por favor, ingresa tu contraseña.');
       return;
     }
