@@ -22,8 +22,6 @@
   </ion-item>
 
 
-  
-
 
   <ion-item>
     <ion-label position="floating">Rut</ion-label>
@@ -47,5 +45,9 @@
     <ion-label position="floating">Confirma Contraseña</ion-label>
     <ion-input type="password" [(ngModel)]="ConfirmDriver"></ion-input>
   </ion-item>
+
+
+
   <ion-button class="FormDriver-button" (click)="ValidarFormDriver()" expand="block">Registrar Conductor</ion-button>
+  <ion-button class="back-button" (click)="GetBack()" expand="block">Volver</ion-button>
 </ion-content>
