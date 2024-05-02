@@ -1,20 +1,24 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>Bienvenido/as a DriverLink</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
+  <ion-header cl="Header" collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">PrincipalPage</ion-title>
+      <ion-title class="PageTitle" size="large"><p class="TitleDrive">Drive</p><p class="TitleLink">Link</p></ion-title>
     </ion-toolbar>
   </ion-header>
-  <p>¿eres nuevo? registrate aquí</p>
-  <ion-button class="UserRegister-button"(click)="RegisterUser()"  expand="block">Registro usuario</ion-button>
-  <p>Trabaja con nosotros </p>
-  <ion-button class="DriverRegister-button"(click)="RegisterDriver()"  expand="block">Registro conductor</ion-button>
-  <p>¿ya posees una cuenta? ingresa aquí !!!</p>
-  <ion-button class="Login-button"(click)="LoginAccount()"  expand="block"> Sign in</ion-button>
+  <div  class="Welcome">
+    <p>Bienvenidos a DriveLink con nuestra plataforma, 
+      encontrar choferes confiables para tus nesecidades 
+      de transporte nunca ha sido tan fácil. Desde la
+      entrega de productos hasta el transporte personal,
+      estamos aquí para simplificar tu transporte.</p>
+      <br>
+      <p>Regístrate para ser parte de esta comunidad</p>
+      <br>
+  </div>    
+  <ion-button class="UserRegister-button"(click)="RegisterUser()"  expand="block">Registrarme como usuario</ion-button>
+  <br><br><br>
+  <ion-button class="DriverRegister-button"(click)="RegisterDriver()"  expand="block">Registrarme como conductor</ion-button>
+  <br><br>
+  <p>¿Ya eres parte de nuestra comunidad?</p>
+  <ion-button class="Login-button"(click)="LoginAccount()"  expand="block"> Iniciar sesión</ion-button>
 
 </ion-content>

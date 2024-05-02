@@ -1,53 +1,79 @@
-<ion-header [translucent]="true">
+<!-- <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>Registro Conductor</ion-title>
   </ion-toolbar>
-</ion-header>
+</ion-header> -->
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">RegisterDriver</ion-title>
+      <ion-title class="driver-register" size="large">Registro de chofer</ion-title>
     </ion-toolbar>
   </ion-header>
 
   <ion-item>
-    <ion-label position="floating">Nombre</ion-label>
+    <ion-label position="floating">Nombre:</ion-label>
     <ion-input type="text" [(ngModel)]="NameDriver"></ion-input>
   </ion-item>
 
   <ion-item>
-    <ion-label position="floating">Apellido</ion-label>
+    <ion-label position="floating">Apellido:</ion-label>
     <ion-input type="text" [(ngModel)]="AppDriver"></ion-input>
   </ion-item>
 
 
 
   <ion-item>
-    <ion-label position="floating">Rut</ion-label>
+    <ion-label position="floating">Rut:</ion-label>
     <ion-input type="text" [(ngModel)]="RunDriver"></ion-input>
   </ion-item>
 
-
+  <!-- Hacer validacion y cambiar ngModel -->
   <ion-item>
-    <ion-label position="floating">Dirección</ion-label>
+    <ion-label position="floating">Email:</ion-label>
     <ion-input type="text" [(ngModel)]="DirectDriver"></ion-input>
   </ion-item>
 
 
 
   <ion-item>
-    <ion-label position="floating">Contraseña</ion-label>
+    <ion-label position="floating">Contraseña:</ion-label>
     <ion-input type="password" [(ngModel)]="PassDriver"></ion-input>
   </ion-item>
 
   <ion-item>
-    <ion-label position="floating">Confirma Contraseña</ion-label>
+    <ion-label position="floating">Confirma Contraseña:</ion-label>
     <ion-input type="password" [(ngModel)]="ConfirmDriver"></ion-input>
   </ion-item>
 
+  <!-- Hacer validacion y cambiar ngModel -->
+  <ion-item>
+    <ion-label position="floating">Celular:</ion-label>
+    <ion-input type="text" [(ngModel)]="DirectDriver"></ion-input>
+  </ion-item>
+  <br><br>
 
+    <!-- Validar -->
+    <div class="vehicle-driver">
+      <ion-radio-group value="strawberries">
+        <p>¿Posees un vehículo?</p>
+        <ion-radio value="vehicle-yes">SI</ion-radio><br />
+        <ion-radio value="vehicle-no">NO</ion-radio><br />
+      </ion-radio-group>
+    </div>
+    <br>
+
+    <!-- Validar -->
+  <div class="licenses">
+    <p>Licencia(s) de conducir:</p> 
+    <input type="file">
+    <br><br>
+    <input type="file">
+  </div>
+  <br><br>
 
   <ion-button class="FormDriver-button" (click)="ValidarFormDriver()" expand="block">Registrar Conductor</ion-button>
+  <br>
   <ion-button class="back-button" (click)="GetBack()" expand="block">Volver</ion-button>
+  <br>
 </ion-content>
