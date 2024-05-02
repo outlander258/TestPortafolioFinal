@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Abyssinica+SIL&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Jaldi:wght@400;700&display=swap');
 
 .Header,.ion-toolbar,.ion-header, .PageTitle{
     background-color: #012c56;
@@ -41,6 +42,8 @@
 
 .welcome p, p{
     text-align: center;
+    font-family: 'Jaldi', sans-serif;
+    font-weight: 400;
 }
 
 .UserRegister-button{
