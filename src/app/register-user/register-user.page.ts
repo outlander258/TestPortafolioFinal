@@ -15,8 +15,10 @@ export class RegisterUserPage implements OnInit {
   NameUser :String | undefined;
   AppUser :String | undefined;
   RunUser :String | undefined;
+  EmailUser :string | undefined;
   PassUser :String | undefined;
   ConfirmUser:string | undefined;
+  CelUser :string | undefined;
   
 
 
@@ -37,6 +39,7 @@ export class RegisterUserPage implements OnInit {
     console.log('RUN : ', this.RunUser);
     console.log('Contraseña : ', this.PassUser);
     console.log('Confir Contaseña : ', this.ConfirmUser);
+    console.log('Celular : ' ,this.CelUser);
   
     if (!this.NameUser?.trim()) {
       alert('Por favor, ingresa tu nombre.');
@@ -67,6 +70,26 @@ export class RegisterUserPage implements OnInit {
       alert('Ingresa tu RUN sin dígito verificador : EJEMPLO : 18033767');
       return;
     }
+
+    if(!this.EmailUser?.trim()){
+      alert('Ingresa un Email para tu registro')
+    }
+
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+if (!emailPattern.test(this.EmailUser|| '')) {
+  alert('La dirección de correo electrónico no es válida. Por favor, inténtalo de nuevo.');
+  return;
+}
+
+  
+
+
+
+
+
+
+
+
   
     if (!this.PassUser?.trim()) {
       alert('Por favor, ingresa tu contraseña.');
@@ -100,8 +123,24 @@ export class RegisterUserPage implements OnInit {
       alert('Las contraseñas no coinciden. Por favor, inténtalo de nuevo.');
       return;
     }
+
+    if(!this.CelUser?.trim()){
+      alert('Ingresa tu número de teléfono .');
+      return;
+    }
+
+    const celular = Number(this.CelUser);
+    if (isNaN(celular) || celular.toString().length < 8 || celular.toString().length > 9) {
+      alert('Asegurate de ingresar un número válido, debe contener entre 8 y 9 dígitos.');
+      return;
+    }
+
+
+    
+
+
   
-    console.log('Contraseñas coinciden');
+    console.log('Registro exitoso...');
   }
 }
 

@@ -15,9 +15,15 @@ export class RegisterDriverPage implements OnInit {
   NameDriver : string | undefined;
   AppDriver :string | undefined;
   RunDriver :string | undefined;
+  EmailDriver:string | undefined;
   DirectDriver :string| undefined;
   PassDriver :string | undefined;
   ConfirmDriver :string | undefined;
+  CelDriver :string | undefined;
+  
+
+
+
 
 
 
@@ -40,6 +46,7 @@ export class RegisterDriverPage implements OnInit {
     console.log('Dirección : ', this.DirectDriver)
     console.log('Contraseña : ', this.PassDriver);
     console.log('Confir Contaseña : ', this.ConfirmDriver);
+    console.log ('número de contacto : ',this.CelDriver);
   
     if (!this.NameDriver?.trim()) {
       alert('Por favor, ingresa tu nombre.');
@@ -70,6 +77,20 @@ export class RegisterDriverPage implements OnInit {
       alert('Ingresa tu RUN sin dígito verificador : EJEMPLO : 18033767');
       return;
     }
+
+    if(!this.EmailDriver?.trim()){
+      alert('Ingresa un Email para tu registro')
+    }
+
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+if (!emailPattern.test(this.EmailDriver || '')) {
+  alert('La dirección de correo electrónico no es válida. Por favor, inténtalo de nuevo.');
+  return;
+}
+
+
+
+
 
     if (!this.DirectDriver?.trim()){
       alert('Ingresa tu dirección')
@@ -106,8 +127,26 @@ export class RegisterDriverPage implements OnInit {
       alert('Las contraseñas no coinciden. Por favor, inténtalo de nuevo.');
       return;
     }
-  
-    console.log('Contraseñas coinciden');
-  }
 
+    if (!this.CelDriver?.trim()) {
+      alert('Por favor, ingresa tu número de celular.');
+      return;
+    }
+    
+    const celular = Number(this.CelDriver);
+    if (isNaN(celular) || celular.toString().length < 8 || celular.toString().length > 9) {
+      alert('Asegurate de ingresar un número válido, debe contener entre 8 y 9 dígitos.');
+      return;
+    }
+
+
+
+ 
+
+
+  
+    console.log('Registro exitoso');
+  
+
+}
 }
