@@ -4,53 +4,55 @@
   </ion-toolbar>
 </ion-header> -->
 
-<ion-content [fullscreen]="true">
+<ion-content class="content" [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title class="driver-register" size="large">Registro de chofer</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <ion-item>
-    <ion-label position="floating">Nombre:</ion-label>
-    <ion-input type="text" [(ngModel)]="NameDriver"></ion-input>
-  </ion-item>
+  <div class="labels">
+    <ion-item>
+      <ion-label position="floating">Nombre:</ion-label>
+      <ion-input type="text" [(ngModel)]="NameDriver"></ion-input>
+    </ion-item>
 
-  <ion-item>
-    <ion-label position="floating">Apellido:</ion-label>
-    <ion-input type="text" [(ngModel)]="AppDriver"></ion-input>
-  </ion-item>
-
-
-
-  <ion-item>
-    <ion-label position="floating">Rut:</ion-label>
-    <ion-input type="text" [(ngModel)]="RunDriver"></ion-input>
-  </ion-item>
-
-  <!-- Hacer validacion y cambiar ngModel -->
-  <ion-item>
-    <ion-label position="floating">Email:</ion-label>
-    <ion-input type="text" [(ngModel)]="DirectDriver"></ion-input>
-  </ion-item>
+    <ion-item>
+      <ion-label position="floating">Apellido:</ion-label>
+      <ion-input type="text" [(ngModel)]="AppDriver"></ion-input>
+    </ion-item>
 
 
 
-  <ion-item>
-    <ion-label position="floating">Contraseña:</ion-label>
-    <ion-input type="password" [(ngModel)]="PassDriver"></ion-input>
-  </ion-item>
+    <ion-item>
+      <ion-label position="floating">Rut:</ion-label>
+      <ion-input type="text" [(ngModel)]="RunDriver"></ion-input>
+    </ion-item>
 
-  <ion-item>
-    <ion-label position="floating">Confirma Contraseña:</ion-label>
-    <ion-input type="password" [(ngModel)]="ConfirmDriver"></ion-input>
-  </ion-item>
+    <!-- Hacer validacion y cambiar ngModel -->
+    <ion-item>
+      <ion-label position="floating">Email:</ion-label>
+      <ion-input type="text" [(ngModel)]="DirectDriver"></ion-input>
+    </ion-item>
 
-  <!-- Hacer validacion y cambiar ngModel -->
-  <ion-item>
-    <ion-label position="floating">Celular:</ion-label>
-    <ion-input type="text" [(ngModel)]="DirectDriver"></ion-input>
-  </ion-item>
+
+
+    <ion-item>
+      <ion-label position="floating">Contraseña:</ion-label>
+      <ion-input type="password" [(ngModel)]="PassDriver"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Confirma Contraseña:</ion-label>
+      <ion-input type="password" [(ngModel)]="ConfirmDriver"></ion-input>
+    </ion-item>
+
+    <!-- Hacer validacion y cambiar ngModel -->
+    <ion-item>
+      <ion-label position="floating">Celular:</ion-label>
+      <ion-input type="text" [(ngModel)]="DirectDriver"></ion-input>
+    </ion-item>
+  </div>
   <br><br>
 
     <!-- Validar -->
@@ -69,7 +71,8 @@
     <input type="file">
     <br><br>
     <input type="file">
-  </div>
+  </div> 
+  
   <br><br>
 
   <ion-button class="FormDriver-button" (click)="ValidarFormDriver()" expand="block">Registrar Conductor</ion-button>

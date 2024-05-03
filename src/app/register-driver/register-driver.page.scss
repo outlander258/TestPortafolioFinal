@@ -1,6 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Abyssinica+SIL&display=swap');
 
+ion-content.content {
+    --ion-background-color: #012c56;
+}
 
+.labels{
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 10px;
+}
 
 .driver-register{
     --color: #ffb800;
@@ -16,6 +24,14 @@
     display: flex;
     text-align: center;
 }
+
+.licenses{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 
 .FormDriver-button{
     --background: #f1f1f1;

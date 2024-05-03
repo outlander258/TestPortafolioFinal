@@ -1,7 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Abyssinica+SIL&display=swap');
 
-.content{
-    background: #012c56;
+ion-content.content {
+    --ion-background-color: #012c56;
+}
+
+.labels{
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 10px;
 }
 
 .User-Register {

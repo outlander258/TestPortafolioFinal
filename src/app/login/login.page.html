@@ -1,32 +1,39 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Bienvenido a DriverLink</ion-title>
+    <ion-title>Bienvenido a DriveLink</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content class="content" [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title class="login" size="large">Iniciar sesión</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <ion-item>
-    <ion-label position="floating">Nombre de usuario</ion-label>
-    <ion-input type="text" [(ngModel)]="UserName"></ion-input>
-    <br>
-  </ion-item>
+  <div class="labels">
+    <ion-item>
+      <ion-label position="floating">Nombre de usuario</ion-label>
+      <ion-input type="text" [(ngModel)]="UserName"></ion-input>
+      <br>
+    </ion-item>
 
-  <ion-item>
-    <ion-label position="floating">Contraseña</ion-label>
-    <ion-input type="password" [(ngModel)]="UserPassword"></ion-input>
-    <br>
-  </ion-item>
+    <ion-item>
+      <ion-label position="floating">Contraseña</ion-label>
+      <ion-input type="password" [(ngModel)]="UserPassword"></ion-input>
+      <br>
+    </ion-item>
+  </div>
   <br>
 
   <ion-button class="login-button" (click)="login()" expand="block">Ingresar</ion-button>
   <br><br>
 
   <ion-button class="back-button" (click)="GetBack()" expand="block">Volver</ion-button>
+  <br><br>
+  <div class="title">
+   <h1 class="TitleDrive">Drive</h1><h1 class="TitleLink">Link</h1>
+  </div>
+
 
 </ion-content>
