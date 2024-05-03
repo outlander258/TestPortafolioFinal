@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Abyssinica+SIL&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+.content {
+    --background: #012c56;
+}
+
+.PageTitle{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    padding-bottom: 1rem;
+    padding-top: 2rem;
+}
+
+.editar-perfil{
+    --background: #f1f1f1;
+    color: #000000;
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+.cerrar-sesion{
+    --background: #f1f1f1;
+    color: #000000;
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+.input-container {
+    display: flex;
+    justify-content: center;
+}
+
+.TitleDrive,.TitleLink{
+    display: inline;
+    font-size: 2em;
+    padding-bottom: 20px;
+    
+}
+
+.TitleDrive{
+    font-family: 'inter', sans-serif;
+    font-weight: 300;
+}
+
+.TitleLink{
+    font-family: 'Abyssinica SIL', serif;
+    font-weight: 300;
+}
+
+.TitleLink{
+    color:#FFB800 ;
+}
+
+.title {
+    display: flex;
+    justify-content: center;
+}

@@ -1,13 +1,32 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Bienvenido conductor/a</ion-title>
+    <ion-title>Bienvenido Usuario/a</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content class="content" [fullscreen]="true">
   <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">driver-page</ion-title>
-    </ion-toolbar>
+      <ion-title class="PageTitle" size="large">Bienvenido <br> [Nombre de usuario]</ion-title>
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>[Nombre y apellido]</ion-card-title>
+        <ion-card-subtitle>[tipo de usuario]</ion-card-subtitle>
+      </ion-card-header>
+    
+      <ion-card-content>
+        Here's a small text description for the card content. Nothing more, nothing less.
+      </ion-card-content>
+    </ion-card>
+    <br>
   </ion-header>
+  <br><br><br>
+  <ion-button class="editar-perfil" expand="block">Editar perfil</ion-button>
+  <br><br>
+  <ion-button class="cerrar-sesion" expand="block">Cerrar sesión</ion-button>
+  <br><br><br>
+  <div class="title">
+    <h1 class="TitleDrive">Drive</h1><h1 class="TitleLink">Link</h1>
+  </div>
+  
+
 </ion-content>
