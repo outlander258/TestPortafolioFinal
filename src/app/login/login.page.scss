@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Abyssinica+SIL&display=swap');
+
+.login{
+    --color: #ffb800;
+    font-family: 'inter', sans-serif;
+    font-weight: 300;
+    justify-content: center;
+    display: flex;
+    text-align: center;
+}
+
+.login-button{
+    --background: #f1f1f1;
+    color: #000000;
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+.back-button{
+    --background: #f1f1f1;
+    color: #000000;
+    padding-right: 20px;
+    padding-left: 20px;
+}
