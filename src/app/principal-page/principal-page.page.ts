@@ -14,30 +14,33 @@ import { ServiceService } from '../service/service.service';
 })
 export class PrincipalPagePage implements OnInit {
 
-  constructor( private router :Router, private service: ServiceService) { }
+  constructor(private router: Router, private service: ServiceService) { }
 
   ngOnInit() {
+    this.datos();
   }
 
-  RegisterUser(){
+  RegisterUser() {
     this.router.navigate(['/register-user']);
 
 
   }
 
-  RegisterDriver(){
+  RegisterDriver() {
     this.router.navigate(['/register-driver']);
 
   }
 
-  LoginAccount(){
+  LoginAccount() {
     this.router.navigate(['/login'])
   }
 
-  Test(){
-    this.service.consulta().subscribe((data) => {
-      console.log(data); // Aquí puedes trabajar con los datos devueltos por el servicio
+  datos() {
+    this.service.getDatos().subscribe((datos:any) => {
+      console.log('Datos obtenidos',datos);
+
+    }, (error: any) => {
+      console.log('Error al obtener los datos',error);
     });
   }
-
 }
