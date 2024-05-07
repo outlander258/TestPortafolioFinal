@@ -35,6 +35,7 @@ export class PrincipalPagePage implements OnInit {
     this.router.navigate(['/login'])
   }
 
+
   datos() {
     this.service.getDatos().subscribe((datos:any) => {
       console.log('Datos obtenidos',datos);
@@ -43,4 +44,5 @@ export class PrincipalPagePage implements OnInit {
       console.log('Error al obtener los datos',error);
     });
   }
+
 }

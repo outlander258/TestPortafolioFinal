@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-driver-page',
@@ -12,9 +13,14 @@ import { IonicModule } from '@ionic/angular';
 })
 export class DriverPagePage implements OnInit {
 
-  constructor() { }
+  constructor( private router : Router) { }
 
   ngOnInit() {
+  }
+
+  logout(){
+    this.router.navigate(['login'])
+
   }
 
 }
