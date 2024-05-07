@@ -29,7 +29,7 @@ export const routes: Routes = [
   {
     path: 'user-page',
     loadComponent: () => import('./user-page/user-page.page').then( m => m.UserPagePage),
-    canActivate :[demonGuard]
+    // canActivate :[demonGuard]
   },
   {
     path: 'driver-page',
