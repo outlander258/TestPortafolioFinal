@@ -17,6 +17,7 @@ export class PrincipalPagePage implements OnInit {
   constructor( private router :Router, private service: ServiceService) { }
 
   ngOnInit() {
+    this.datos();
   }
 
   RegisterUser(){
@@ -34,10 +35,20 @@ export class PrincipalPagePage implements OnInit {
     this.router.navigate(['/login'])
   }
 
-  Test(){
-    this.service.consulta().subscribe((data) => {
-      console.log(data); // Aquí puedes trabajar con los datos devueltos por el servicio
+ 
+
+  datos() {
+    this.service.getDatos().subscribe((datos:any) => {
+      console.log('Datos obtenidos',datos);
+
+    }, (error: any) => {
+      console.log('Error al obtener los datos',error);
     });
   }
+
+ 
+
+
+
 
 }

@@ -3,21 +3,21 @@ import { CanActivateFn} from "@angular/router";
 import { Router } from "@angular/router";
 
 export const demonGuard : CanActivateFn = () =>{
-    const userStorage =localStorage.getItem('username');
+  const userStorage = localStorage.getItem('tipo_usuario');
     const redirect = inject(Router)
    
   
 
     if (userStorage === 'USER') {
-      return true ; // Permite el acceso a la ruta 'user'
+      return true ; 
     } else if (userStorage === 'DRIVER') {
-      return true; // Permite el acceso a la ruta 'DRIVER'
+      return true; 
 
     } else if (userStorage === 'ADMIN') {
-        return true; // Permite el acceso a la ruta 'ADMIN'
+        return true; 
 
     }else {
-      // Redirige a la página de inicio de sesión si el tipo de usuario no es válido
+      
       return redirect.navigate(['/login']);
     }
   }

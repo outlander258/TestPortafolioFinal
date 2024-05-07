@@ -1,13 +1,22 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>Bienvenido administrador/a</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()">Cerrar sesión</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">admin-page</ion-title>
+      <ion-title size="large">Lista de conductores</ion-title>
     </ion-toolbar>
   </ion-header>
+   <!--<ion-list>
+
+   <ion-item *ngFor="let driver of drivers">
+      {{ driver.nombre }} - {{ driver.apellido }}
+    </ion-item> 
+  </ion-list> -->
 </ion-content>

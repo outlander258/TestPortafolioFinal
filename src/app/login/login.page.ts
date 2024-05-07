@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { ModelLog } from '../modelo/ModelLog';
+import { ServiceService } from '../service/service.service';
+import { lastValueFrom } from 'rxjs';
 
 
 @Component({
@@ -14,29 +17,67 @@ import { Router } from '@angular/router';
 })
 export class LoginPage implements OnInit {
 
-  UserName: string | undefined;
-  UserPassword : string | undefined;
+  UserName: string = '';
+  UserPassword: string = '';
+  UserLogin :ModelLog ={
+    id :'',
+    primer_Nombre:'',
+    segundoNombre :'',
+    tipo_usuario : 0,
+    primerApellido: '',
+    segundoApellido: '',
+    rut :'',
+    telefono : '',
+    email : '',
+    contraseña :'',
+    verificado : '',
 
-  constructor(private router : Router) { }
+
+  }
+
+ 
+
+  constructor(private router : Router, private servicio :ServiceService) { }
+
+
+ 
+
+
+
+
+
+
 
   ngOnInit() {
 
   }
 
-  login(){
-    console.log('Nombre Usuario: ',this.UserName)
-    console.log('CONTRASEÑA USUARIO : ',this.UserPassword)
-
-
-  }
-
-  newUser(){
-    console.log("antes boton")
-    this.router.navigate(['principal-page']);
-    console.log("despues boton")
-
-
-
+  async login(){
+    if (this.UserName && this.UserPassword) {
+      this.UserLogin.email = this.UserName!;
+      this.UserLogin.contraseña = this.UserPassword!;
+    
+      const respuesta = await lastValueFrom(this.servicio.getLogin(this.UserLogin));
+      if (respuesta && respuesta.email && respuesta.email.toLowerCase() === this.UserLogin.email.toLowerCase() && respuesta.contraseña === this.UserLogin.contraseña){
+        console.log('inicio de sesión exitoso')
+        if(respuesta.tipo_usuario === 1){
+          localStorage.setItem('tipo_usuario', 'ADMIN');
+          this.router.navigate(['admin-page']);
+        } else if (respuesta.tipo_usuario === 2) {
+          localStorage.setItem('tipo_usuario', 'DRIVER'); 
+          this.router.navigate(['driver-page']);
+        } else if (respuesta.tipo_usuario === 3) {
+          localStorage.setItem('tipo_usuario', 'USER'); 
+          this.router.navigate(['user-page']);
+        } else {
+          console.log('Tipo de usuario desconocido');
+        }
+      } else {
+        console.log('credenciales inválidas');
+      }
+    } else {
+      console.log('Nombre de usuario o contraseña no válidos');
+    }
   }
 GetBack(){
   this.router.navigate(['principal-page']);
