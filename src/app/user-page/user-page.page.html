@@ -6,31 +6,65 @@
 
 <ion-content class="content" [fullscreen]="true">
   <ion-header collapse="condense">
-      <ion-title class="PageTitle" size="large">Bienvenido <br> [Nombre de usuario]</ion-title>
+    <ion-title class="PageTitle" size="large">Bienvenido <br> [Nombre de usuario]</ion-title>
     <ion-card>
       <ion-card-header>
         <ion-card-title>[Nombre y apellido]</ion-card-title>
         <ion-card-subtitle>[tipo de usuario]</ion-card-subtitle>
       </ion-card-header>
-    
+
       <ion-card-content>
         Here's a small text description for the card content. Nothing more, nothing less.
       </ion-card-content>
     </ion-card>
     <br>
   </ion-header>
+
   <div class="input-container">
-    <!-- <ion-input class="buscar-chofer" label="Buscar chofer: " label-placement="floating" fill="solid" placeholder="Juan Perez"></ion-input> -->
-    <ion-searchbar animated="true" placeholder="Buscar chofer:"></ion-searchbar>
+
+    <ion-button class="buscar-chofer" expand="block" (click)="setOpenModalConductor(true)">Buscar Conductor</ion-button>
+
+
+
+    <ion-modal [isOpen]="modalConductor">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>Conductores</ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="setOpenModalConductor(false)">Cerrar</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content class="ion-padding">
+
+
+          <ion-list *ngFor="let conductor of conductores">
+            <ion-item>
+              <ion-label>
+              {{conductor.primer_nombre}} {{conductor.primer_apellido}}</ion-label>
+              <ion-label slot="end">{{conductor.telefono}} </ion-label>
+            </ion-item>
+
+          </ion-list>
+
+
+
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+
   </div>
+
   <br><br><br>
   <ion-button class="editar-perfil" expand="block">Editar perfil</ion-button>
   <br><br>
   <ion-button class="cerrar-sesion" expand="block" (click)="logout()">Cerrar sesión</ion-button>
   <br><br><br>
   <div class="title">
-    <h1 class="TitleDrive">Drive</h1><h1 class="TitleLink">Link</h1>
+    <h1 class="TitleDrive">Drive</h1>
+    <h1 class="TitleLink">Link</h1>
   </div>
-  
+
 
 </ion-content>
