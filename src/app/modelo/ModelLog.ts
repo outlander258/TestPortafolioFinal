@@ -1,15 +1,15 @@
 export interface ModelLog{
-    id : string;
-    primer_Nombre :string;
-    segundoNombre :string;
+    id : number | undefined;
+    primer_nombre :string;
+    segundo_nombre :string;
     tipo_usuario :number
-    primerApellido :string;
-    segundoApellido :string;
+   primer_apellido :string;
+    segundo_apellido :string;
     rut :string;
     telefono :string;
     email:string;
     contraseña: string;
-    verificado: string;
+    verificado: boolean;
 
 
 

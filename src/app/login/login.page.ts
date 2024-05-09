@@ -20,17 +20,17 @@ export class LoginPage implements OnInit {
   UserName: string = '';
   UserPassword: string = '';
   UserLogin :ModelLog ={
-    id :'',
-    primer_Nombre:'',
-    segundoNombre :'',
+    id : undefined ,
+    primer_nombre:'',
+    segundo_nombre :'',
     tipo_usuario : 0,
-    primerApellido: '',
-    segundoApellido: '',
+    primer_apellido: '',
+    segundo_apellido: '',
     rut :'',
     telefono : '',
     email : '',
     contraseña :'',
-    verificado : '',
+    verificado : false,
 
 
   }
