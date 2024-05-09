@@ -14,28 +14,27 @@ import { ServiceService } from '../service/service.service';
 })
 export class PrincipalPagePage implements OnInit {
 
-  constructor( private router :Router, private service: ServiceService) { }
+  constructor(private router: Router, private service: ServiceService) { }
 
   ngOnInit() {
     this.datos();
   }
 
-  RegisterUser(){
+  RegisterUser() {
     this.router.navigate(['/register-user']);
 
 
   }
 
-  RegisterDriver(){
+  RegisterDriver() {
     this.router.navigate(['/register-driver']);
 
   }
 
-  LoginAccount(){
+  LoginAccount() {
     this.router.navigate(['/login'])
   }
 
- 
 
   datos() {
     this.service.getDatos().subscribe((datos:any) => {
@@ -45,10 +44,5 @@ export class PrincipalPagePage implements OnInit {
       console.log('Error al obtener los datos',error);
     });
   }
-
- 
-
-
-
 
 }
