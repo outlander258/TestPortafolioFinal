@@ -3,9 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
-import { ModelLog } from '../modelo/ModelLog';
-import { ServiceService } from '../service/service.service';
-import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-register-driver',
@@ -15,14 +12,14 @@ import { lastValueFrom } from 'rxjs';
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class RegisterDriverPage implements OnInit {
-  NameDriver : string | undefined;
-  AppDriver :string | undefined;
-  RunDriver :string | undefined;
-  EmailDriver:string | undefined;
-  PassDriver :string | undefined;
-  ConfirmDriver :string | undefined;
-  CelDriver :string | undefined;
-  
+  NameDriver: string | undefined;
+  AppDriver: string | undefined;
+  RunDriver: string | undefined;
+  EmailDriver: string | undefined;
+  DirectDriver: string | undefined;
+  PassDriver: string | undefined;
+  ConfirmDriver: string | undefined;
+  CelDriver: string | undefined;
 
 
 
@@ -30,32 +27,77 @@ export class RegisterDriverPage implements OnInit {
 
 
 
-  constructor( private router :Router, private servicio :ServiceService) { }
+
+  constructor(private router: Router) { }
 
   ngOnInit() {
- 
+
   }
 
-  GetBack(){
+  GetBack() {
     this.router.navigate(['principal-page']);
   }
-  async registerDriver() {
-    if (
-      !this.NameDriver||
-      !this.AppDriver ||
-      !this.RunDriver ||
-      !this.EmailDriver ||
-      !this.PassDriver ||
-      !this.ConfirmDriver ||
-      !this.CelDriver
-    ) {
-      alert('Por favor, complete todos los campos.');
+
+
+  ValidarFormDriver() {
+    console.log('Nombre : ', this.NameDriver);
+    console.log('Apellido : ', this.AppDriver);
+    console.log('RUN : ', this.RunDriver);
+    console.log('Dirección : ', this.DirectDriver)
+    console.log('Contraseña : ', this.PassDriver);
+    console.log('Confir Contaseña : ', this.ConfirmDriver);
+    console.log('número de contacto : ', this.CelDriver);
+
+    if (!this.NameDriver?.trim()) {
+      alert('Por favor, ingresa tu nombre.');
       return;
     }
 
+    if (this.NameDriver.length < 8) {
+      alert('El nombre debe tener al menos 8 caracteres.');
+      return;
+    }
+
+    if (!this.AppDriver?.trim()) {
+      alert('Por favor, ingresa tu apellido');
+      return;
+    }
+
+    if (this.AppDriver.length < 6) {
+      alert('El apellido debe contener al menos 6 caracteres');
+      return;
+    }
+
+    if (!this.RunDriver?.trim()) {
+      alert('Por favor, ingresa tu RUN ');
+      return;
+    }
+
+    if (this.RunDriver.length < 7) {
+      alert('Ingresa tu RUN sin dígito verificador : EJEMPLO : 18033767');
+      return;
+    }
+
+    if (!this.EmailDriver?.trim()) {
+      alert('Ingresa un Email para tu registro')
+    }
+
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!emailPattern.test(this.EmailDriver)) {
+    if (!emailPattern.test(this.EmailDriver || '')) {
       alert('La dirección de correo electrónico no es válida. Por favor, inténtalo de nuevo.');
+      return;
+    }
+
+
+
+
+
+    if (!this.DirectDriver?.trim()) {
+      alert('Ingresa tu dirección')
+    }
+
+    if (!this.PassDriver?.trim()) {
+      alert('Por favor, ingresa tu contraseña.');
       return;
     }
 
@@ -64,18 +106,30 @@ export class RegisterDriverPage implements OnInit {
       return;
     }
 
+
     if (!/[A-Z]/.test(this.PassDriver)) {
       alert('La contraseña debe contener al menos una mayúscula.');
       return;
     }
+
 
     if (!/[$&+,:;=?@#|'<>.^*()%!-]/.test(this.PassDriver)) {
       alert('La contraseña debe contener al menos un caracter especial.');
       return;
     }
 
+    if (!this.ConfirmDriver) {
+      alert('Por favor, confirma tu contraseña.');
+      return;
+    }
+
     if (this.PassDriver !== this.ConfirmDriver) {
       alert('Las contraseñas no coinciden. Por favor, inténtalo de nuevo.');
+      return;
+    }
+
+    if (!this.CelDriver?.trim()) {
+      alert('Por favor, ingresa tu número de celular.');
       return;
     }
 
@@ -85,30 +139,14 @@ export class RegisterDriverPage implements OnInit {
       return;
     }
 
-    const newUser: ModelLog = {
-      id: undefined,
-      primer_nombre: this.NameDriver,
-      segundo_nombre: '',
-      tipo_usuario: 2, 
-      primer_apellido:this.AppDriver,
-      segundo_apellido: '',
-      rut: this.RunDriver,
-      telefono: this.CelDriver,
-      email: this.EmailDriver,
-      contraseña: this.PassDriver,
-      verificado: false,
-    };
+    
 
-    try {
-      const response = await lastValueFrom(this.servicio.addUser(newUser));
-      console.log('Registro de usuario exitoso:', response);
-      // Puedes mostrar un mensaje de éxito o redirigir a otra página aquí
-    } catch (error) {
-      console.error('Error al registrar usuario:', error);
-      // Puedes mostrar un mensaje de error aquí
-    }
+
+
+
+
+    console.log('Registro exitoso');
+
+
   }
-
-
-  
 }

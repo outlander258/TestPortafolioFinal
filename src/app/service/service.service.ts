@@ -25,30 +25,31 @@ export class ServiceService {
   getDatos(): any {
     return this.http.get(this.URL + 'usuario?select=*', { headers: this.header });
   }
- // retorna elementos de la base de datos como primer nombre, emial, tipo_user y contraseña
- getLogin(UserLogin: ModelLog): Observable<ModelLog> {
-  console.log('UserLogin.email:', UserLogin.email);
-  console.log('UserLogin.contraseña:', UserLogin.contraseña);
-  console.log('URL:', this.URL);
+  // retorna elementos de la base de datos como primer nombre, emial, tipo_user y contraseña
+  getLogin(UserLogin: ModelLog): Observable<ModelLog> {
+    console.log('UserLogin.email:', UserLogin.email);
+    console.log('UserLogin.contraseña:', UserLogin.contraseña);
+    console.log('URL:', this.URL);
 
-  return this.http.get<ModelLog[]>(this.URL + 'usuario?select=primer_nombre, email ,tipo_usuario, contraseña&email=eq.' + UserLogin.email + '&contraseña=eq.'  + UserLogin.contraseña, { headers: this.header, responseType: 'json' }).pipe(
-    map((userInfo) => {
-      return userInfo[0];
-    }));
+    return this.http.get<ModelLog[]>(this.URL + 'usuario?select=primer_nombre, email ,tipo_usuario, contraseña&email=eq.' + UserLogin.email + '&contraseña=eq.' + UserLogin.contraseña, { headers: this.header, responseType: 'json' }).pipe(
+      map((userInfo) => {
+        return userInfo[0];
+      }));
   }
 
- // base para crear nuevos usuarios 
+  // base para crear nuevos usuarios 
   addUser(newUser: ModelLog): Observable<ModelLog> {
     console.log('New User:', newUser);
 
     return this.http.post<ModelLog>(this.URL + 'usuario', newUser, { headers: this.header, responseType: 'json' });
   }
 
-
-
-
-
-
-
-
+  getConductorVerificado() {
+    return this.http.get(this.URL + 'usuario?select=primer_nombre,primer_apellido,telefono&tipo_usuario=eq.2&verificado=eq.TRUE', { headers: this.header });
   }
+
+
+
+
+
+}
