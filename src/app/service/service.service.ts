@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-
 import { ModelLog } from '../modelo/ModelLog';
 import { Observable, map } from 'rxjs';
+
+
 
 
 
@@ -23,7 +24,6 @@ export class ServiceService {
   // select de todos los usuarios
   getDatos(): any {
     return this.http.get(this.URL + 'usuario?select=*', { headers: this.header });
-
   }
  // retorna elementos de la base de datos como primer nombre, emial, tipo_user y contraseña
  getLogin(UserLogin: ModelLog): Observable<ModelLog> {
@@ -40,21 +40,15 @@ export class ServiceService {
  // base para crear nuevos usuarios 
   addUser(newUser: ModelLog): Observable<ModelLog> {
     console.log('New User:', newUser);
-  
+
     return this.http.post<ModelLog>(this.URL + 'usuario', newUser, { headers: this.header, responseType: 'json' });
   }
-  
 
 
 
 
 
 
-
-  }
 
 
   }
-
-}
-
