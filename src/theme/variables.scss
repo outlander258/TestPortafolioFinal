@@ -82,6 +82,17 @@
    * -------------------------------------------
    */
 
+   ion-item {
+    --background: #012c56;
+  }
+
+  ion-card {
+    background: #232526;  
+    background: -webkit-linear-gradient(to right, #414345, #232526);  
+    background: linear-gradient(to right, #414345, #232526); 
+  }
+
+
   body {
     --ion-color-primary: #428cff;
     --ion-color-primary-rgb: 66,140,255;
