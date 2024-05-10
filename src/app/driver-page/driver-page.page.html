@@ -5,6 +5,10 @@
 </ion-header>
 
 <ion-content class="content" [fullscreen]="true">
+  <div class="title">
+    <h1 class="TitleDrive">Drive</h1>
+    <h1 class="TitleLink">Link</h1>
+  </div>
   <ion-header collapse="condense">
       <ion-title class="PageTitle" size="large">Bienvenido <br> [Nombre de usuario]</ion-title>
     <ion-card>
@@ -19,14 +23,11 @@
     </ion-card>
     <br>
   </ion-header>
-  <br><br><br>
+  <br><br>
   <ion-button class="editar-perfil" expand="block">Editar perfil</ion-button>
   <br><br>
     <ion-button class="cerrar-sesion" expand="block" (click)="logout()">Cerrar sesión</ion-button>
   <br><br><br>
-  <div class="title">
-    <h1 class="TitleDrive">Drive</h1><h1 class="TitleLink">Link</h1>
-  </div>
-  
+
 
 </ion-content>

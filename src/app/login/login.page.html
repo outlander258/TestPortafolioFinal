@@ -1,10 +1,14 @@
-<ion-header [translucent]="true">
+<!-- <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Bienvenido a DriveLink</ion-title>
+    <ion-title>Bienvenido/as a DriveLink</ion-title>
   </ion-toolbar>
-</ion-header>
+</ion-header> -->
 
 <ion-content class="content" [fullscreen]="true">
+  <div class="title">
+    <h1 class="TitleDrive">Drive</h1><h1 class="TitleLink">Link</h1>
+   </div>
+   <br><br>
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title class="login" size="large">Iniciar sesión</ion-title>
@@ -24,16 +28,12 @@
       <br>
     </ion-item>
   </div>
-  <br>
+  <br><br>
 
   <ion-button class="login-button" (click)="login()" expand="block">Ingresar</ion-button>
   <br><br>
 
   <ion-button class="back-button" (click)="GetBack()" expand="block">Volver</ion-button>
-  <br><br>
-  <div class="title">
-   <h1 class="TitleDrive">Drive</h1><h1 class="TitleLink">Link</h1>
-  </div>
-
+  <br>
 
 </ion-content>

@@ -1,10 +1,14 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Bienvenido Usuario/a</ion-title>
+    <ion-title>Perfil Usuario/a</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="content" [fullscreen]="true">
+  <div class="title">
+    <h1 class="TitleDrive">Drive</h1>
+    <h1 class="TitleLink">Link</h1>
+  </div>
   <ion-header collapse="condense">
     <ion-title class="PageTitle" size="large">Bienvenido <br> [Nombre de usuario]</ion-title>
     <ion-card>
@@ -24,8 +28,6 @@
 
     <ion-button class="buscar-chofer" expand="block" (click)="setOpenModalConductor(true)">Buscar Conductor</ion-button>
 
-
-
     <ion-modal [isOpen]="modalConductor">
       <ng-template>
         <ion-header>
@@ -37,7 +39,6 @@
           </ion-toolbar>
         </ion-header>
         <ion-content class="ion-padding">
-
 
           <ion-list *ngFor="let conductor of conductores">
             <ion-item>
@@ -60,11 +61,8 @@
   <ion-button class="editar-perfil" expand="block">Editar perfil</ion-button>
   <br><br>
   <ion-button class="cerrar-sesion" expand="block" (click)="logout()">Cerrar sesión</ion-button>
-  <br><br><br>
-  <div class="title">
-    <h1 class="TitleDrive">Drive</h1>
-    <h1 class="TitleLink">Link</h1>
-  </div>
+  <br><br>
+
 
 
 </ion-content>
