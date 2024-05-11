@@ -13,13 +13,23 @@
 
   <div class="labels">
     <ion-item>
-      <ion-label position="floating">Nombre:</ion-label>
+      <ion-label position="floating">Primer Nombre:</ion-label>
       <ion-input type="text" [(ngModel)]="NameDriver" aria-label="Nombre"></ion-input>
     </ion-item>
 
     <ion-item>
-      <ion-label position="floating">Apellido:</ion-label>
+      <ion-label position="floating"> Segundo Nombre:</ion-label>
+      <ion-input type="text"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Primer Apellido:</ion-label>
       <ion-input type="text" [(ngModel)]="AppDriver" aria-label="Apellido"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating"> Segundo Apellido:</ion-label>
+      <ion-input type="text"></ion-input>
     </ion-item>
 
     <ion-item>
@@ -71,8 +81,8 @@
   
   <br><br>
 
-  <!-- ion-button class="FormDriver-button" (click)="registerDriver()" expand="block">Registrar Conductor</ion-button -->
+  <ion-button class="FormDriver-button"  expand="block">Registrarme</ion-button>
   <br>
   <ion-button class="back-button" (click)="GetBack()" expand="block">Volver</ion-button>
-  <br>
+  <br><br>
 </ion-content>

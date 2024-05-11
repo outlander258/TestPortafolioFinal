@@ -14,13 +14,23 @@
 
   <div class="labels">
     <ion-item>
-      <ion-label position="floating">Nombre:</ion-label>
+      <ion-label position="floating">Primer Nombre:</ion-label>
       <ion-input type="text" [(ngModel)]="NameUser"></ion-input>
     </ion-item>
 
     <ion-item>
-      <ion-label position="floating">Apellido:</ion-label>
+      <ion-label position="floating"> Segundo Nombre:</ion-label>
+      <ion-input type="text"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Primer Apellido:</ion-label>
       <ion-input type="text" [(ngModel)]="AppUser"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Segundo Apellido:</ion-label>
+      <ion-input type="text" ></ion-input>
     </ion-item>
 
     <ion-item>
@@ -65,5 +75,5 @@
   <ion-button class="FormUser-button" (click)="registerUser()"  expand="block">Registrarme</ion-button>
   <br>
   <ion-button class="back-button" (click)="GetBack()" expand="block">Volver</ion-button>
-  <br>
+  <br><br>
 </ion-content>
