@@ -33,7 +33,11 @@
   <ion-button class="login-button" (click)="login()" expand="block">Ingresar</ion-button>
   <br><br>
 
+
   <ion-button class="back-button" (click)="GetBack()" expand="block">Volver</ion-button>
-  <br>
+  <br><br>
+
+
+  <ion-progress-bar *ngIf="showProgressBar" [value]="progress" color="warning"></ion-progress-bar>
 
 </ion-content>
