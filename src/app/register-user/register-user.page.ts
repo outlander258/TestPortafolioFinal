@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { ServiceService } from '../service/service.service';
 import { ModelLog } from '../modelo/ModelLog';
@@ -23,7 +23,7 @@ export class RegisterUserPage implements OnInit {
   ConfirmUser: string | undefined;
   CelUser: string | undefined;
 
-  constructor(private router: Router, private servicio: ServiceService) {}
+  constructor(private router: Router, private servicio: ServiceService, private alertController: AlertController) {}
 
   ngOnInit() {}
 
@@ -37,39 +37,39 @@ export class RegisterUserPage implements OnInit {
       !this.ConfirmUser ||
       !this.CelUser
     ) {
-      alert('Por favor, complete todos los campos.');
+      this.presentAlert('Por favor, complete todos los campos.');
       return;
     }
 
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailPattern.test(this.EmailUser)) {
-      alert('La dirección de correo electrónico no es válida. Por favor, inténtalo de nuevo.');
+      this.presentAlert('La dirección de correo electrónico no es válida. Por favor, inténtalo de nuevo.');
       return;
     }
 
     if (this.PassUser.length < 7) {
-      alert('La contraseña debe tener al menos 7 caracteres.');
+      this.presentAlert('La contraseña debe tener al menos 7 caracteres.');
       return;
     }
 
     if (!/[A-Z]/.test(this.PassUser)) {
-      alert('La contraseña debe contener al menos una mayúscula.');
+      this.presentAlert('La contraseña debe contener al menos una mayúscula.');
       return;
     }
 
     if (!/[$&+,:;=?@#|'<>.^*()%!-]/.test(this.PassUser)) {
-      alert('La contraseña debe contener al menos un caracter especial.');
+      this.presentAlert('La contraseña debe contener al menos un caracter especial.');
       return;
     }
 
     if (this.PassUser !== this.ConfirmUser) {
-      alert('Las contraseñas no coinciden. Por favor, inténtalo de nuevo.');
+      this.presentAlert('Las contraseñas no coinciden. Por favor, inténtalo de nuevo.');
       return;
     }
 
     const celular = Number(this.CelUser);
     if (isNaN(celular) || celular.toString().length < 8 || celular.toString().length > 9) {
-      alert('Asegurate de ingresar un número válido, debe contener entre 8 y 9 dígitos.');
+      this.presentAlert('Asegurate de ingresar un número válido, debe contener entre 8 y 9 dígitos.');
       return;
     }
 
@@ -95,6 +95,16 @@ export class RegisterUserPage implements OnInit {
       console.error('Error al registrar usuario:', error);
       // Puedes mostrar un mensaje de error aquí
     }
+  }
+
+  async presentAlert(message: string) {
+    const alert = await this.alertController.create({
+      header: 'Error',
+      message: message,
+      buttons: ['OK']
+    });
+
+    await alert.present();
   }
 
   GetBack() {
