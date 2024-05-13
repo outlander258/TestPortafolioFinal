@@ -37,39 +37,55 @@ export class RegisterUserPage implements OnInit {
       !this.ConfirmUser ||
       !this.CelUser
     ) {
-      this.presentAlert('Por favor, complete todos los campos.');
+      this.presentAlert('Error', 'Por favor, complete todos los campos.');
       return;
     }
 
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailPattern.test(this.EmailUser)) {
-      this.presentAlert('La dirección de correo electrónico no es válida. Por favor, inténtalo de nuevo.');
+      this.presentAlert('Error', 'La dirección de correo electrónico no es válida. Por favor, inténtalo de nuevo.');
+      return;
+    }
+
+    if (!this.NameUser || this.NameUser.trim().length === 0 || this.NameUser.trim().split(' ').length > 1) {
+      this.presentAlert('Error', 'El primer nombre debe ser un solo nombre sin espacios.');
+      return;
+    }
+
+    if (!this.AppUser || this.AppUser.trim().length === 0 || this.AppUser.trim().split(' ').length > 1) {
+      this.presentAlert('Error', 'El primer apellido debe ser un solo apellido sin espacios.');
+      return;
+    }
+
+    const rutPattern = /^[1-9][0-9]{0,1}\.?[0-9]{3}\.?[0-9]{3}-[0-9kK]{1}$/;
+    if (!this.RunUser || !rutPattern.test(this.RunUser)) {
+      this.presentAlert('Error', 'El RUT es obligatorio y debe estar en el formato correcto (12.345.678-9).');
       return;
     }
 
     if (this.PassUser.length < 7) {
-      this.presentAlert('La contraseña debe tener al menos 7 caracteres.');
+      this.presentAlert('Error', 'La contraseña debe tener al menos 7 caracteres.');
       return;
     }
 
     if (!/[A-Z]/.test(this.PassUser)) {
-      this.presentAlert('La contraseña debe contener al menos una mayúscula.');
+      this.presentAlert('Error', 'La contraseña debe contener al menos una mayúscula.');
       return;
     }
 
     if (!/[$&+,:;=?@#|'<>.^*()%!-]/.test(this.PassUser)) {
-      this.presentAlert('La contraseña debe contener al menos un caracter especial.');
+      this.presentAlert('Error', 'La contraseña debe contener al menos un caracter especial.');
       return;
     }
 
     if (this.PassUser !== this.ConfirmUser) {
-      this.presentAlert('Las contraseñas no coinciden. Por favor, inténtalo de nuevo.');
+      this.presentAlert('Error', 'Las contraseñas no coinciden. Por favor, inténtalo de nuevo.');
       return;
     }
 
     const celular = Number(this.CelUser);
     if (isNaN(celular) || celular.toString().length < 8 || celular.toString().length > 9) {
-      this.presentAlert('Asegurate de ingresar un número válido, debe contener entre 8 y 9 dígitos.');
+      this.presentAlert('Error', 'Asegurate de ingresar un número válido, debe contener entre 8 y 9 dígitos.');
       return;
     }
 
@@ -90,16 +106,16 @@ export class RegisterUserPage implements OnInit {
     try {
       const response = await lastValueFrom(this.servicio.addUser(newUser));
       console.log('Registro de usuario exitoso:', response);
-      // Puedes mostrar un mensaje de éxito o redirigir a otra página aquí
+      this.presentAlert('Éxito', 'Usuario registrado exitosamente');
     } catch (error) {
       console.error('Error al registrar usuario:', error);
-      // Puedes mostrar un mensaje de error aquí
+      this.presentAlert('Error', 'Hubo un error al registrar el usuario');
     }
   }
 
-  async presentAlert(message: string) {
+  async presentAlert(header: string, message: string) {
     const alert = await this.alertController.create({
-      header: 'Error',
+      header: header,
       message: message,
       buttons: ['OK']
     });
@@ -111,4 +127,3 @@ export class RegisterUserPage implements OnInit {
     this.router.navigate(['principal-page']);
   }
 }
-
