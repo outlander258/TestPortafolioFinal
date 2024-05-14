@@ -13,12 +13,16 @@ import { Router } from '@angular/router';
 })
 export class DriverPagePage implements OnInit {
   // Variable para almacenar el estado de disponibilidad del conductor
-  isAvailable: boolean = false;
+  isAvailable: boolean = true;
 
   constructor(private router: Router, private toastController: ToastController) { }
 
   ngOnInit() {
   }
+
+  // Variable para almacenar el contenido del card
+cardContent: string = "Añade una breve descripción de tu experiencia como conductor.";
+
 
   // Método para manejar los cambios de estado del botón
   toggleAvailability(event: CustomEvent) {

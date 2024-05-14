@@ -22,10 +22,22 @@
       <p>¡Gracias por ser parte de nuestro equipo!</p>
   </div> 
   <br><br>
-  <ion-button class="cerrar-sesion" expand="block" (click)="logout()">Cerrar sesión</ion-button>
-  <!-- <ion-list>
-   <ion-item *ngFor="let driver of drivers">
+  <ion-button class="usuarios" shape="round" (click)="toggleShowUsers()">Usuarios</ion-button>
+<ion-list *ngIf="showUsers">
+  <ion-item *ngFor="let user of users">
+    {{ user.nombre }} - {{ user.apellido }}
+    <ion-button [disabled]="user.bloqueado" (click)="blockUser(user)">Bloquear</ion-button>
+    <ion-button [disabled]="!user.bloqueado" (click)="unblockUser(user)">Desbloquear</ion-button>
+  </ion-item> 
+</ion-list>
+  <ion-button class="conductores" shape="round" (click)="toggleShowDrivers()">Conductores</ion-button>
+  <ion-list *ngIf="showDrivers">
+    <ion-item *ngFor="let driver of drivers">
       {{ driver.nombre }} - {{ driver.apellido }}
+      <ion-button [disabled]="driver.bloqueado" (click)="blockDriver(driver)">Bloquear</ion-button>
+      <ion-button [disabled]="!driver.bloqueado" (click)="unblockDriver(driver)">Desbloquear</ion-button>
     </ion-item> 
-  </ion-list> -->
+  </ion-list>
+  <br><br>
+  <ion-button class="cerrar-sesion" expand="block" (click)="logout()">Cerrar sesión</ion-button>
 </ion-content>

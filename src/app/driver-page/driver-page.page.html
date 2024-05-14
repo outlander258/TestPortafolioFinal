@@ -18,27 +18,20 @@
       </ion-card-header>
     
       <ion-card-content>
-        Here's a small text description for the card content. Nothing more, nothing less.
+        <ion-textarea [(ngModel)]="cardContent"></ion-textarea>
       </ion-card-content>
     </ion-card>
     <br>
 
     <div class="toggle-container">
-      <ion-toggle class="disponibilidad" labelPlacement="stacked" alignment="start" (ionChange)="toggleAvailability($event)">Disponibilidad</ion-toggle>
+      <ion-toggle class="disponibilidad" [(ngModel)]="isAvailable" labelPlacement="stacked" alignment="start" (ionChange)="toggleAvailability($event)">Disponibilidad</ion-toggle>
     </div>
-    
-    <!-- posible boton para disponibilidad del conductor -->
-<!-- 
-    <div class="toggle-container">
-      <ion-toggle class="disponibilidad" labelPlacement="stacked" alignment="start">Disponibilidad</ion-toggle>
-    </div> -->
-
   </ion-header>
   <br><br>
   <ion-button class="editar-perfil" expand="block">Editar perfil</ion-button>
   <br><br>
     <ion-button class="cerrar-sesion" expand="block" (click)="logout()">Cerrar sesión</ion-button>
-  <br><br><br>
+  <br><br>
 
 
 </ion-content>
