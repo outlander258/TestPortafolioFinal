@@ -48,20 +48,33 @@ export class LoginPage implements OnInit {
       const respuesta = await lastValueFrom(this.servicio.getLogin(this.UserLogin));
       if (respuesta && respuesta.email && respuesta.email.toLowerCase() === this.UserLogin.email.toLowerCase() && respuesta.contraseña === this.UserLogin.contraseña){
         console.log('inicio de sesión exitoso')
+        console.log(respuesta.primer_nombre)
+        console.log(respuesta.primer_apellido)
+        
+
+  const queryParams = {
+   primerNombre : respuesta.primer_nombre,
+   primerApellido: respuesta.primer_apellido,
+ 
+
+  };
+
         this.showProgressBar = true;
         this.progress = 0; // Reinicia el valor de progress
         this.startProgressBar();
         setTimeout(() => {
           this.showProgressBar = false;
           if(respuesta.tipo_usuario === 1){
-            localStorage.setItem('tipo_usuario', 'ADMIN');
-            this.router.navigate(['admin-page']);
+            localStorage.setItem('tipo_usuario', 'ADMIN') ;
+            this.router.navigate(['admin-page'], { queryParams });
           } else if (respuesta.tipo_usuario === 2) {
-            localStorage.setItem('tipo_usuario', 'DRIVER'); 
-            this.router.navigate(['driver-page']);
+            localStorage.setItem('tipo_usuario', 'DRIVER') 
+            this.router.navigate(['driver-page'], { queryParams });
+            console.log(queryParams)
+
           } else if (respuesta.tipo_usuario === 3) {
-            localStorage.setItem('tipo_usuario', 'USER'); 
-            this.router.navigate(['user-page']);
+            localStorage.setItem('tipo_usuario', 'USER');
+            this.router.navigate(['user-page'], { queryParams });
           } else {
             console.log('Tipo de usuario desconocido');
           }

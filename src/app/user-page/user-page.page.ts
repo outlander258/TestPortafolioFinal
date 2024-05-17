@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { ServiceService } from '../service/service.service';
 import { ModelLog } from '../modelo/ModelLog';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -15,15 +16,47 @@ import { ModelLog } from '../modelo/ModelLog';
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class UserPagePage implements OnInit {
+  primerNombre: string = '';
+  primerApellido: string = '';
+
   modalConductor=false
 
   conductores:ModelLog[]=[]
 
-  constructor( private router : Router, private servicio:ServiceService) { }
+  constructor( private router : Router, private servicio:ServiceService , private route : ActivatedRoute) { }
 
   ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      this.primerNombre = params['primerNombre'];
+      this.primerApellido = params['primerApellido'];
+      console.log(params);
+      console.log(this.primerNombre);
+      console.log(this.primerApellido);
+    });
+
+
+
+
+
+
+
+
+
     this.getConductores()
+
+    // vista solo accesible para tipo_usuario = 3
+
+    const userStorage = localStorage.getItem('tipo_usuario');
+
+    if (userStorage !== 'USER') {
+      this.router.navigate(['/login']);
+
+
+     
+
+
   }
+}
 
   logout(){
     this.router.navigate(['login'])

@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { ServiceService } from '../service/service.service';
 
 @Component({
   selector: 'app-admin-page',
@@ -12,6 +14,8 @@ import { Router } from '@angular/router';
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class AdminPagePage implements OnInit {
+  primerNombre: string = '';
+  primerApellido: string = '';
   // Lista de conductores (esto es solo un ejemplo, necesitarás obtener la lista de conductores de tu base de datos)
   drivers = [
     { nombre: 'Conductor 1', apellido: 'Apellido 1', bloqueado: false },
@@ -32,10 +36,34 @@ users = [
 // Variable para controlar si se muestra la lista de usuarios
 showUsers = false;
 
-  constructor( private router : Router) { }
+  constructor( private router : Router ,private route : ActivatedRoute, private servicio : ServiceService) { }
 
   ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      this.primerNombre = params['primerNombre'];
+      this.primerApellido = params['primerApellido'];
+      console.log(params);
+      console.log(this.primerNombre);
+      console.log(this.primerApellido);
+    });
+
+
+
+
+
+
+    // vista solo accesible para tipo_usuario = 3
+
+    const userStorage = localStorage.getItem('tipo_usuario');
+
+    if (userStorage !== 'ADMIN') {
+      this.router.navigate(['/login']);
+  
+
+
+
   }
+}
 
   // Método para bloquear un conductor
   blockDriver(driver: { nombre: string, apellido: string, bloqueado: boolean }) {

@@ -31,11 +31,11 @@ export class ServiceService {
     console.log('UserLogin.contraseña:', UserLogin.contraseña);
     console.log('URL:', this.URL);
 
-    return this.http.get<ModelLog[]>(this.URL + 'usuario?select=primer_nombre, email ,tipo_usuario, contraseña&email=eq.' + UserLogin.email + '&contraseña=eq.' + UserLogin.contraseña, { headers: this.header, responseType: 'json' }).pipe(
-      map((userInfo) => {
-        return userInfo[0];
-      }));
-  }
+    return this.http.get<ModelLog[]>(this.URL + 'usuario?select=primer_nombre,primer_apellido,email,tipo_usuario,contraseña&email=eq.' + UserLogin.email + '&contraseña=eq.' + UserLogin.contraseña, { headers: this.header, responseType: 'json' }).pipe(
+        map((userInfo) => {
+            return userInfo[0];
+        }));
+}
 
   // base para crear nuevos usuarios 
   addUser(newUser: ModelLog): Observable<ModelLog> {
@@ -47,6 +47,14 @@ export class ServiceService {
   getConductorVerificado() {
     return this.http.get(this.URL + 'usuario?select=primer_nombre,primer_apellido,telefono&tipo_usuario=eq.2&verificado=eq.TRUE', { headers: this.header });
   }
+
+
+  adminBlock(){
+
+    
+  }
+
+
 
 
 
