@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { DriverPagePage } from './driver-page.page';
+import { DriverPagePage } from './DriverPagePage';
 
 describe('DriverPagePage', () => {
   let component: DriverPagePage;

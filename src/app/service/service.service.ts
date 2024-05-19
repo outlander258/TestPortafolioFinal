@@ -31,11 +31,11 @@ export class ServiceService {
     console.log('UserLogin.contraseña:', UserLogin.contraseña);
     console.log('URL:', this.URL);
 
-    return this.http.get<ModelLog[]>(this.URL + 'usuario?select=primer_nombre, email ,tipo_usuario, contraseña&email=eq.' + UserLogin.email + '&contraseña=eq.' + UserLogin.contraseña, { headers: this.header, responseType: 'json' }).pipe(
-      map((userInfo) => {
-        return userInfo[0];
-      }));
-  }
+    return this.http.get<ModelLog[]>(this.URL + 'usuario?select=id,primer_nombre,segundo_nombre,primer_apellido,segundo_apellido,telefono,email,tipo_usuario,contraseña&email=eq.' + UserLogin.email + '&contraseña=eq.' + UserLogin.contraseña, { headers: this.header, responseType: 'json' }).pipe(
+        map((userInfo) => {
+            return userInfo[0];
+        }));
+}
 
   // base para crear nuevos usuarios 
   addUser(newUser: ModelLog): Observable<ModelLog> {
@@ -48,6 +48,20 @@ export class ServiceService {
     return this.http.get(this.URL + 'usuario?select=primer_nombre,primer_apellido,telefono&tipo_usuario=eq.2&verificado=eq.TRUE', { headers: this.header });
   }
 
+
+  adminBlock(){
+
+    
+  }
+
+
+  UpdateDatos(id: number, newUser: any): void {
+    this.http.patch(this.URL+'usuario?id=eq.'+id, newUser, { headers: this.header }).subscribe(response => {
+      console.log('Registro actualizado:', response);
+    }, error => {
+      console.error('Error al actualizar el registro:', error);
+    });
+  }
 
 
 
