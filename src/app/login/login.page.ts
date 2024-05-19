@@ -7,6 +7,7 @@ import { ModelLog } from '../modelo/ModelLog';
 import { ServiceService } from '../service/service.service';
 import { lastValueFrom } from 'rxjs';
 
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -18,11 +19,11 @@ export class LoginPage implements OnInit {
 
   UserName: string = '';
   UserPassword: string = '';
-  UserLogin :ModelLog ={
-    id : undefined ,
-    primer_nombre:'',
-    segundo_nombre :'',
-    tipo_usuario : 0,
+  UserLogin: ModelLog = {
+    id: undefined,
+    primer_nombre: '',
+    segundo_nombre: '',
+    tipo_usuario: 0,
     primer_apellido: '',
     segundo_apellido: '',
     rut :'',
@@ -40,24 +41,28 @@ export class LoginPage implements OnInit {
   ngOnInit() {
   }
 
-  async login(){
+  async login() {
     if (this.UserName && this.UserPassword) {
       this.UserLogin.email = this.UserName!;
       this.UserLogin.contraseña = this.UserPassword!;
-    
+
       const respuesta = await lastValueFrom(this.servicio.getLogin(this.UserLogin));
-      if (respuesta && respuesta.email && respuesta.email.toLowerCase() === this.UserLogin.email.toLowerCase() && respuesta.contraseña === this.UserLogin.contraseña){
+      if (respuesta && respuesta.email && respuesta.email.toLowerCase() === this.UserLogin.email.toLowerCase() && respuesta.contraseña === this.UserLogin.contraseña) {
         console.log('inicio de sesión exitoso')
         console.log(respuesta.primer_nombre)
         console.log(respuesta.primer_apellido)
-        
 
-  const queryParams = {
-   primerNombre : respuesta.primer_nombre,
-   primerApellido: respuesta.primer_apellido,
- 
 
-  };
+        const queryParams = {
+          primerNombre: respuesta.primer_nombre,
+          primerApellido: respuesta.primer_apellido,
+          segundoNombre: respuesta.segundo_nombre,
+          segundoApellido: respuesta.segundo_apellido,
+          telefono: respuesta.telefono,
+          id: respuesta.id,
+
+
+        };
 
         this.showProgressBar = true;
         this.progress = 0; // Reinicia el valor de progress

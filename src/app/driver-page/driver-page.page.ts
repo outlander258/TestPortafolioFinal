@@ -4,6 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
+import { ModelLog } from '../modelo/ModelLog';
+import { ServiceService } from '../service/service.service';
+
 
 
 
@@ -16,18 +19,49 @@ import { ActivatedRoute } from '@angular/router';
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class DriverPagePage implements OnInit {
-  primerNombre: string = '';
-  primerApellido: string = '';
   // Variable para almacenar el estado de disponibilidad del conductor
   isAvailable: boolean = true;
 
-  constructor(private router: Router, private toastController: ToastController, private route : ActivatedRoute) { }
+
+
+
+
+
+  // variables para almacenar los datos del conductor
+  primerNombre: string = '';
+  primerApellido: string = '';
+  segundoNombre: string = '';
+  segundoApellido: string = '';
+  telefono: string = '';
+  id: number | undefined;
+
+  //variables para insertar nuevos datos modificados
+  new_primerNombre: string = '';
+  new_primerApellido: string = '';
+  new_segundoNombre: string = '';
+  new_segundoApellido: string = '';
+  new_telefono: string = '';
+
+  // variables para modal
+  isModalModificarDatosOpen: boolean = false;
+
+
+
+
+
+
+
+
+
+  constructor(
+    private router: Router,
+    private toastController: ToastController,
+    private route: ActivatedRoute,
+    private service: ServiceService
+
+  ) { }
 
   ngOnInit() {
-
-
-
-
 
     // vista solo accesible para tipo_usuario = 2
 
@@ -36,24 +70,41 @@ export class DriverPagePage implements OnInit {
     if (userStorage !== 'DRIVER') {
       this.router.navigate(['/login']);
 
-  }
+  };
 
-   
   this.route.queryParams.subscribe(params => {
     this.primerNombre = params['primerNombre'];
     this.primerApellido = params['primerApellido'];
+    this.segundoNombre = params['segundoNombre'];
+    this.segundoApellido = params['segundoApellido'];
+    this.telefono = params['telefono'];
+    this.id = params['id'];
+
     console.log(params);
     console.log(this.primerNombre);
     console.log(this.primerApellido);
+    console.log(this.segundoNombre);
+    console.log(this.segundoApellido);
+    console.log(this.telefono);
+    console.log(this.id);
   });
 
+  // asignacion de variables para cambion en caso de no ingresar dato nuevo
 
-
-
-
+  this.new_primerNombre = this.primerNombre;
+  this.new_primerApellido = this.primerApellido;
+  this.new_segundoNombre = this.segundoNombre;
+  this.new_segundoApellido = this.segundoApellido;
+  this.new_telefono = this.telefono;
 
 
 }
+
+
+
+
+
+
 
 
 ngAfterViewInit() {
@@ -78,9 +129,32 @@ cardContent: string = "Añade una breve descripción de tu experiencia como cond
       duration: 1000
     });
     toast.present();
-  }
+    }
 
-  logout(){
+
+  logout() {
     this.router.navigate(['login'])
   }
+
+  setModalModificarDatosOpen(estado: boolean) {
+    this.isModalModificarDatosOpen = estado;
+  }
+
+
+  modificarDatos() {
+    const new_datos = {
+      primer_nombre: this.new_primerNombre,
+      segundo_nombre: this.new_segundoNombre,
+      primer_apellido: this.new_primerApellido,
+      segundo_apellido: this.new_segundoApellido,
+      telefono: this.new_telefono
+    };
+
+    this.service.UpdateDatos(this.id!, new_datos);
+    this.setModalModificarDatosOpen(false);
+  }
+
+
+
+
 }
