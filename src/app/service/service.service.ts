@@ -31,7 +31,7 @@ export class ServiceService {
     console.log('UserLogin.contraseña:', UserLogin.contraseña);
     console.log('URL:', this.URL);
 
-    return this.http.get<ModelLog[]>(this.URL + 'usuario?select=primer_nombre,primer_apellido,email,tipo_usuario,contraseña&email=eq.' + UserLogin.email + '&contraseña=eq.' + UserLogin.contraseña, { headers: this.header, responseType: 'json' }).pipe(
+    return this.http.get<ModelLog[]>(this.URL + 'usuario?select=id,primer_nombre,primer_apellido,email,tipo_usuario,contraseña&email=eq.' + UserLogin.email + '&contraseña=eq.' + UserLogin.contraseña, { headers: this.header, responseType: 'json' }).pipe(
         map((userInfo) => {
             return userInfo[0];
         }));
@@ -45,13 +45,36 @@ export class ServiceService {
   }
 
   getConductorVerificado() {
-    return this.http.get(this.URL + 'usuario?select=primer_nombre,primer_apellido,telefono&tipo_usuario=eq.2&verificado=eq.TRUE', { headers: this.header });
+    return this.http.get(this.URL + 'usuario?select=id,primer_nombre,primer_apellido,telefono&tipo_usuario=eq.2&verificado=eq.TRUE', { headers: this.header });
   }
 
 
-  adminBlock(){
 
-    
+
+  conductorDisponible(datos: any) {
+    return this.http.post(this.URL + 'conductor_activo', datos, { headers: this.header })
+      .toPromise()
+      .then(response => {
+        console.log('Conductor disponible:', response);
+        return response;
+      })
+      .catch(error => {
+        console.error('Error al activar conductor:', error);
+        throw error;
+      });
+  }
+  
+  conductorNoDisponible(id: any) {
+    return this.http.delete(this.URL + 'conductor_activo?id=eq.' + id, { headers: this.header })
+      .toPromise()
+      .then(response => {
+        console.log('Conductor no disponible:', response);
+        return response;
+      })
+      .catch(error => {
+        console.error('Error al desactivar conductor:', error);
+        throw error;
+      });
   }
 
 

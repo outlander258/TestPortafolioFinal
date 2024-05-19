@@ -18,6 +18,7 @@ export class LoginPage implements OnInit {
 
   UserName: string = '';
   UserPassword: string = '';
+
   UserLogin :ModelLog ={
     id : undefined ,
     primer_nombre:'',
@@ -50,11 +51,13 @@ export class LoginPage implements OnInit {
         console.log('inicio de sesión exitoso')
         console.log(respuesta.primer_nombre)
         console.log(respuesta.primer_apellido)
+        console.log(respuesta.id)
         
 
   const queryParams = {
    primerNombre : respuesta.primer_nombre,
    primerApellido: respuesta.primer_apellido,
+   idUser: respuesta.id
  
 
   };

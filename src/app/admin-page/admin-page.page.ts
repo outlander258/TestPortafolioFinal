@@ -39,6 +39,7 @@ showUsers = false;
   constructor( private router : Router ,private route : ActivatedRoute, private servicio : ServiceService) { }
 
   ngOnInit() {
+  
     this.route.queryParams.subscribe(params => {
       this.primerNombre = params['primerNombre'];
       this.primerApellido = params['primerApellido'];

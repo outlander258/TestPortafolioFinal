@@ -67,25 +67,58 @@ export class UserPagePage implements OnInit {
     this.modalConductor=modal
   }
 
-
-  async getConductores(){
+  async getConductores() {
     this.servicio.getConductorVerificado().subscribe((conductores: any) => {
       console.log('Datos obtenidos', conductores);
-      // Formatear los números de teléfono
-      conductores.forEach((conductor: any) => {
-        conductor.telefono = '+56-9' + conductor.telefono.toString().slice(-8); // Obtener los últimos 8 dígitos del número de teléfono
+
+      // Filtrar los conductores por disponibilidad
+      const conductoresDisponibles = conductores.filter((conductor: any) => {
+        const disponibilidad = JSON.parse(localStorage.getItem(`availability_${conductor.id}`) || 'false');
+        console.log(this.conductores)
+        return disponibilidad && conductor.verificado;
+        
+
       });
-      this.conductores = conductores; // Asignar los conductores obtenidos a la variable conductores
+
+      // Formatear los números de teléfono
+      conductoresDisponibles.forEach((conductor: any) => {
+        conductor.telefono = '+56-9' + conductor.telefono.toString().slice(-8);
+         // Obtener los últimos 8 dígitos del número de teléfono
+         console.log(conductoresDisponibles)
+      });
+
+      this.conductores = conductoresDisponibles; // Asignar los conductores disponibles a la variable conductores
     }, (error: any) => {
       console.log('Error al obtener los datos', error);
     });
   }
-  
-  
-  
-  
-
-
-
-  
 }
+ 
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+
+
+  
+
