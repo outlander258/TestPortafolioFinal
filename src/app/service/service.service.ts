@@ -22,16 +22,17 @@ export class ServiceService {
 
 
   // select de todos los usuarios
-  getDatos(): any {
-    return this.http.get(this.URL + 'usuario?select=*', { headers: this.header });
+  getDatos(): Observable<any> {
+    return this.http.get<any[]>(`${this.URL}usuario?select=*`, { headers: this.header });
   }
+
   // retorna elementos de la base de datos como primer nombre, emial, tipo_user y contraseña
   getLogin(UserLogin: ModelLog): Observable<ModelLog> {
     console.log('UserLogin.email:', UserLogin.email);
     console.log('UserLogin.contraseña:', UserLogin.contraseña);
     console.log('URL:', this.URL);
 
-    return this.http.get<ModelLog[]>(this.URL + 'usuario?select=id,primer_nombre,primer_apellido,email,tipo_usuario,contraseña&email=eq.' + UserLogin.email + '&contraseña=eq.' + UserLogin.contraseña, { headers: this.header, responseType: 'json' }).pipe(
+    return this.http.get<ModelLog[]>(this.URL + 'usuario?select=id,primer_nombre,primer_apellido,email,tipo_usuario,verificado,contraseña&email=eq.' + UserLogin.email + '&contraseña=eq.' + UserLogin.contraseña, { headers: this.header, responseType: 'json' }).pipe(
         map((userInfo) => {
             return userInfo[0];
         }));
@@ -75,12 +76,16 @@ export class ServiceService {
         console.error('Error al desactivar conductor:', error);
         throw error;
       });
+
+
+      
   }
 
-
-
-
-
-
-
+  getConductorDisponible(): Observable<any> {
+    return this.http.get(this.URL + 'conductor_activo?select=*', { headers: this.header });
+  }
 }
+
+
+
+

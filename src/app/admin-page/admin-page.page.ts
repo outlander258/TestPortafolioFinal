@@ -16,6 +16,8 @@ import { ServiceService } from '../service/service.service';
 export class AdminPagePage implements OnInit {
   primerNombre: string = '';
   primerApellido: string = '';
+  conductores: any[] = [];
+  solicitantes: any[] = [];
   // Lista de conductores (esto es solo un ejemplo, necesitarás obtener la lista de conductores de tu base de datos)
   drivers = [
     { nombre: 'Conductor 1', apellido: 'Apellido 1', bloqueado: false },
@@ -39,6 +41,18 @@ showUsers = false;
   constructor( private router : Router ,private route : ActivatedRoute, private servicio : ServiceService) { }
 
   ngOnInit() {
+
+    this.getSolicitantes();
+   
+
+
+    this.getDrivers();
+
+
+
+
+
+
   
     this.route.queryParams.subscribe(params => {
       this.primerNombre = params['primerNombre'];
@@ -107,4 +121,31 @@ toggleShowUsers() {
   logout(){
     this.router.navigate(['login'])
   }
-}
+
+
+  getSolicitantes() {
+    this.servicio.getDatos().subscribe((data: any[]) => {
+      this.solicitantes = data.filter(user => user.tipo_usuario === 3); // Cambiado a 3
+      console.log('Solicitantes:', this.solicitantes);
+    }, (error: any) => {
+      console.error('Error al obtener los usuarios:', error);
+    });
+  }
+
+  getDrivers() {
+    this.servicio.getDatos().subscribe((data: any[]) => {
+      this.conductores = data.filter(user => user.tipo_usuario === 2); // Cambiado a 2
+      console.log('Conductores:', this.conductores);
+    }, (error: any) => {
+      console.error('Error al obtener los usuarios:', error);
+    });
+  }
+
+
+
+  }
+
+
+
+
+

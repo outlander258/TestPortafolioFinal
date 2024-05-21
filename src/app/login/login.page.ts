@@ -41,40 +41,46 @@ export class LoginPage implements OnInit {
   ngOnInit() {
   }
 
-  async login(){
+
+
+
+  async login() {
     if (this.UserName && this.UserPassword) {
       this.UserLogin.email = this.UserName!;
       this.UserLogin.contraseña = this.UserPassword!;
     
       const respuesta = await lastValueFrom(this.servicio.getLogin(this.UserLogin));
-      if (respuesta && respuesta.email && respuesta.email.toLowerCase() === this.UserLogin.email.toLowerCase() && respuesta.contraseña === this.UserLogin.contraseña){
-        console.log('inicio de sesión exitoso')
-        console.log(respuesta.primer_nombre)
-        console.log(respuesta.primer_apellido)
-        console.log(respuesta.id)
+      if (respuesta && respuesta.email && respuesta.email.toLowerCase() === this.UserLogin.email.toLowerCase() && respuesta.contraseña === this.UserLogin.contraseña) {
+        console.log('Inicio de sesión exitoso');
+        console.log(respuesta.primer_nombre);
+        console.log(respuesta.primer_apellido);
+        console.log(respuesta.id);
+        console.log(respuesta.verificado);
+  
+        const queryParams = {
+          primerNombre: respuesta.primer_nombre,
+          primerApellido: respuesta.primer_apellido,
+          idUser: respuesta.id
         
-
-  const queryParams = {
-   primerNombre : respuesta.primer_nombre,
-   primerApellido: respuesta.primer_apellido,
-   idUser: respuesta.id
- 
-
-  };
-
+        };
+  
         this.showProgressBar = true;
         this.progress = 0; // Reinicia el valor de progress
         this.startProgressBar();
         setTimeout(() => {
           this.showProgressBar = false;
-          if(respuesta.tipo_usuario === 1){
-            localStorage.setItem('tipo_usuario', 'ADMIN') ;
+          if (respuesta.tipo_usuario === 1) {
+            localStorage.setItem('tipo_usuario', 'ADMIN');
             this.router.navigate(['admin-page'], { queryParams });
           } else if (respuesta.tipo_usuario === 2) {
-            localStorage.setItem('tipo_usuario', 'DRIVER') 
-            this.router.navigate(['driver-page'], { queryParams });
-            console.log(queryParams)
-
+            // se agregó una segunda verificación para que cualquier aspirante a conductor no pueda acceder a la plataforma
+            if (respuesta.verificado) {
+              localStorage.setItem('tipo_usuario', 'DRIVER');
+              this.router.navigate(['driver-page'], { queryParams });
+              console.log(queryParams);
+            } else {
+              this.presentAlert('No puedes acceder debido a que todavía estás en verificación para figurar como conductor de esta plataforma.');
+            }
           } else if (respuesta.tipo_usuario === 3) {
             localStorage.setItem('tipo_usuario', 'USER');
             this.router.navigate(['user-page'], { queryParams });
@@ -83,14 +89,16 @@ export class LoginPage implements OnInit {
           }
         }, 2000); // 2000 milisegundos = 2 segundos
       } else {
-        console.log('credenciales inválidas');
-        this.presentAlert('credenciales inválidas');
+        console.log('Credenciales inválidas');
+        this.presentAlert('Credenciales inválidas');
       }
     } else {
       console.log('Nombre de usuario o contraseña no válidos');
       this.presentAlert('Nombre de usuario o contraseña no válidos');
     }
   }
+
+
 
   startProgressBar() {
     this.progressInterval = setInterval(() => {

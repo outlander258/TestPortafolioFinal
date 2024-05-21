@@ -36,13 +36,12 @@ export class UserPagePage implements OnInit {
 
 
 
+    this.getConductoresDisponibles();
 
 
 
 
-
-
-    this.getConductores()
+ 
 
     // vista solo accesible para tipo_usuario = 3
 
@@ -63,36 +62,42 @@ export class UserPagePage implements OnInit {
 
   }
 
-  async setOpenModalConductor(modal:boolean){
-    this.modalConductor=modal
+
+ 
+
+
+  getConductoresDisponibles() {
+    this.servicio.getConductorDisponible().subscribe(
+      (data: any[]) => {
+        this.conductores = data;
+      },
+      (error) => {
+        console.error('Error al obtener los conductores disponibles:', error);
+      }
+    );
   }
 
-  async getConductores() {
-    this.servicio.getConductorVerificado().subscribe((conductores: any) => {
-      console.log('Datos obtenidos', conductores);
-
-      // Filtrar los conductores por disponibilidad
-      const conductoresDisponibles = conductores.filter((conductor: any) => {
-        const disponibilidad = JSON.parse(localStorage.getItem(`availability_${conductor.id}`) || 'false');
-        console.log(this.conductores)
-        return disponibilidad && conductor.verificado;
-        
-
-      });
-
-      // Formatear los números de teléfono
-      conductoresDisponibles.forEach((conductor: any) => {
-        conductor.telefono = '+56-9' + conductor.telefono.toString().slice(-8);
-         // Obtener los últimos 8 dígitos del número de teléfono
-         console.log(conductoresDisponibles)
-      });
-
-      this.conductores = conductoresDisponibles; // Asignar los conductores disponibles a la variable conductores
-    }, (error: any) => {
-      console.log('Error al obtener los datos', error);
-    });
+  setOpenModalConductor(isOpen: boolean) {
+    this.modalConductor = isOpen;
+    if (isOpen) {
+      this.getConductoresDisponibles();
+    }
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
  
     
 

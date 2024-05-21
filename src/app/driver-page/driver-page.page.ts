@@ -22,9 +22,14 @@ export class DriverPagePage implements OnInit {
   constructor(private router: Router, private toastController: ToastController, private route: ActivatedRoute, private servicio :ServiceService) { }
 
   ngOnInit() {
+
+
+
+
+
+
     // Recuperar la disponibilidad del conductor desde localStorage
-    // seteando el boton
-    this.isAvailable =false;
+
     const storedAvailability = localStorage.getItem('isAvailable');
     if (storedAvailability !== null) {
       this.isAvailable = JSON.parse(storedAvailability);
@@ -41,11 +46,16 @@ export class DriverPagePage implements OnInit {
       this.primerApellido = params['primerApellido'] || this.primerApellido;
       this.idConductor = params['idUser'] || this.idConductor;
 
+
       console.log(params);
       console.log(this.primerNombre);
       console.log(this.primerApellido);
-      console.log(this.idConductor)
+      console.log(this.idConductor);
+
     });
+  
+
+
   }
 
   ngAfterViewInit() {}
