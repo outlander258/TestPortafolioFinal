@@ -84,7 +84,29 @@ export class ServiceService {
   getConductorDisponible(): Observable<any> {
     return this.http.get(this.URL + 'conductor_activo?select=*', { headers: this.header });
   }
+
+
+  updateVerificado(userId: Number, verificado: boolean): Observable<any> {
+    const body = { verificado: verificado };
+    return this.http.patch<any>(`${this.URL}usuario?id=eq.${userId}`, body, { headers: this.header });
+  }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

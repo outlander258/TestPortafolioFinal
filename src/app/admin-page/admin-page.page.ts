@@ -80,33 +80,49 @@ showUsers = false;
   }
 }
 
-  // Método para bloquear un conductor
-  blockDriver(driver: { nombre: string, apellido: string, bloqueado: boolean }) {
-    console.log('Bloquear conductor:', driver.nombre);
-    driver.bloqueado = true;
-    // Aquí necesitarás agregar el código para bloquear el conductor en tu base de datos
-  }
 
-  // Método para desbloquear un conductor
-  unblockDriver(driver: { nombre: string, apellido: string, bloqueado: boolean }) {
-    console.log('Desbloquear conductor:', driver.nombre);
-    driver.bloqueado = false;
-    // Aquí necesitarás agregar el código para desbloquear el conductor en tu base de datos
-  }
-
-  // Método para bloquear un usuario
-blockUser(user: { nombre: string, apellido: string, bloqueado: boolean }) {
-  console.log('Bloquear usuario:', user.nombre);
-  user.bloqueado = true;
-  // Aquí necesitarás agregar el código para bloquear el usuario en tu base de datos
+blockDriver(driver: any) {
+  console.log('Bloquear conductor:', driver.primer_nombre);
+  this.servicio.updateVerificado(driver.id, false).subscribe(response => {
+    console.log('Conductor bloqueado:', response);
+    driver.verificado = false;
+  }, error => {
+    console.error('Error al bloquear conductor:', error);
+  });
 }
 
-// Método para desbloquear un usuario
-unblockUser(user: { nombre: string, apellido: string, bloqueado: boolean }) {
-  console.log('Desbloquear usuario:', user.nombre);
-  user.bloqueado = false;
-  // Aquí necesitarás agregar el código para desbloquear el usuario en tu base de datos
+unblockDriver(driver: any) {
+  console.log('Desbloquear conductor:', driver.primer_nombre);
+  this.servicio.updateVerificado(driver.id, true).subscribe(response => {
+    console.log('Conductor desbloqueado:', response);
+    driver.verificado = true;
+  }, error => {
+    console.error('Error al desbloquear conductor:', error);
+  });
 }
+
+
+blockUser(user: any) {
+  console.log('Bloquear usuario:', user.primer_nombre);
+  this.servicio.updateVerificado(user.id, false).subscribe(response => {
+    console.log('Usuario bloqueado:', response);
+    user.verificado = false;
+  }, error => {
+    console.error('Error al bloquear usuario:', error);
+  });
+}
+
+unblockUser(user: any) {
+  console.log('Desbloquear usuario:', user.primer_nombre);
+  this.servicio.updateVerificado(user.id, true).subscribe(response => {
+    console.log('Usuario desbloqueado:', response);
+    user.verificado = true;
+  }, error => {
+    console.error('Error al desbloquear usuario:', error);
+  });
+}
+
+
 
   // Método para mostrar u ocultar la lista de conductores
   toggleShowDrivers() {

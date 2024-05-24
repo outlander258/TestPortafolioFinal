@@ -48,7 +48,7 @@ export class LoginPage implements OnInit {
     if (this.UserName && this.UserPassword) {
       this.UserLogin.email = this.UserName!;
       this.UserLogin.contraseña = this.UserPassword!;
-    
+  
       const respuesta = await lastValueFrom(this.servicio.getLogin(this.UserLogin));
       if (respuesta && respuesta.email && respuesta.email.toLowerCase() === this.UserLogin.email.toLowerCase() && respuesta.contraseña === this.UserLogin.contraseña) {
         console.log('Inicio de sesión exitoso');
@@ -61,7 +61,6 @@ export class LoginPage implements OnInit {
           primerNombre: respuesta.primer_nombre,
           primerApellido: respuesta.primer_apellido,
           idUser: respuesta.id
-        
         };
   
         this.showProgressBar = true;
@@ -73,17 +72,19 @@ export class LoginPage implements OnInit {
             localStorage.setItem('tipo_usuario', 'ADMIN');
             this.router.navigate(['admin-page'], { queryParams });
           } else if (respuesta.tipo_usuario === 2) {
-            // se agregó una segunda verificación para que cualquier aspirante a conductor no pueda acceder a la plataforma
             if (respuesta.verificado) {
               localStorage.setItem('tipo_usuario', 'DRIVER');
               this.router.navigate(['driver-page'], { queryParams });
-              console.log(queryParams);
             } else {
               this.presentAlert('No puedes acceder debido a que todavía estás en verificación para figurar como conductor de esta plataforma.');
             }
           } else if (respuesta.tipo_usuario === 3) {
-            localStorage.setItem('tipo_usuario', 'USER');
-            this.router.navigate(['user-page'], { queryParams });
+            if (respuesta.verificado) {
+              localStorage.setItem('tipo_usuario', 'USER');
+              this.router.navigate(['user-page'], { queryParams });
+            } else {
+              this.presentAlert('Haz sido bloqueado de la plataforma.');
+            }
           } else {
             console.log('Tipo de usuario desconocido');
           }
@@ -97,7 +98,6 @@ export class LoginPage implements OnInit {
       this.presentAlert('Nombre de usuario o contraseña no válidos');
     }
   }
-
 
 
   startProgressBar() {
