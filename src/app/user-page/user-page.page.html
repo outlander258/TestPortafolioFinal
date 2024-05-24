@@ -10,10 +10,10 @@
     <h1 class="TitleLink">Link</h1>
   </div>
   <ion-header collapse="condense">
-    <ion-title class="PageTitle" size="large">Bienvenido/a <br> {{ primerNombre}}</ion-title>
+    <ion-title class="PageTitle" size="large">Bienvenido/a <br> {{ primerNombre }}</ion-title>
     <ion-card>
       <ion-card-header>
-        <ion-card-title>{{ primerNombre}} {{ primerApellido}}</ion-card-title>
+        <ion-card-title>{{ primerNombre }} {{ primerApellido }}</ion-card-title>
         <ion-card-subtitle>[tipo de usuario]</ion-card-subtitle>
       </ion-card-header>
 
@@ -24,12 +24,11 @@
     <br>
   </ion-header>
 
-
   <div class="input-container">
     <ion-button class="buscar-chofer" expand="block" (click)="setOpenModalConductor(true)">
       Mostrar conductores disponibles
     </ion-button>
-  
+
     <ion-modal [isOpen]="modalConductor">
       <ng-template>
         <ion-header>
@@ -44,7 +43,8 @@
           <ion-list *ngIf="conductores.length > 0">
             <ion-item *ngFor="let conductor of conductores">
               <ion-label>
-                ID: {{conductor.id}}
+                Nombre: {{conductor.usuario.primer_nombre}} {{conductor.usuario.segundo_nombre}}<br>
+                Teléfono: {{conductor.usuario.telefono}}
               </ion-label>
             </ion-item>
           </ion-list>
@@ -56,14 +56,9 @@
     </ion-modal>
   </div>
 
- 
-
   <br><br><br>
   <ion-button class="editar-perfil" expand="block">Editar perfil</ion-button>
   <br><br>
   <ion-button class="cerrar-sesion" expand="block" (click)="logout()">Cerrar sesión</ion-button>
   <br><br>
-
-
-
 </ion-content>

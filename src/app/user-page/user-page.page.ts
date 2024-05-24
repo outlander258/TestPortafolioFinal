@@ -7,6 +7,14 @@ import { ServiceService } from '../service/service.service';
 import { ModelLog } from '../modelo/ModelLog';
 import { ActivatedRoute } from '@angular/router';
 
+interface ConductorActivo {
+  id: number;
+  usuario: {
+    primer_nombre: string;
+    segundo_nombre: string;
+    telefono: string;
+  };
+}
 
 @Component({
   selector: 'app-user-page',
@@ -19,11 +27,13 @@ export class UserPagePage implements OnInit {
   primerNombre: string = '';
   primerApellido: string = '';
 
-  modalConductor=false
+  modalConductor = false;
+  modalBuscarConductor = false;
 
-  conductores:ModelLog[]=[]
+  conductores: ConductorActivo[] = [];
+  busquedaConductor: string = '';
 
-  constructor( private router : Router, private servicio:ServiceService , private route : ActivatedRoute) { }
+  constructor(private router: Router, private servicio: ServiceService, private route: ActivatedRoute) {}
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -34,42 +44,24 @@ export class UserPagePage implements OnInit {
       console.log(this.primerApellido);
     });
 
-
-
     this.getConductoresDisponibles();
 
-
-
-
- 
-
     // vista solo accesible para tipo_usuario = 3
-
     const userStorage = localStorage.getItem('tipo_usuario');
-
     if (userStorage !== 'USER') {
       this.router.navigate(['/login']);
-
-
-     
-
-
-  }
-}
-
-  logout(){
-    this.router.navigate(['login'])
-
+    }
   }
 
-
- 
-
+  logout() {
+    this.router.navigate(['login']);
+  }
 
   getConductoresDisponibles() {
     this.servicio.getConductorDisponible().subscribe(
-      (data: any[]) => {
+      (data: ConductorActivo[]) => {
         this.conductores = data;
+        console.log('Conductores disponibles:', this.conductores);
       },
       (error) => {
         console.error('Error al obtener los conductores disponibles:', error);
@@ -83,29 +75,16 @@ export class UserPagePage implements OnInit {
       this.getConductoresDisponibles();
     }
   }
+
+  setOpenModalBuscarConductor(isOpen: boolean) {
+    this.modalBuscarConductor = isOpen;
+  }
+
+  buscarConductor() {
+    console.log('Buscar conductor:', this.busquedaConductor);
+    // Aquí puedes implementar la lógica de búsqueda según tus necesidades
+  }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-    
-
-
-
-
-
-
 
   
 
