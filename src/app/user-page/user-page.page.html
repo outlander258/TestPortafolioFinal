@@ -57,6 +57,25 @@
   </div>
 
   <br><br><br>
+  <ion-item>
+    <ion-input [(ngModel)]="busquedaConductor" placeholder="Ingrese nombre del conductor"></ion-input>
+    <ion-button expand="block" (click)="buscarConductor()">Buscar Conductor</ion-button>
+  </ion-item>
+  <br><br>
+
+  <ion-list *ngIf="resultadoBusqueda.length > 0">
+    <ion-item *ngFor="let conductor of resultadoBusqueda">
+      <ion-label>
+        Nombre: {{conductor.usuario.primer_nombre}} {{conductor.usuario.segundo_nombre}}<br>
+        Teléfono: {{conductor.usuario.telefono}}
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  <ion-item *ngIf="resultadoBusqueda.length === 0 && busquedaRealizada">
+    <ion-label>No se encontró el conductor.</ion-label>
+  </ion-item>
+  
+  <br><br><br>
   <ion-button class="editar-perfil" expand="block">Editar perfil</ion-button>
   <br><br>
   <ion-button class="cerrar-sesion" expand="block" (click)="logout()">Cerrar sesión</ion-button>

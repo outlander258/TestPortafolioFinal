@@ -11,7 +11,7 @@ interface ConductorActivo {
   id: number;
   usuario: {
     primer_nombre: string;
-    segundo_nombre: string;
+    segundo_nombre?: string;
     telefono: string;
   };
 }
@@ -26,12 +26,13 @@ interface ConductorActivo {
 export class UserPagePage implements OnInit {
   primerNombre: string = '';
   primerApellido: string = '';
-
   modalConductor = false;
-  modalBuscarConductor = false;
 
   conductores: ConductorActivo[] = [];
   busquedaConductor: string = '';
+  busquedaRealizada: boolean = false;
+  resultadoBusqueda: ConductorActivo[] = [];
+ 
 
   constructor(private router: Router, private servicio: ServiceService, private route: ActivatedRoute) {}
 
@@ -76,15 +77,43 @@ export class UserPagePage implements OnInit {
     }
   }
 
-  setOpenModalBuscarConductor(isOpen: boolean) {
-    this.modalBuscarConductor = isOpen;
-  }
-
   buscarConductor() {
+    this.busquedaRealizada = true;
+    
+    if (!this.busquedaConductor.trim()) {
+      this.resultadoBusqueda = [];
+      return;
+    }
+    
     console.log('Buscar conductor:', this.busquedaConductor);
-    // Aquí puedes implementar la lógica de búsqueda según tus necesidades
+    this.resultadoBusqueda = this.conductores.filter(conductor => 
+      conductor.usuario.primer_nombre.toLowerCase().includes(this.busquedaConductor.toLowerCase())
+    );
+
+    if (this.resultadoBusqueda.length === 0) {
+      console.log('El conductor que buscas no está disponible o no existe');
+    }
   }
 }
+
+
+
+ 
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
 
   
 

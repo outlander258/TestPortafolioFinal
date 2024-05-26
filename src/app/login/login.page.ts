@@ -62,6 +62,11 @@ export class LoginPage implements OnInit {
           primerApellido: respuesta.primer_apellido,
           idUser: respuesta.id
         };
+
+          // Limpiar los campos de usuario y contraseña
+          this.UserName = '';
+          this.UserPassword = '';
+
   
         this.showProgressBar = true;
         this.progress = 0; // Reinicia el valor de progress
