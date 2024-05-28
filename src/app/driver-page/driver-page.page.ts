@@ -4,16 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
-<<<<<<< HEAD
-import { ServiceService } from '../service/service.service';
-=======
 import { ModelLog } from '../modelo/ModelLog';
 import { ServiceService } from '../service/service.service';
 
 
 
 
->>>>>>> 6c02bbbd6f13e47fcc22fc590adaf874847787bc
 
 @Component({
   selector: 'app-driver-page',
@@ -23,31 +19,10 @@ import { ServiceService } from '../service/service.service';
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class DriverPagePage implements OnInit {
-<<<<<<< HEAD
-  primerNombre: string = '';
-  primerApellido: string = '';
-  idConductor : number | undefined;
-  isAvailable: boolean = true;
-
-  constructor(private router: Router, private toastController: ToastController, private route: ActivatedRoute, private servicio :ServiceService) { }
-
-  ngOnInit() {
-
-
-
-
-
-
-    // Recuperar la disponibilidad del conductor desde localStorage
-
-    const storedAvailability = localStorage.getItem('isAvailable');
-    if (storedAvailability !== null) {
-      this.isAvailable = JSON.parse(storedAvailability);
-    }
-
-=======
   // Variable para almacenar el estado de disponibilidad del conductor
   isAvailable: boolean = true;
+  idConductor:number | undefined;
+
 
 
 
@@ -84,13 +59,25 @@ export class DriverPagePage implements OnInit {
     private router: Router,
     private toastController: ToastController,
     private route: ActivatedRoute,
-    private service: ServiceService
+    private servicio: ServiceService
 
   ) { }
 
   ngOnInit() {
 
->>>>>>> 6c02bbbd6f13e47fcc22fc590adaf874847787bc
+    
+    // Recuperar la disponibilidad del conductor desde localStorage
+
+    const storedAvailability = localStorage.getItem('isAvailable');
+    if (storedAvailability !== null) {
+      this.isAvailable = JSON.parse(storedAvailability);
+    }
+
+
+
+
+
+
     // vista solo accesible para tipo_usuario = 2
     const userStorage = localStorage.getItem('tipo_usuario');
     if (userStorage !== 'DRIVER') {
@@ -109,41 +96,54 @@ export class DriverPagePage implements OnInit {
       console.log(this.idConductor);
 
     });
+
+
+
+    this.route.queryParams.subscribe(params => {
+      this.primerNombre = params['primerNombre'];
+      this.primerApellido = params['primerApellido'];
+      this.segundoNombre = params['segundoNombre'];
+      this.segundoApellido = params['segundoApellido'];
+      this.telefono = params['telefono'];
+      this.id = params['id'];
+  
+      console.log(params);
+      console.log(this.primerNombre);
+      console.log(this.primerApellido);
+      console.log(this.segundoNombre);
+      console.log(this.segundoApellido);
+      console.log(this.telefono);
+      console.log(this.id);
+    });
+  
+    // asignacion de variables para cambion en caso de no ingresar dato nuevo
+  
+    this.new_primerNombre = this.primerNombre;
+    this.new_primerApellido = this.primerApellido;
+    this.new_segundoNombre = this.segundoNombre;
+    this.new_segundoApellido = this.segundoApellido;
+    this.new_telefono = this.telefono;
+  
+
+
+
+
+
   
 
 
   };
 
-<<<<<<< HEAD
-  ngAfterViewInit() {}
-=======
-  this.route.queryParams.subscribe(params => {
-    this.primerNombre = params['primerNombre'];
-    this.primerApellido = params['primerApellido'];
-    this.segundoNombre = params['segundoNombre'];
-    this.segundoApellido = params['segundoApellido'];
-    this.telefono = params['telefono'];
-    this.id = params['id'];
-
-    console.log(params);
-    console.log(this.primerNombre);
-    console.log(this.primerApellido);
-    console.log(this.segundoNombre);
-    console.log(this.segundoApellido);
-    console.log(this.telefono);
-    console.log(this.id);
-  });
-
-  // asignacion de variables para cambion en caso de no ingresar dato nuevo
-
-  this.new_primerNombre = this.primerNombre;
-  this.new_primerApellido = this.primerApellido;
-  this.new_segundoNombre = this.segundoNombre;
-  this.new_segundoApellido = this.segundoApellido;
-  this.new_telefono = this.telefono;
 
 
-}
+
+
+
+
+
+ 
+
+
 
 
 
@@ -155,7 +155,6 @@ export class DriverPagePage implements OnInit {
 ngAfterViewInit() {
 
 }
->>>>>>> 6c02bbbd6f13e47fcc22fc590adaf874847787bc
 
   // Variable para almacenar el contenido del card
   cardContent: string = "Añade una breve descripción de tu experiencia como conductor.";
@@ -186,14 +185,8 @@ ngAfterViewInit() {
     toast.present();
     }
 
-<<<<<<< HEAD
   logout() {
     this.router.navigate(['login']);
-=======
-
-  logout() {
-    this.router.navigate(['login'])
->>>>>>> 6c02bbbd6f13e47fcc22fc590adaf874847787bc
   }
 
   setModalModificarDatosOpen(estado: boolean) {
@@ -210,7 +203,7 @@ ngAfterViewInit() {
       telefono: this.new_telefono
     };
 
-    this.service.UpdateDatos(this.id!, new_datos);
+    this.servicio.UpdateDatos(this.id!, new_datos);
     this.setModalModificarDatosOpen(false);
   }
 

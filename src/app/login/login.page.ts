@@ -19,67 +19,36 @@ export class LoginPage implements OnInit {
 
   UserName: string = '';
   UserPassword: string = '';
-<<<<<<< HEAD
 
-  UserLogin :ModelLog ={
-    id : undefined ,
-    primer_nombre:'',
-    segundo_nombre :'',
-    tipo_usuario : 0,
-=======
   UserLogin: ModelLog = {
     id: undefined,
     primer_nombre: '',
     segundo_nombre: '',
     tipo_usuario: 0,
->>>>>>> 6c02bbbd6f13e47fcc22fc590adaf874847787bc
     primer_apellido: '',
     segundo_apellido: '',
-    rut :'',
-    telefono : '',
-    email : '',
-    contraseña :'',
-    verificado : false,
+    rut: '',
+    telefono: '',
+    email: '',
+    contraseña: '',
+    verificado: false,
   }
   public progress = 0;
   public showProgressBar = false;
   private progressInterval: any;
 
-  constructor(private router : Router, private servicio :ServiceService, private alertController: AlertController) { }
+  constructor(private router: Router, private servicio: ServiceService, private alertController: AlertController) { }
 
   ngOnInit() {
   }
 
-<<<<<<< HEAD
 
 
 
-=======
->>>>>>> 6c02bbbd6f13e47fcc22fc590adaf874847787bc
   async login() {
     if (this.UserName && this.UserPassword) {
       this.UserLogin.email = this.UserName!;
       this.UserLogin.contraseña = this.UserPassword!;
-<<<<<<< HEAD
-  
-      const respuesta = await lastValueFrom(this.servicio.getLogin(this.UserLogin));
-      if (respuesta && respuesta.email && respuesta.email.toLowerCase() === this.UserLogin.email.toLowerCase() && respuesta.contraseña === this.UserLogin.contraseña) {
-        console.log('Inicio de sesión exitoso');
-        console.log(respuesta.primer_nombre);
-        console.log(respuesta.primer_apellido);
-        console.log(respuesta.id);
-        console.log(respuesta.verificado);
-  
-        const queryParams = {
-          primerNombre: respuesta.primer_nombre,
-          primerApellido: respuesta.primer_apellido,
-          idUser: respuesta.id
-        };
-
-          // Limpiar los campos de usuario y contraseña
-          this.UserName = '';
-          this.UserPassword = '';
-=======
 
       const respuesta = await lastValueFrom(this.servicio.getLogin(this.UserLogin));
       if (respuesta && respuesta.email && respuesta.email.toLowerCase() === this.UserLogin.email.toLowerCase() && respuesta.contraseña === this.UserLogin.contraseña) {
@@ -98,9 +67,13 @@ export class LoginPage implements OnInit {
 
 
         };
->>>>>>> 6c02bbbd6f13e47fcc22fc590adaf874847787bc
 
-  
+
+        // Limpiar los campos de usuario y contraseña
+        this.UserName = '';
+        this.UserPassword = '';
+
+
         this.showProgressBar = true;
         this.progress = 0; // Reinicia el valor de progress
         this.startProgressBar();
@@ -141,7 +114,7 @@ export class LoginPage implements OnInit {
   startProgressBar() {
     this.progressInterval = setInterval(() => {
       this.progress += 0.01;
-  
+
       if (this.progress > 1) {
         clearInterval(this.progressInterval);
       }
@@ -162,7 +135,7 @@ export class LoginPage implements OnInit {
     await alert.present();
   }
 
-  GetBack(){
+  GetBack() {
     this.router.navigate(['principal-page']);
   }
 }
