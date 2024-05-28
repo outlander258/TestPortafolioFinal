@@ -21,7 +21,7 @@ import { ServiceService } from '../service/service.service';
 export class DriverPagePage implements OnInit {
   // Variable para almacenar el estado de disponibilidad del conductor
   isAvailable: boolean = true;
-  idConductor:number | undefined;
+  idConductor:number = 0;
 
 
 
@@ -106,6 +106,7 @@ export class DriverPagePage implements OnInit {
       this.segundoApellido = params['segundoApellido'];
       this.telefono = params['telefono'];
       this.id = params['id'];
+      this.idConductor = params['id'];
   
       console.log(params);
       console.log(this.primerNombre);
@@ -163,10 +164,12 @@ ngAfterViewInit() {
     this.isAvailable = event.detail.checked;
     console.log(this.isAvailable)
     if(this.isAvailable === true){
-      console.log("Verdad")
+      console.log("Verdad", this.idConductor)
+
       const datos ={
         id : this.idConductor
       }
+      console.log(datos)
       this.servicio.conductorDisponible(datos);
     }
     if(this.isAvailable===false){
