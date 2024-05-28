@@ -16,26 +16,55 @@ import { ActivatedRoute } from '@angular/router';
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class UserPagePage implements OnInit {
-  primerNombre: string = '';
-  primerApellido: string = '';
+
+// variables para almacenar los datos del conductor
+primerNombre: string = '';
+primerApellido: string = '';
+segundoNombre: string = '';
+segundoApellido: string = '';
+telefono: string = '';
+id: number | undefined;
+
+//variables para insertar nuevos datos modificados
+new_primerNombre: string = '';
+new_primerApellido: string = '';
+new_segundoNombre: string = '';
+new_segundoApellido: string = '';
+new_telefono: string = '';
+
+// variables para modal
+isModalModificarDatosOpen: boolean = false;
+
 
   modalConductor=false
 
   conductores:ModelLog[]=[]
 
-  constructor( private router : Router, private servicio:ServiceService , private route : ActivatedRoute) { }
+  constructor( 
+    private router : Router,
+     private servicio:ServiceService , 
+     private route : ActivatedRoute,
+
+    ) { }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.primerNombre = params['primerNombre'];
       this.primerApellido = params['primerApellido'];
-      console.log(params);
-      console.log(this.primerNombre);
-      console.log(this.primerApellido);
+      this.segundoNombre = params['segundoNombre'];
+      this.segundoApellido = params['segundoApellido'];
+      this.telefono = params['telefono'];
+      this.id = params['id'];
+  
     });
 
 
-
+    this.new_primerNombre = this.primerNombre;
+    this.new_primerApellido = this.primerApellido;
+    this.new_segundoNombre = this.segundoNombre;
+    this.new_segundoApellido = this.segundoApellido;
+    this.new_telefono = this.telefono;
+  
 
 
 
@@ -51,8 +80,6 @@ export class UserPagePage implements OnInit {
     if (userStorage !== 'USER') {
       this.router.navigate(['/login']);
 
-
-     
 
 
   }
@@ -81,8 +108,22 @@ export class UserPagePage implements OnInit {
     });
   }
   
-  
-  
+  setModalModificarDatosOpen(estado: boolean) {
+    this.isModalModificarDatosOpen = estado;
+  }
+
+  modificarDatos() {
+    const new_datos = {
+      primer_nombre: this.new_primerNombre,
+      segundo_nombre: this.new_segundoNombre,
+      primer_apellido: this.new_primerApellido,
+      segundo_apellido: this.new_segundoApellido,
+      telefono: this.new_telefono
+    };
+
+    this.servicio.UpdateDatos(this.id!, new_datos);
+    this.setModalModificarDatosOpen(false);
+  }
   
 
 
