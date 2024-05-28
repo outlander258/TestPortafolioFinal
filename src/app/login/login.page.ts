@@ -7,6 +7,7 @@ import { ModelLog } from '../modelo/ModelLog';
 import { ServiceService } from '../service/service.service';
 import { lastValueFrom } from 'rxjs';
 
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -18,12 +19,20 @@ export class LoginPage implements OnInit {
 
   UserName: string = '';
   UserPassword: string = '';
+<<<<<<< HEAD
 
   UserLogin :ModelLog ={
     id : undefined ,
     primer_nombre:'',
     segundo_nombre :'',
     tipo_usuario : 0,
+=======
+  UserLogin: ModelLog = {
+    id: undefined,
+    primer_nombre: '',
+    segundo_nombre: '',
+    tipo_usuario: 0,
+>>>>>>> 6c02bbbd6f13e47fcc22fc590adaf874847787bc
     primer_apellido: '',
     segundo_apellido: '',
     rut :'',
@@ -41,13 +50,17 @@ export class LoginPage implements OnInit {
   ngOnInit() {
   }
 
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> 6c02bbbd6f13e47fcc22fc590adaf874847787bc
   async login() {
     if (this.UserName && this.UserPassword) {
       this.UserLogin.email = this.UserName!;
       this.UserLogin.contraseña = this.UserPassword!;
+<<<<<<< HEAD
   
       const respuesta = await lastValueFrom(this.servicio.getLogin(this.UserLogin));
       if (respuesta && respuesta.email && respuesta.email.toLowerCase() === this.UserLogin.email.toLowerCase() && respuesta.contraseña === this.UserLogin.contraseña) {
@@ -66,6 +79,26 @@ export class LoginPage implements OnInit {
           // Limpiar los campos de usuario y contraseña
           this.UserName = '';
           this.UserPassword = '';
+=======
+
+      const respuesta = await lastValueFrom(this.servicio.getLogin(this.UserLogin));
+      if (respuesta && respuesta.email && respuesta.email.toLowerCase() === this.UserLogin.email.toLowerCase() && respuesta.contraseña === this.UserLogin.contraseña) {
+        console.log('inicio de sesión exitoso')
+        console.log(respuesta.primer_nombre)
+        console.log(respuesta.primer_apellido)
+
+
+        const queryParams = {
+          primerNombre: respuesta.primer_nombre,
+          primerApellido: respuesta.primer_apellido,
+          segundoNombre: respuesta.segundo_nombre,
+          segundoApellido: respuesta.segundo_apellido,
+          telefono: respuesta.telefono,
+          id: respuesta.id,
+
+
+        };
+>>>>>>> 6c02bbbd6f13e47fcc22fc590adaf874847787bc
 
   
         this.showProgressBar = true;

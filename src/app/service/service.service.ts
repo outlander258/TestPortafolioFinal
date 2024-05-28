@@ -32,7 +32,11 @@ export class ServiceService {
     console.log('UserLogin.contraseña:', UserLogin.contraseña);
     console.log('URL:', this.URL);
 
+<<<<<<< HEAD
     return this.http.get<ModelLog[]>(this.URL + 'usuario?select=id,primer_nombre,primer_apellido,email,tipo_usuario,verificado,contraseña&email=eq.' + UserLogin.email + '&contraseña=eq.' + UserLogin.contraseña, { headers: this.header, responseType: 'json' }).pipe(
+=======
+    return this.http.get<ModelLog[]>(this.URL + 'usuario?select=id,primer_nombre,segundo_nombre,primer_apellido,segundo_apellido,telefono,email,tipo_usuario,contraseña&email=eq.' + UserLogin.email + '&contraseña=eq.' + UserLogin.contraseña, { headers: this.header, responseType: 'json' }).pipe(
+>>>>>>> 6c02bbbd6f13e47fcc22fc590adaf874847787bc
         map((userInfo) => {
             return userInfo[0];
         }));
@@ -50,7 +54,13 @@ export class ServiceService {
   }
 
 
-
+  UpdateDatos(id: number, newUser: any): void {
+    this.http.patch(this.URL+'usuario?id=eq.'+id, newUser, { headers: this.header }).subscribe(response => {
+      console.log('Registro actualizado:', response);
+    }, error => {
+      console.error('Error al actualizar el registro:', error);
+    });
+  }
 
   conductorDisponible(datos: any) {
     return this.http.post(this.URL + 'conductor_activo', datos, { headers: this.header })
