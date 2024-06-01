@@ -14,6 +14,7 @@ import { ServiceService } from '../service/service.service';
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class AdminPagePage implements OnInit {
+  fechaHora : Date | undefined;
   primerNombre: string = '';
   primerApellido: string = '';
   conductores: any[] = [];
@@ -41,6 +42,15 @@ showUsers = false;
   constructor( private router : Router ,private route : ActivatedRoute, private servicio : ServiceService) { }
 
   ngOnInit() {
+    this.servicio.getDateTime().subscribe( dateTime =>{
+      this.fechaHora= dateTime
+    })
+
+
+
+
+
+
 
     this.getSolicitantes();
    
@@ -86,10 +96,33 @@ blockDriver(driver: any) {
   this.servicio.updateVerificado(driver.id, false).subscribe(response => {
     console.log('Conductor bloqueado:', response);
     driver.verificado = false;
+    // Eliminar el conductor de la tabla conductor_activo
+    this.servicio.conductorNoDisponible(driver.id).then(
+      response => {
+        console.log('Conductor eliminado de conductor_activo:', response);
+        // Actualizar la lista local de conductores para reflejar el cambio
+        this.conductores = this.conductores.filter(c => c.usuario.id !== driver.id);
+      }
+    ).catch(
+      error => {
+        console.error('Error al eliminar el conductor de conductor_activo:', error);
+      }
+    );
   }, error => {
     console.error('Error al bloquear conductor:', error);
   });
 }
+
+
+
+
+
+
+
+
+
+
+
 
 unblockDriver(driver: any) {
   console.log('Desbloquear conductor:', driver.primer_nombre);

@@ -19,6 +19,7 @@ import { ServiceService } from '../service/service.service';
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class DriverPagePage implements OnInit {
+  fechaHora : Date | undefined;
   // Variable para almacenar el estado de disponibilidad del conductor
   isAvailable: boolean = true;
   idConductor:number = 0;
@@ -64,6 +65,11 @@ export class DriverPagePage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.servicio.getDateTime().subscribe( dateTime =>{
+      this.fechaHora= dateTime
+    })
+    
+    
 
     
     // Recuperar la disponibilidad del conductor desde localStorage

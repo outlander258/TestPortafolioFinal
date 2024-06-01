@@ -24,9 +24,11 @@ interface ConductorActivo {
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class UserPagePage implements OnInit {
+  fechaHora: Date | undefined;
   primerNombre: string = '';
   primerApellido: string = '';
   modalConductor = false;
+
 
   conductores: ConductorActivo[] = [];
   busquedaConductor: string = '';
@@ -37,6 +39,15 @@ export class UserPagePage implements OnInit {
   constructor(private router: Router, private servicio: ServiceService, private route: ActivatedRoute) {}
 
   ngOnInit() {
+    this.servicio.getDateTime().subscribe( dateTime =>{
+      this.fechaHora= dateTime
+    })
+    
+
+
+
+
+
     this.route.queryParams.subscribe(params => {
       this.primerNombre = params['primerNombre'];
       this.primerApellido = params['primerApellido'];

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ModelLog } from '../modelo/ModelLog';
-import { Observable, map } from 'rxjs';
-
+import { Observable, interval } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 
 
@@ -20,6 +20,13 @@ export class ServiceService {
   header = new HttpHeaders()
     .set('apikey', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndncWFic3hmam90bXVjbWZqcXRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTQ3NjUwNzMsImV4cCI6MjAzMDM0MTA3M30.5i8-v2LiWpbqJLOhR64w0kBSvx4Mh8aSi_UBKCl__nk')
 
+
+
+
+
+
+
+    
 
   // select de todos los usuarios
   getDatos(): Observable<any> {
@@ -96,7 +103,24 @@ export class ServiceService {
     const body = { verificado: verificado };
     return this.http.patch<any>(`${this.URL}usuario?id=eq.${userId}`, body, { headers: this.header });
   }
+
+
+// fecha y hora en tiempo real
+  getDateTime(): Observable<Date> {
+    return interval(1000).pipe(
+      map(() => new Date())
+    );
+  }
 }
+
+
+
+
+
+
+
+
+
 
 
 
