@@ -7,36 +7,42 @@
   <!-- </ion-toolbar>
 </ion-header>  -->
 
-<ion-content  [fullscreen]="true">
+<ion-content [fullscreen]="true">
   <ion-header cl="Header" collapse="condense">
+
+    <ion-header cl="Header" collapse="condense">
       <ion-title class="PageTitle" size="large"><p class="TitleDrive">Drive</p><p class="TitleLink">Link</p></ion-title>
+  </ion-header>
+
   </ion-header>
 
   <div class="Welcome">
     <p>
-      <ion-title class="PageTitle" size="large">Bienvenido/a <br> {{ primerNombre}}</ion-title>
-      
-      ¡Bienvenido al equipo administrativo de nuestra aplicación! Tu papel es fundamental para garantizar que nuestra plataforma 
+
+      <ion-title class="PageTitle" size="large">Bienvenido/a <br> {{ primerNombre }}</ion-title>
+      ¡Bienvenido/a al equipo administrativo de nuestra aplicación! Tu papel es fundamental para garantizar que nuestra plataforma
+
       funcione sin problemas y brinde la mejor experiencia a nuestros usuarios. Tu contribución es invaluable para el éxito 
-      continuo de nuestra aplicación. </p>
-      <br>
-      <p>¡Gracias por ser parte de nuestro equipo!</p>
+      continuo de nuestra aplicación.
+    </p>
+    <br>
+    <p>¡Gracias por ser parte de nuestro equipo!</p>
   </div> 
   <br><br>
   <ion-button class="usuarios" shape="round" (click)="toggleShowUsers()">Usuarios</ion-button>
-<ion-list *ngIf="showUsers">
-  <ion-item *ngFor="let user of users">
-    {{ user.nombre }} - {{ user.apellido }}
-    <ion-button [disabled]="user.bloqueado" (click)="blockUser(user)">Bloquear</ion-button>
-    <ion-button [disabled]="!user.bloqueado" (click)="unblockUser(user)">Desbloquear</ion-button>
-  </ion-item> 
-</ion-list>
+  <ion-list *ngIf="showUsers">
+    <ion-item class="ItemAdmin" *ngFor="let user of solicitantes">
+      {{ user.primer_nombre }} - {{ user.primer_apellido }}
+      <ion-button [disabled]="!user.verificado" (click)="blockUser(user)">Bloquear</ion-button>
+      <ion-button [disabled]="user.verificado" (click)="unblockUser(user)">Desbloquear</ion-button>
+    </ion-item> 
+  </ion-list>
   <ion-button class="conductores" shape="round" (click)="toggleShowDrivers()">Conductores</ion-button>
   <ion-list *ngIf="showDrivers">
-    <ion-item *ngFor="let driver of drivers">
-      {{ driver.nombre }} - {{ driver.apellido }}
-      <ion-button [disabled]="driver.bloqueado" (click)="blockDriver(driver)">Bloquear</ion-button>
-      <ion-button [disabled]="!driver.bloqueado" (click)="unblockDriver(driver)">Desbloquear</ion-button>
+    <ion-item *ngFor="let driver of conductores">
+      {{ driver.primer_nombre }} - {{ driver.primer_apellido }}
+      <ion-button [disabled]="!driver.verificado" (click)="blockDriver(driver)">Bloquear</ion-button>
+      <ion-button [disabled]="driver.verificado" (click)="unblockDriver(driver)">Desbloquear</ion-button>
     </ion-item> 
   </ion-list>
   <br><br><br>

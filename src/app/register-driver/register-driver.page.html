@@ -1,4 +1,4 @@
- <ion-header [translucent]="true">
+<ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>Registro Conductor</ion-title>
   </ion-toolbar>
@@ -18,7 +18,7 @@
     </ion-item>
 
     <ion-item>
-      <ion-label position="floating"> Segundo Nombre:</ion-label>
+      <ion-label position="floating">Segundo Nombre:</ion-label>
       <ion-input type="text"></ion-input>
     </ion-item>
 
@@ -28,7 +28,7 @@
     </ion-item>
 
     <ion-item>
-      <ion-label position="floating"> Segundo Apellido:</ion-label>
+      <ion-label position="floating">Segundo Apellido:</ion-label>
       <ion-input type="text"></ion-input>
     </ion-item>
 
@@ -37,7 +37,6 @@
       <ion-input type="text" [(ngModel)]="RunDriver" aria-label="Rut"></ion-input>
     </ion-item>
 
-    <!-- Hacer validacion y cambiar ngModel -->
     <ion-item>
       <ion-label position="floating">Email:</ion-label>
       <ion-input type="text" [(ngModel)]="EmailDriver" aria-label="Email"></ion-input>
@@ -53,7 +52,6 @@
       <ion-input type="password" [(ngModel)]="ConfirmDriver" aria-label="Confirma Contraseña"></ion-input>
     </ion-item>
 
-  
     <ion-item>
       <ion-label position="floating">Celular:</ion-label>
       <ion-input type="text" [(ngModel)]="CelDriver" aria-label="Celular"></ion-input>
@@ -61,7 +59,6 @@
   </div>
   <br><br>
 
-  <!-- Validar -->
   <div class="vehicle-driver">
     <ion-radio-group value="strawberries">
       <p>¿Posees un vehículo?</p>
@@ -71,7 +68,6 @@
   </div>
   <br>
 
-  <!-- Validar -->
   <div class="licenses">
     <p>Licencia(s) de conducir:</p> 
     <input type="file" aria-label="Licencia de Conducir 1">
@@ -81,8 +77,12 @@
   
   <br><br>
 
-  <ion-button class="FormDriver-button"  expand="block">Registrarme</ion-button>
+  <ion-button class="FormDriver-button" expand="block">Registrarme</ion-button>
   <br>
   <ion-button class="back-button" (click)="GetBack()" expand="block">Volver</ion-button>
   <br><br>
+
+  <div class="documents-link">
+    <p>Obtén todos tus documentos <a href="https://www.chileatiende.gob.cl/temas/certificados" target="_blank">aquí</a>.</p>
+  </div>
 </ion-content>

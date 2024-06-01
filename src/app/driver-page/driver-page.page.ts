@@ -21,6 +21,8 @@ import { ServiceService } from '../service/service.service';
 export class DriverPagePage implements OnInit {
   // Variable para almacenar el estado de disponibilidad del conductor
   isAvailable: boolean = true;
+  idConductor:number = 0;
+
 
 
 
@@ -57,48 +59,92 @@ export class DriverPagePage implements OnInit {
     private router: Router,
     private toastController: ToastController,
     private route: ActivatedRoute,
-    private service: ServiceService
+    private servicio: ServiceService
 
   ) { }
 
   ngOnInit() {
 
+    
+    // Recuperar la disponibilidad del conductor desde localStorage
+
+    const storedAvailability = localStorage.getItem('isAvailable');
+    if (storedAvailability !== null) {
+      this.isAvailable = JSON.parse(storedAvailability);
+    }
+
+
+
+
+
+
     // vista solo accesible para tipo_usuario = 2
-
     const userStorage = localStorage.getItem('tipo_usuario');
-
     if (userStorage !== 'DRIVER') {
       this.router.navigate(['/login']);
+    }
+
+    this.route.queryParams.subscribe(params => {
+      this.primerNombre = params['primerNombre'] || this.primerNombre;
+      this.primerApellido = params['primerApellido'] || this.primerApellido;
+      this.idConductor = params['idUser'] || this.idConductor;
+
+
+      console.log(params);
+      console.log(this.primerNombre);
+      console.log(this.primerApellido);
+      console.log(this.idConductor);
+
+    });
+
+
+
+    this.route.queryParams.subscribe(params => {
+      this.primerNombre = params['primerNombre'];
+      this.primerApellido = params['primerApellido'];
+      this.segundoNombre = params['segundoNombre'];
+      this.segundoApellido = params['segundoApellido'];
+      this.telefono = params['telefono'];
+      this.id = params['id'];
+      this.idConductor = params['id'];
+  
+      console.log(params);
+      console.log(this.primerNombre);
+      console.log(this.primerApellido);
+      console.log(this.segundoNombre);
+      console.log(this.segundoApellido);
+      console.log(this.telefono);
+      console.log(this.id);
+    });
+  
+    // asignacion de variables para cambion en caso de no ingresar dato nuevo
+  
+    this.new_primerNombre = this.primerNombre;
+    this.new_primerApellido = this.primerApellido;
+    this.new_segundoNombre = this.segundoNombre;
+    this.new_segundoApellido = this.segundoApellido;
+    this.new_telefono = this.telefono;
+  
+
+
+
+
+
+  
+
 
   };
 
-  this.route.queryParams.subscribe(params => {
-    this.primerNombre = params['primerNombre'];
-    this.primerApellido = params['primerApellido'];
-    this.segundoNombre = params['segundoNombre'];
-    this.segundoApellido = params['segundoApellido'];
-    this.telefono = params['telefono'];
-    this.id = params['id'];
-
-    console.log(params);
-    console.log(this.primerNombre);
-    console.log(this.primerApellido);
-    console.log(this.segundoNombre);
-    console.log(this.segundoApellido);
-    console.log(this.telefono);
-    console.log(this.id);
-  });
-
-  // asignacion de variables para cambion en caso de no ingresar dato nuevo
-
-  this.new_primerNombre = this.primerNombre;
-  this.new_primerApellido = this.primerApellido;
-  this.new_segundoNombre = this.segundoNombre;
-  this.new_segundoApellido = this.segundoApellido;
-  this.new_telefono = this.telefono;
 
 
-}
+
+
+
+
+
+ 
+
+
 
 
 
@@ -112,16 +158,27 @@ ngAfterViewInit() {
 }
 
   // Variable para almacenar el contenido del card
-cardContent: string = "Añade una breve descripción de tu experiencia como conductor.";
+  cardContent: string = "Añade una breve descripción de tu experiencia como conductor.";
 
-
-  // Método para manejar los cambios de estado del botón
   toggleAvailability(event: CustomEvent) {
     this.isAvailable = event.detail.checked;
-    const message = this.isAvailable ? 'Estás disponible para trabajar' : 'Ya no estás disponible para trabajar';
-    this.presentToast(message);
-  }
+    console.log(this.isAvailable)
+    if(this.isAvailable === true){
+      console.log("Verdad", this.idConductor)
 
+      const datos ={
+        id : this.idConductor
+      }
+      console.log(datos)
+      this.servicio.conductorDisponible(datos);
+    }
+    if(this.isAvailable===false){
+      console.log("mentira")
+      this.servicio.conductorNoDisponible(this.idConductor);
+
+    }
+   
+  }
   // Método para mostrar un toast
   async presentToast(message: string) {
     const toast = await this.toastController.create({
@@ -131,9 +188,8 @@ cardContent: string = "Añade una breve descripción de tu experiencia como cond
     toast.present();
     }
 
-
   logout() {
-    this.router.navigate(['login'])
+    this.router.navigate(['login']);
   }
 
   setModalModificarDatosOpen(estado: boolean) {
@@ -150,7 +206,7 @@ cardContent: string = "Añade una breve descripción de tu experiencia como cond
       telefono: this.new_telefono
     };
 
-    this.service.UpdateDatos(this.id!, new_datos);
+    this.servicio.UpdateDatos(this.id!, new_datos);
     this.setModalModificarDatosOpen(false);
   }
 

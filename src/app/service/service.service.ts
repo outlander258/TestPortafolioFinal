@@ -22,16 +22,17 @@ export class ServiceService {
 
 
   // select de todos los usuarios
-  getDatos(): any {
-    return this.http.get(this.URL + 'usuario?select=*', { headers: this.header });
+  getDatos(): Observable<any> {
+    return this.http.get<any[]>(`${this.URL}usuario?select=*`, { headers: this.header });
   }
+
   // retorna elementos de la base de datos como primer nombre, emial, tipo_user y contraseña
   getLogin(UserLogin: ModelLog): Observable<ModelLog> {
     console.log('UserLogin.email:', UserLogin.email);
     console.log('UserLogin.contraseña:', UserLogin.contraseña);
     console.log('URL:', this.URL);
 
-    return this.http.get<ModelLog[]>(this.URL + 'usuario?select=id,primer_nombre,segundo_nombre,primer_apellido,segundo_apellido,telefono,email,tipo_usuario,contraseña&email=eq.' + UserLogin.email + '&contraseña=eq.' + UserLogin.contraseña, { headers: this.header, responseType: 'json' }).pipe(
+    return this.http.get<ModelLog[]>(this.URL + 'usuario?select=id,primer_nombre,segundo_nombre,primer_apellido,segundo_apellido,telefono,email,verificado,tipo_usuario,contraseña&email=eq.' + UserLogin.email + '&contraseña=eq.' + UserLogin.contraseña, { headers: this.header, responseType: 'json' }).pipe(
         map((userInfo) => {
             return userInfo[0];
         }));
@@ -45,13 +46,7 @@ export class ServiceService {
   }
 
   getConductorVerificado() {
-    return this.http.get(this.URL + 'usuario?select=primer_nombre,primer_apellido,telefono&tipo_usuario=eq.2&verificado=eq.TRUE', { headers: this.header });
-  }
-
-
-  adminBlock(){
-
-    
+    return this.http.get(this.URL + 'usuario?select=id,primer_nombre,primer_apellido,telefono&tipo_usuario=eq.2&verificado=eq.TRUE', { headers: this.header });
   }
 
 
@@ -63,7 +58,62 @@ export class ServiceService {
     });
   }
 
+  conductorDisponible(datos: any) {
+    return this.http.post(this.URL + 'conductor_activo', datos, { headers: this.header })
+      .toPromise()
+      .then(response => {
+        console.log('Conductor disponible:', response);
+        return response;
+      })
+      .catch(error => {
+        console.error('Error al activar conductor:', error);
+        throw error;
+      });
+  }
+  
+  conductorNoDisponible(id: any) {
+    return this.http.delete(this.URL + 'conductor_activo?id=eq.' + id, { headers: this.header })
+      .toPromise()
+      .then(response => {
+        console.log('Conductor no disponible:', response);
+        console.log(id)
+        return response;
+      })
+      .catch(error => {
+        console.error('Error al desactivar conductor:', error);
+        throw error;
+      });
 
 
+      
+  }
 
+  getConductorDisponible(): Observable<any> {
+    return this.http.get(this.URL + 'conductor_activo?select=id,usuario:usuario(id,primer_nombre,segundo_nombre,telefono)', { headers: this.header });
+  }
+
+  updateVerificado(userId: Number, verificado: boolean): Observable<any> {
+    const body = { verificado: verificado };
+    return this.http.patch<any>(`${this.URL}usuario?id=eq.${userId}`, body, { headers: this.header });
+  }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

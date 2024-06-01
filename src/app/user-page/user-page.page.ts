@@ -7,6 +7,14 @@ import { ServiceService } from '../service/service.service';
 import { ModelLog } from '../modelo/ModelLog';
 import { ActivatedRoute } from '@angular/router';
 
+interface ConductorActivo {
+  id: number;
+  usuario: {
+    primer_nombre: string;
+    segundo_nombre?: string;
+    telefono: string;
+  };
+}
 
 @Component({
   selector: 'app-user-page',
@@ -16,6 +24,7 @@ import { ActivatedRoute } from '@angular/router';
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class UserPagePage implements OnInit {
+
 
 // variables para almacenar los datos del conductor
 primerNombre: string = '';
@@ -36,16 +45,23 @@ new_telefono: string = '';
 isModalModificarDatosOpen: boolean = false;
 
 
-  modalConductor=false
+  modalConductor = false;
 
-  conductores:ModelLog[]=[]
+
+  conductores: ConductorActivo[] = [];
+  busquedaConductor: string = '';
+  busquedaRealizada: boolean = false;
+  resultadoBusqueda: ConductorActivo[] = [];
+ 
+
 
   constructor( 
-    private router : Router,
-     private servicio:ServiceService , 
-     private route : ActivatedRoute,
+    private router: Router,
+    private servicio: ServiceService, 
+    private route: ActivatedRoute,
 
     ) { }
+
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -58,55 +74,71 @@ isModalModificarDatosOpen: boolean = false;
   
     });
 
+    this.getConductoresDisponibles();
+
 
     this.new_primerNombre = this.primerNombre;
     this.new_primerApellido = this.primerApellido;
     this.new_segundoNombre = this.segundoNombre;
     this.new_segundoApellido = this.segundoApellido;
     this.new_telefono = this.telefono;
-  
-
-
-
-
-
-
-    this.getConductores()
+  }
 
     // vista solo accesible para tipo_usuario = 3
-
     const userStorage = localStorage.getItem('tipo_usuario');
-
     if (userStorage !== 'USER') {
       this.router.navigate(['/login']);
+    }
+  }
+
+  logout() {
+    this.router.navigate(['login']);
+  }
 
 
+  getConductoresDisponibles() {
+    this.servicio.getConductorDisponible().subscribe(
+      (data: ConductorActivo[]) => {
+        this.conductores = data;
+        console.log('Conductores disponibles:', this.conductores);
+      },
+      (error) => {
+        console.error('Error al obtener los conductores disponibles:', error);
+      }
+    );
+  }
 
+  setOpenModalConductor(isOpen: boolean) {
+    this.modalConductor = isOpen;
+    if (isOpen) {
+      this.getConductoresDisponibles();
+    }
+  }
+
+  buscarConductor() {
+    this.busquedaRealizada = true;
+    
+    if (!this.busquedaConductor.trim()) {
+      this.resultadoBusqueda = [];
+      return;
+    }
+    
+    console.log('Buscar conductor:', this.busquedaConductor);
+    this.resultadoBusqueda = this.conductores.filter(conductor => 
+      conductor.usuario.primer_nombre.toLowerCase().includes(this.busquedaConductor.toLowerCase())
+    );
+
+    if (this.resultadoBusqueda.length === 0) {
+      console.log('El conductor que buscas no está disponible o no existe');
+    }
   }
 }
 
-  logout(){
-    this.router.navigate(['login'])
-
-  }
-
-  async setOpenModalConductor(modal:boolean){
-    this.modalConductor=modal
-  }
 
 
-  async getConductores(){
-    this.servicio.getConductorVerificado().subscribe((conductores: any) => {
-      console.log('Datos obtenidos', conductores);
-      // Formatear los números de teléfono
-      conductores.forEach((conductor: any) => {
-        conductor.telefono = '+56-9' + conductor.telefono.toString().slice(-8); // Obtener los últimos 8 dígitos del número de teléfono
-      });
-      this.conductores = conductores; // Asignar los conductores obtenidos a la variable conductores
-    }, (error: any) => {
-      console.log('Error al obtener los datos', error);
-    });
-  }
+
+
+
   
   setModalModificarDatosOpen(estado: boolean) {
     this.isModalModificarDatosOpen = estado;
@@ -124,9 +156,5 @@ isModalModificarDatosOpen: boolean = false;
     this.servicio.UpdateDatos(this.id!, new_datos);
     this.setModalModificarDatosOpen(false);
   }
-  
-
-
-
   
 }
