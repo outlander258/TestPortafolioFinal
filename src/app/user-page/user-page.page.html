@@ -76,6 +76,7 @@
     <ion-label>No se encontró el conductor.</ion-label>
   </ion-item>
   
+  <ion-button expand="block" (click)="setModalSolicitudViaje(true)">Solicitar Viaje</ion-button>
   <br><br><br>
    <ion-button class="editar-perfil" expand="block" (click)="setModalModificarDatosOpen(true)">Editar perfil</ion-button>
   <br><br>
@@ -122,4 +123,51 @@
     </ng-template>
   </ion-modal>
   
+
+  <!-- modal con formulario para solicitar viaje -->
+  <ion-modal [isOpen]="isModalSolicitudViajeOpen">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>SOLICITA VIAJES</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="setModalSolicitudViaje(false)">Cancelar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        
+        <ion-list>
+          <ion-item>
+            <ion-toggle (ionChange)="toggleConductor($event)">Desea un conductor especifico?</ion-toggle>
+          </ion-item>
+          <ion-item *ngIf="showInputConductor">
+            <ion-label position="floating">Nombre del conductor</ion-label>
+          </ion-item>
+          <ion-item>
+            <p>espacio para implementar GPS con punto de origen</p>
+          </ion-item>
+          <ion-item>
+            <p>espacio para implementar GPS con punto de destino</p>
+          </ion-item>
+          <ion-item>
+            <ion-toggle (ionChange)="toggleAgendamiento($event)">viaje inmediato o agendado?</ion-toggle>
+          </ion-item>
+          <ion-item *ngIf="showInputAgendamiento">
+            <ng-template>
+            <ion-datetime-button presentation="date" datetime="datetime"></ion-datetime-button>
+          </ng-template>
+          </ion-item>
+
+
+
+        </ion-list>
+        <ion-button class="editar-perfil" expand="block" (click)="modificarDatos()">Guardar cambios</ion-button>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+
+
+
 </ion-content>
