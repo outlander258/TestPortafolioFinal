@@ -62,8 +62,31 @@ export class UserPagePage implements OnInit {
     const userStorage = localStorage.getItem('tipo_usuario');
     if (userStorage !== 'USER') {
       this.router.navigate(['/login']);
+
     }
+
+
+    this.getDrivers();
+
+
+
   }
+
+
+  getDrivers() {
+    this.servicio.getDatos().subscribe((data: any[]) => {
+      this.conductores = data.filter(user => user.tipo_usuario === 2); // Cambiado a 2
+      console.log('Conductores:', this.conductores);
+    }, (error: any) => {
+      console.error('Error al obtener los usuarios:', error);
+    });
+  }
+
+
+
+
+
+
 
   logout() {
     this.router.navigate(['login']);
@@ -97,13 +120,35 @@ export class UserPagePage implements OnInit {
     }
     
     console.log('Buscar conductor:', this.busquedaConductor);
-    this.resultadoBusqueda = this.conductores.filter(conductor => 
+  
+    // Buscar entre los conductores activos y disponibles
+    let conductorActivo = this.conductores.find(conductor => 
       conductor.usuario.primer_nombre.toLowerCase().includes(this.busquedaConductor.toLowerCase())
     );
-
-    if (this.resultadoBusqueda.length === 0) {
-      console.log('El conductor que buscas no está disponible o no existe');
+  
+    if (conductorActivo) {
+      // Si se encuentra un conductor activo, mostrarlo en los resultados de búsqueda y detener la función
+      this.resultadoBusqueda = [conductorActivo];
+      console.log('Conductor activo encontrado:', conductorActivo);
+      return;
     }
+  
+    // Buscar entre todos los conductores en la base de datos
+    this.servicio.getDatos().subscribe((data: any[]) => {
+      let conductorInactivo = data.find(conductor => 
+        conductor.primer_nombre.toLowerCase().includes(this.busquedaConductor.toLowerCase())
+      );
+  
+      if (conductorInactivo) {
+        // Si se encuentra un conductor inactivo, mostrar el popup correspondiente
+        console.log('Conductor inactivo encontrado:', conductorInactivo);
+        // Lógica para mostrar el popup
+      } else {
+        console.log('El conductor que buscas no está disponible o no existe');
+      }
+    }, (error: any) => {
+      console.error('Error al obtener los usuarios:', error);
+    });
   }
 }
 

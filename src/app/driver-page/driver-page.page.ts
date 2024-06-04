@@ -133,25 +133,10 @@ export class DriverPagePage implements OnInit {
   
 
 
-
-
-
   
 
 
   };
-
-
-
-
-
-
-
-
- 
-
-
-
 
 
 
