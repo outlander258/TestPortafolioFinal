@@ -26,23 +26,26 @@ interface ConductorActivo {
 export class UserPagePage implements OnInit {
 
 
-// variables para almacenar los datos del conductor
-primerNombre: string = '';
-primerApellido: string = '';
-segundoNombre: string = '';
-segundoApellido: string = '';
-telefono: string = '';
-id: number | undefined;
+  // variables para almacenar los datos del conductor
+  primerNombre: string = '';
+  primerApellido: string = '';
+  segundoNombre: string = '';
+  segundoApellido: string = '';
+  telefono: string = '';
+  id: number | undefined;
 
-//variables para insertar nuevos datos modificados
-new_primerNombre: string = '';
-new_primerApellido: string = '';
-new_segundoNombre: string = '';
-new_segundoApellido: string = '';
-new_telefono: string = '';
+  //variables para insertar nuevos datos modificados
+  new_primerNombre: string = '';
+  new_primerApellido: string = '';
+  new_segundoNombre: string = '';
+  new_segundoApellido: string = '';
+  new_telefono: string = '';
 
-// variables para modal
-isModalModificarDatosOpen: boolean = false;
+  // variables para modal
+  isModalModificarDatosOpen: boolean = false;
+  isModalSolicitudViajeOpen: boolean = false;
+  showInputConductor = false
+  showInputAgendamiento = false
 
 
   modalConductor = false;
@@ -52,15 +55,15 @@ isModalModificarDatosOpen: boolean = false;
   busquedaConductor: string = '';
   busquedaRealizada: boolean = false;
   resultadoBusqueda: ConductorActivo[] = [];
- 
 
 
-  constructor( 
+
+  constructor(
     private router: Router,
-    private servicio: ServiceService, 
+    private servicio: ServiceService,
     private route: ActivatedRoute,
 
-    ) { }
+  ) { }
 
 
   ngOnInit() {
@@ -71,7 +74,7 @@ isModalModificarDatosOpen: boolean = false;
       this.segundoApellido = params['segundoApellido'];
       this.telefono = params['telefono'];
       this.id = params['id'];
-  
+
     });
 
     this.getConductoresDisponibles();
@@ -82,7 +85,7 @@ isModalModificarDatosOpen: boolean = false;
     this.new_segundoNombre = this.segundoNombre;
     this.new_segundoApellido = this.segundoApellido;
     this.new_telefono = this.telefono;
-  }
+
 
     // vista solo accesible para tipo_usuario = 3
     const userStorage = localStorage.getItem('tipo_usuario');
@@ -115,16 +118,19 @@ isModalModificarDatosOpen: boolean = false;
     }
   }
 
+
+
+
   buscarConductor() {
     this.busquedaRealizada = true;
-    
+
     if (!this.busquedaConductor.trim()) {
       this.resultadoBusqueda = [];
       return;
     }
-    
+
     console.log('Buscar conductor:', this.busquedaConductor);
-    this.resultadoBusqueda = this.conductores.filter(conductor => 
+    this.resultadoBusqueda = this.conductores.filter(conductor =>
       conductor.usuario.primer_nombre.toLowerCase().includes(this.busquedaConductor.toLowerCase())
     );
 
@@ -132,14 +138,24 @@ isModalModificarDatosOpen: boolean = false;
       console.log('El conductor que buscas no está disponible o no existe');
     }
   }
-}
 
 
 
+  toggleAgendamiento(event: any) {
+    this.showInputAgendamiento = event
+  }
+
+  toggleConductor(event: any) {
+    this.showInputConductor = event.detail.checked;
+  }
+
+
+  setModalSolicitudViaje(estado: boolean) {
+    this.isModalSolicitudViajeOpen = estado
+  }
 
 
 
-  
   setModalModificarDatosOpen(estado: boolean) {
     this.isModalModificarDatosOpen = estado;
   }
@@ -156,5 +172,5 @@ isModalModificarDatosOpen: boolean = false;
     this.servicio.UpdateDatos(this.id!, new_datos);
     this.setModalModificarDatosOpen(false);
   }
-  
+
 }
