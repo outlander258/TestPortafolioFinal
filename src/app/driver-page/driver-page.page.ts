@@ -19,7 +19,9 @@ import { ServiceService } from '../service/service.service';
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class DriverPagePage implements OnInit {
+  solicitudPendiente: any = null;
   fechaHora : Date | undefined;
+
   // Variable para almacenar el estado de disponibilidad del conductor
   isAvailable: boolean = true;
   idConductor:number = 0;
@@ -56,6 +58,7 @@ export class DriverPagePage implements OnInit {
 
 
 
+
   constructor(
     private router: Router,
     private toastController: ToastController,
@@ -68,10 +71,24 @@ export class DriverPagePage implements OnInit {
     this.servicio.getDateTime().subscribe( dateTime =>{
       this.fechaHora= dateTime
     })
-    
-    
 
-    
+    this.servicio.getRequestObservable().subscribe(solictud =>{
+      if(solictud){
+        this.solicitudPendiente = solictud;
+      }
+    })
+
+
+  
+
+
+
+
+
+  
+   
+
+
     // Recuperar la disponibilidad del conductor desde localStorage
 
     const storedAvailability = localStorage.getItem('isAvailable');
@@ -200,6 +217,28 @@ ngAfterViewInit() {
     this.servicio.UpdateDatos(this.id!, new_datos);
     this.setModalModificarDatosOpen(false);
   }
+
+
+  aceptarSolicitud() {
+    // Aquí puedes implementar la lógica para aceptar la solicitud
+    console.log('Solicitud aceptada');
+    // Si necesitas realizar alguna acción, puedes hacerlo aquí
+  
+    // Una vez aceptada la solicitud, oculta el popup
+    this.solicitudPendiente = null;
+  }
+  
+  rechazarSolicitud() {
+    // Aquí puedes implementar la lógica para rechazar la solicitud
+    console.log('Solicitud rechazada');
+    // Si necesitas realizar alguna acción, puedes hacerlo aquí
+  
+    // Una vez rechazada la solicitud, oculta el popup
+    this.solicitudPendiente = null;
+  }
+
+
+
 
 
 

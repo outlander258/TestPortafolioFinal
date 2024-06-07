@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import { ServiceService } from '../service/service.service';
 import { ModelLog } from '../modelo/ModelLog';
 import { ActivatedRoute } from '@angular/router';
+import { AlertController } from '@ionic/angular';
+import { BehaviorSubject } from 'rxjs';
 
 interface ConductorActivo {
   id: number;
@@ -24,9 +26,11 @@ interface ConductorActivo {
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class UserPagePage implements OnInit {
+  private requestSubject = new BehaviorSubject<any>(null);
   fechaHora: Date | undefined;
   primerNombre: string = '';
   primerApellido: string = '';
+  userID : number | undefined;
   modalConductor = false;
 
 
@@ -36,12 +40,14 @@ export class UserPagePage implements OnInit {
   resultadoBusqueda: ConductorActivo[] = [];
  
 
-  constructor(private router: Router, private servicio: ServiceService, private route: ActivatedRoute) {}
+  constructor(private router: Router, private servicio: ServiceService, private route: ActivatedRoute, private alertController: AlertController) {}
 
   ngOnInit() {
     this.servicio.getDateTime().subscribe( dateTime =>{
       this.fechaHora= dateTime
     })
+
+
     
 
 
@@ -51,9 +57,11 @@ export class UserPagePage implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.primerNombre = params['primerNombre'];
       this.primerApellido = params['primerApellido'];
+      this.userID = params['id']
       console.log(params);
       console.log(this.primerNombre);
       console.log(this.primerApellido);
+      console.log(this.userID);
     });
 
     this.getConductoresDisponibles();
@@ -150,6 +158,32 @@ export class UserPagePage implements OnInit {
       console.error('Error al obtener los usuarios:', error);
     });
   }
+
+  solicitarConductor(conductorId: number) {
+    // Obtener los datos del usuario solicitante
+    const solicitante = {
+      id: this.userID,
+      nombre: this.primerNombre,
+      apellido: this.primerApellido,
+      conductor_id: conductorId,
+    };
+  
+    // Llamar al método del servicio para enviar la solicitud
+    this.servicio.enviarSolicitud(solicitante) // Emitir evento de solicitud
+  
+    // Mostrar en consola (opcional, para depuración)
+    console.log('Solicitud enviada al conductor:', solicitante);
+  }
+
+
+
+
+
+
+
+
+
+
 }
 
 

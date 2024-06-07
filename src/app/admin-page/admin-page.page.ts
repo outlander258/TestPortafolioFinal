@@ -14,56 +14,26 @@ import { ServiceService } from '../service/service.service';
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class AdminPagePage implements OnInit {
-  fechaHora : Date | undefined;
+  fechaHora: Date | undefined;
   primerNombre: string = '';
   primerApellido: string = '';
   conductores: any[] = [];
   solicitantes: any[] = [];
-  // Lista de conductores (esto es solo un ejemplo, necesitarás obtener la lista de conductores de tu base de datos)
-  drivers = [
-    { nombre: 'Conductor 1', apellido: 'Apellido 1', bloqueado: false },
-    { nombre: 'Conductor 2', apellido: 'Apellido 2', bloqueado: false },
-    // Agrega más conductores aquí
-  ];
-
   // Variable para controlar si se muestra la lista de conductores
   showDrivers = false;
+  // Variable para controlar si se muestra la lista de usuarios
+  showUsers = false;
 
-  // Lista de usuarios (esto es solo un ejemplo, necesitarás obtener la lista de usuarios de tu base de datos)
-users = [
-  { nombre: 'Usuario 1', apellido: 'Apellido 1', bloqueado: false },
-  { nombre: 'Usuario 2', apellido: 'Apellido 2', bloqueado: false },
-  // Agrega más usuarios aquí
-];
-
-// Variable para controlar si se muestra la lista de usuarios
-showUsers = false;
-
-  constructor( private router : Router ,private route : ActivatedRoute, private servicio : ServiceService) { }
+  constructor(private router: Router, private route: ActivatedRoute, private servicio: ServiceService) {}
 
   ngOnInit() {
-    this.servicio.getDateTime().subscribe( dateTime =>{
-      this.fechaHora= dateTime
-    })
-
-
-
-
-
-
+    this.servicio.getDateTime().subscribe(dateTime => {
+      this.fechaHora = dateTime;
+    });
 
     this.getSolicitantes();
-   
-
-
     this.getDrivers();
 
-
-
-
-
-
-  
     this.route.queryParams.subscribe(params => {
       this.primerNombre = params['primerNombre'];
       this.primerApellido = params['primerApellido'];
@@ -72,90 +42,64 @@ showUsers = false;
       console.log(this.primerApellido);
     });
 
-
-
-
-
-
     // vista solo accesible para tipo_usuario = 3
-
     const userStorage = localStorage.getItem('tipo_usuario');
-
     if (userStorage !== 'ADMIN') {
       this.router.navigate(['/login']);
-  
-
-
-
+    }
   }
-}
 
+  blockDriver(driver: any) {
+    console.log('Bloquear conductor:', driver.primer_nombre);
+    this.servicio.updateVerificado(driver.id, false).subscribe(response => {
+      console.log('Conductor bloqueado:', response);
+      driver.verificado = false;
+      // Eliminar el conductor de la tabla conductor_activo
+      this.servicio.conductorNoDisponible(driver.id).then(
+        response => {
+          console.log('Conductor eliminado de conductor_activo:', response);
+          // Actualizar la lista local de conductores para reflejar el cambio
+          this.conductores = this.conductores.filter(c => c.id !== driver.id);
+        }
+      ).catch(
+        error => {
+          console.error('Error al eliminar el conductor de conductor_activo:', error);
+        }
+      );
+    }, error => {
+      console.error('Error al bloquear conductor:', error);
+    });
+  }
 
-blockDriver(driver: any) {
-  console.log('Bloquear conductor:', driver.primer_nombre);
-  this.servicio.updateVerificado(driver.id, false).subscribe(response => {
-    console.log('Conductor bloqueado:', response);
-    driver.verificado = false;
-    // Eliminar el conductor de la tabla conductor_activo
-    this.servicio.conductorNoDisponible(driver.id).then(
-      response => {
-        console.log('Conductor eliminado de conductor_activo:', response);
-        // Actualizar la lista local de conductores para reflejar el cambio
-        this.conductores = this.conductores.filter(c => c.usuario.id !== driver.id);
-      }
-    ).catch(
-      error => {
-        console.error('Error al eliminar el conductor de conductor_activo:', error);
-      }
-    );
-  }, error => {
-    console.error('Error al bloquear conductor:', error);
-  });
-}
+  unblockDriver(driver: any) {
+    console.log('Desbloquear conductor:', driver.primer_nombre);
+    this.servicio.updateVerificado(driver.id, true).subscribe(response => {
+      console.log('Conductor desbloqueado:', response);
+      driver.verificado = true;
+    }, error => {
+      console.error('Error al desbloquear conductor:', error);
+    });
+  }
 
+  blockUser(user: any) {
+    console.log('Bloquear usuario:', user.primer_nombre);
+    this.servicio.updateVerificado(user.id, false).subscribe(response => {
+      console.log('Usuario bloqueado:', response);
+      user.verificado = false;
+    }, error => {
+      console.error('Error al bloquear usuario:', error);
+    });
+  }
 
-
-
-
-
-
-
-
-
-
-
-unblockDriver(driver: any) {
-  console.log('Desbloquear conductor:', driver.primer_nombre);
-  this.servicio.updateVerificado(driver.id, true).subscribe(response => {
-    console.log('Conductor desbloqueado:', response);
-    driver.verificado = true;
-  }, error => {
-    console.error('Error al desbloquear conductor:', error);
-  });
-}
-
-
-blockUser(user: any) {
-  console.log('Bloquear usuario:', user.primer_nombre);
-  this.servicio.updateVerificado(user.id, false).subscribe(response => {
-    console.log('Usuario bloqueado:', response);
-    user.verificado = false;
-  }, error => {
-    console.error('Error al bloquear usuario:', error);
-  });
-}
-
-unblockUser(user: any) {
-  console.log('Desbloquear usuario:', user.primer_nombre);
-  this.servicio.updateVerificado(user.id, true).subscribe(response => {
-    console.log('Usuario desbloqueado:', response);
-    user.verificado = true;
-  }, error => {
-    console.error('Error al desbloquear usuario:', error);
-  });
-}
-
-
+  unblockUser(user: any) {
+    console.log('Desbloquear usuario:', user.primer_nombre);
+    this.servicio.updateVerificado(user.id, true).subscribe(response => {
+      console.log('Usuario desbloqueado:', response);
+      user.verificado = true;
+    }, error => {
+      console.error('Error al desbloquear usuario:', error);
+    });
+  }
 
   // Método para mostrar u ocultar la lista de conductores
   toggleShowDrivers() {
@@ -163,14 +107,13 @@ unblockUser(user: any) {
   }
 
   // Método para mostrar u ocultar la lista de usuarios
-toggleShowUsers() {
-  this.showUsers = !this.showUsers;
-}
-
-  logout(){
-    this.router.navigate(['login'])
+  toggleShowUsers() {
+    this.showUsers = !this.showUsers;
   }
 
+  logout() {
+    this.router.navigate(['login']);
+  }
 
   getSolicitantes() {
     this.servicio.getDatos().subscribe((data: any[]) => {
@@ -189,12 +132,4 @@ toggleShowUsers() {
       console.error('Error al obtener los usuarios:', error);
     });
   }
-
-
-
-  }
-
-
-
-
-
+}

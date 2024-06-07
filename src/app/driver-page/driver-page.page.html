@@ -11,10 +11,10 @@
     <h1 class="TitleLink">Link</h1>
   </div>
   <ion-header collapse="condense">
-      <ion-title class="PageTitle" size="large">Bienvenido/a <br> {{ primerNombre}}</ion-title>
+    <ion-title class="PageTitle" size="large">Bienvenido/a <br> {{ primerNombre }}</ion-title>
     <ion-card>
       <ion-card-header>
-        <ion-card-title>{{ primerNombre}} {{ primerApellido}}</ion-card-title>
+        <ion-card-title>{{ primerNombre }} {{ primerApellido }}</ion-card-title>
         <ion-card-subtitle>[tipo de usuario]</ion-card-subtitle>
       </ion-card-header>
     
@@ -31,7 +31,7 @@
   <br><br>
   <ion-button class="editar-perfil" expand="block" (click)="setModalModificarDatosOpen(true)">Editar perfil</ion-button>
   <br><br>
-    <ion-button class="cerrar-sesion" expand="block" (click)="logout()">Cerrar sesión</ion-button>
+  <ion-button class="cerrar-sesion" expand="block" (click)="logout()">Cerrar sesión</ion-button>
   <br><br>
 
 
@@ -51,23 +51,23 @@
         <ion-list>
           <ion-item>
             <ion-label>Primer Nombre</ion-label>
-            <ion-input placeholder="{{primerNombre}}" [(ngModel)]="new_primerNombre"></ion-input>
+            <ion-input placeholder="{{ primerNombre }}" [(ngModel)]="new_primerNombre"></ion-input>
           </ion-item>
           <ion-item>
             <ion-label>Segundo Nombre</ion-label>
-            <ion-input placeholder="{{segundoNombre}}" [(ngModel)]="new_segundoNombre"></ion-input>
+            <ion-input placeholder="{{ segundoNombre }}" [(ngModel)]="new_segundoNombre"></ion-input>
           </ion-item>
           <ion-item>
             <ion-label>Primer Apellido</ion-label>
-            <ion-input placeholder="{{primerApellido}}" [(ngModel)]="new_primerApellido"></ion-input>
+            <ion-input placeholder="{{ primerApellido }}" [(ngModel)]="new_primerApellido"></ion-input>
           </ion-item>
           <ion-item>
             <ion-label>Segundo Apellido</ion-label>
-            <ion-input placeholder="{{segundoApellido}}" [(ngModel)]="new_segundoApellido"></ion-input>
+            <ion-input placeholder="{{ segundoApellido }}" [(ngModel)]="new_segundoApellido"></ion-input>
           </ion-item>
           <ion-item>
             <ion-label>Telefono</ion-label>
-            <ion-input placeholder="{{telefono}}" [(ngModel)]="new_telefono"></ion-input>
+            <ion-input placeholder="{{ telefono }}" [(ngModel)]="new_telefono"></ion-input>
           </ion-item>
         </ion-list>
         <ion-button class="editar-perfil" expand="block" (click)="modificarDatos()">Guardar cambios</ion-button>

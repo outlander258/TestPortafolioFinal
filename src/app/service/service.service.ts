@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ModelLog } from '../modelo/ModelLog';
-import { Observable, interval } from 'rxjs';
+import { Observable, interval, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
-
-
 
 
 @Injectable({
@@ -13,6 +11,7 @@ import { map } from 'rxjs/operators';
 export class ServiceService {
 
   URL = 'https://wgqabsxfjotmucmfjqtn.supabase.co/rest/v1/';
+  private requestSubject = new BehaviorSubject<any>(null);
 
   constructor(private http: HttpClient) { }
 
@@ -111,7 +110,62 @@ export class ServiceService {
       map(() => new Date())
     );
   }
+
+
+
+
+
+    // Método para obtener la solicitud en tiempo real
+    getRequestObservable(): Observable<any> {
+      return this.requestSubject.asObservable();
+    }
+
+
+  // Método para registrar el viaje una vez aceptado
+  registrarViaje(viaje: any): Observable<any> {
+    return this.http.post<any>(`${this.URL}viaje`, viaje, { headers: this.header });
+  }
+
+  enviarSolicitud(solicitante: any) {
+    // Lógica para enviar la solicitud al conductor
+    // Aquí puedes usar un BehaviorSubject para simular el envío en tiempo real
+    this.requestSubject.next(solicitante);
+  
+    // Si tienes un sistema de notificaciones o sockets, puedes integrarlo aquí
+    // Ejemplo: this.socket.emit('nuevaSolicitud', solicitante);
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
