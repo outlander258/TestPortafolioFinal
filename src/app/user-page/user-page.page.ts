@@ -102,7 +102,7 @@ export class UserPagePage implements OnInit {
 
   getConductoresDisponibles() {
     this.servicio.getConductorDisponible().subscribe(
-      (data: ConductorActivo[]) => {
+      (data: any[]) => {
         this.conductores = data;
         console.log('Conductores disponibles:', this.conductores);
       },

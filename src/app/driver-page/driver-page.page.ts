@@ -75,6 +75,8 @@ export class DriverPagePage implements OnInit {
     this.servicio.getRequestObservable().subscribe(solictud =>{
       if(solictud){
         this.solicitudPendiente = solictud;
+        this.showSolicitudPopup;
+
       }
     })
 
@@ -236,6 +238,14 @@ ngAfterViewInit() {
     // Una vez rechazada la solicitud, oculta el popup
     this.solicitudPendiente = null;
   }
+
+  showSolicitudPopup() {
+    if (this.solicitudPendiente) {
+      // Lógica para mostrar el pop-up en la interfaz de usuario
+      alert(`Solicitud de ${this.solicitudPendiente.nombre} ${this.solicitudPendiente.apellido}`);
+    }
+  }
+
 
 
 

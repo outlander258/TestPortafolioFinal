@@ -95,7 +95,18 @@ export class ServiceService {
   }
 
   getConductorDisponible(): Observable<any> {
-    return this.http.get(this.URL + 'conductor_activo?select=id,usuario:usuario(id,primer_nombre,segundo_nombre,telefono)', { headers: this.header });
+    return this.http.get(this.URL + 'conductor_activo?select=id,usuario:usuario(id,primer_nombre,segundo_nombre,telefono)', { headers: this.header })
+      .pipe(
+        map((data: any) => {
+          const conductores = data.map((item: any) => {
+            return {
+              id: item.id,
+              usuario: item.usuario
+            };
+          });
+          return conductores;
+        })
+      );
   }
 
   updateVerificado(userId: Number, verificado: boolean): Observable<any> {
@@ -135,6 +146,7 @@ export class ServiceService {
     // Ejemplo: this.socket.emit('nuevaSolicitud', solicitante);
   }
 
+ 
 
 
 
