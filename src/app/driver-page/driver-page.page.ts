@@ -231,14 +231,12 @@ ngAfterViewInit() {
   }
   
   rechazarSolicitud() {
-    // Aquí puedes implementar la lógica para rechazar la solicitud
     console.log('Solicitud rechazada');
-    // Si necesitas realizar alguna acción, puedes hacerlo aquí
-  
-    // Una vez rechazada la solicitud, oculta el popup
     this.solicitudPendiente = null;
+  
+    // Aquí puedes añadir la lógica para eliminar la solicitud del almacenamiento local o base de datos
+    this.servicio.eliminarSolicitud(this.idConductor);
   }
-
   showSolicitudPopup() {
     if (this.solicitudPendiente) {
       // Lógica para mostrar el pop-up en la interfaz de usuario

@@ -146,6 +146,16 @@ export class ServiceService {
     // Ejemplo: this.socket.emit('nuevaSolicitud', solicitante);
   }
 
+
+
+  eliminarSolicitud(idConductor: number) {
+    // Aquí puedes implementar la lógica para eliminar la solicitud del almacenamiento local o base de datos
+    localStorage.removeItem(`solicitud_${idConductor}`);
+    // O en el caso de usar una base de datos:
+    // this.httpClient.delete(`url_api/solicitudes/${idConductor}`).subscribe();
+  }
+}
+
  
 
 
@@ -160,7 +170,7 @@ export class ServiceService {
 
 
 
-}
+
 
 
 
