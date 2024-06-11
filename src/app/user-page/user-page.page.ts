@@ -166,6 +166,7 @@ export class UserPagePage implements OnInit {
       nombre: this.primerNombre,
       apellido: this.primerApellido,
       conductor_id: conductorId,
+      fecha : this.fechaHora
     };
   
     // Llamar al método del servicio para enviar la solicitud
