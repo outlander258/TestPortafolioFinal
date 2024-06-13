@@ -75,7 +75,7 @@ export class DriverPagePage implements OnInit {
     this.servicio.getRequestObservable().subscribe(solicitud =>{
       if(solicitud){
         this.solicitudPendiente = solicitud;
-        this.showSolicitudPopup;
+        this.showSolicitudPopup();
 
       }
     })
