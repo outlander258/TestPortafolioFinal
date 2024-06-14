@@ -38,6 +38,9 @@ export class UserPagePage implements OnInit {
   busquedaConductor: string = '';
   busquedaRealizada: boolean = false;
   resultadoBusqueda: ConductorActivo[] = [];
+  conductorInactivo: boolean = false;
+  conductorNoEncontrado: boolean = false;
+  conductorInactivoDetalles: any = null;
 
 
   constructor(private router: Router, private servicio: ServiceService, private route: ActivatedRoute, private alertController: AlertController) {}
@@ -123,43 +126,58 @@ export class UserPagePage implements OnInit {
     // Limpiar resultados de búsqueda anteriores
     this.resultadoBusqueda = [];
     this.busquedaRealizada = true;
-    
+    this.conductorInactivo = false;
+    this.conductorNoEncontrado = false;
+    this.conductorInactivoDetalles = null;
+
     if (!this.busquedaConductor.trim()) {
       return;
     }
-    
+
     console.log('Buscar conductor:', this.busquedaConductor);
-  
+
     // Buscar entre los conductores activos y disponibles
-    let conductorActivo = this.conductores.find(conductor => 
+    let conductorActivo = this.conductores.find(conductor =>
       conductor.usuario.primer_nombre.toLowerCase().includes(this.busquedaConductor.toLowerCase())
     );
-  
+
     if (conductorActivo) {
       // Si se encuentra un conductor activo, mostrarlo en los resultados de búsqueda y detener la función
       this.resultadoBusqueda = [conductorActivo];
       console.log('Conductor activo encontrado:', conductorActivo);
       return;
     }
-  
+
     // Buscar entre todos los conductores en la base de datos
     this.servicio.getDatos().subscribe((data: any[]) => {
-      let conductorInactivo = data.find(conductor => 
+      let conductorInactivo = data.find(conductor =>
         conductor.primer_nombre.toLowerCase().includes(this.busquedaConductor.toLowerCase())
       );
-  
+
       if (conductorInactivo) {
-        // Si se encuentra un conductor inactivo, mostrar el popup correspondiente
+        // Si se encuentra un conductor inactivo, mostrar los datos relevantes en el HTML
         console.log('Conductor inactivo encontrado:', conductorInactivo);
-        // Lógica para mostrar el popup
+        this.conductorInactivo = true;
+        this.conductorInactivoDetalles = conductorInactivo;
       } else {
         console.log('El conductor que buscas no está disponible o no existe');
+        this.conductorNoEncontrado = true;
       }
     }, (error: any) => {
       console.error('Error al obtener los usuarios:', error);
     });
-}
+  }
 
+
+
+
+
+
+
+
+
+
+  
   solicitarConductor(conductorId: number) {
     // Obtener los datos del usuario solicitante
     const solicitante = {
