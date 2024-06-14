@@ -38,7 +38,7 @@ export class UserPagePage implements OnInit {
   busquedaConductor: string = '';
   busquedaRealizada: boolean = false;
   resultadoBusqueda: ConductorActivo[] = [];
- 
+
 
   constructor(private router: Router, private servicio: ServiceService, private route: ActivatedRoute, private alertController: AlertController) {}
 
@@ -120,10 +120,11 @@ export class UserPagePage implements OnInit {
   }
 
   buscarConductor() {
+    // Limpiar resultados de búsqueda anteriores
+    this.resultadoBusqueda = [];
     this.busquedaRealizada = true;
     
     if (!this.busquedaConductor.trim()) {
-      this.resultadoBusqueda = [];
       return;
     }
     
@@ -157,7 +158,7 @@ export class UserPagePage implements OnInit {
     }, (error: any) => {
       console.error('Error al obtener los usuarios:', error);
     });
-  }
+}
 
   solicitarConductor(conductorId: number) {
     // Obtener los datos del usuario solicitante
