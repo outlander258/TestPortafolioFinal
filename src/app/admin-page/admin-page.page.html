@@ -10,6 +10,7 @@
 <ion-content [fullscreen]="true">
   <ion-header cl="Header" collapse="condense">
 
+
     <ion-toolbar>
       <ion-title class="PageTitle" size="large">
        
@@ -18,6 +19,7 @@
       </ion-title>
     </ion-toolbar>
 
+
   </ion-header>
 
   <div class="Welcome">
@@ -25,7 +27,7 @@
       <ion-label>{{ fechaHora | date:'dd/MM/yyyy HH:mm:ss' }}</ion-label>
 
       <ion-title class="PageTitle" size="large">Bienvenido/a <br> {{ primerNombre }}</ion-title>
-      ¡Bienvenido al equipo administrativo de nuestra aplicación! Tu papel es fundamental para garantizar que nuestra plataforma
+      ¡Bienvenido/a al equipo administrativo de nuestra aplicación! Tu papel es fundamental para garantizar que nuestra plataforma
 
       funcione sin problemas y brinde la mejor experiencia a nuestros usuarios. Tu contribución es invaluable para el éxito 
       continuo de nuestra aplicación.
@@ -36,7 +38,7 @@
   <br><br>
   <ion-button class="usuarios" shape="round" (click)="toggleShowUsers()">Usuarios</ion-button>
   <ion-list *ngIf="showUsers">
-    <ion-item *ngFor="let user of solicitantes">
+    <ion-item class="ItemAdmin" *ngFor="let user of solicitantes">
       {{ user.primer_nombre }} - {{ user.primer_apellido }}
       <ion-button [disabled]="!user.verificado" (click)="blockUser(user)">Bloquear</ion-button>
       <ion-button [disabled]="user.verificado" (click)="unblockUser(user)">Desbloquear</ion-button>

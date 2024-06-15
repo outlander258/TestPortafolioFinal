@@ -26,11 +26,36 @@ interface ConductorActivo {
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class UserPagePage implements OnInit {
+
   private requestSubject = new BehaviorSubject<any>(null);
   fechaHora: Date | undefined;
+  userID : number | undefined;
+
+
+
+  // variables para almacenar los datos del conductor
   primerNombre: string = '';
   primerApellido: string = '';
-  userID : number | undefined;
+  segundoNombre: string = '';
+  segundoApellido: string = '';
+  telefono: string = '';
+  id: number | undefined;
+
+  //variables para insertar nuevos datos modificados
+  new_primerNombre: string = '';
+  new_primerApellido: string = '';
+  new_segundoNombre: string = '';
+  new_segundoApellido: string = '';
+  new_telefono: string = '';
+
+  // variables para modal
+  isModalModificarDatosOpen: boolean = false;
+  isModalSolicitudViajeOpen: boolean = false;
+  showInputConductor = false
+  showInputAgendamiento = false
+
+
+
   modalConductor = false;
 
 
@@ -43,7 +68,18 @@ export class UserPagePage implements OnInit {
   conductorInactivoDetalles: any = null;
 
 
-  constructor(private router: Router, private servicio: ServiceService, private route: ActivatedRoute, private alertController: AlertController) {}
+
+
+
+
+  constructor(
+    private router: Router,
+    private servicio: ServiceService,
+    private route: ActivatedRoute,
+    private alertController: AlertController,
+  ) { }
+
+
 
   ngOnInit() {
     this.servicio.getDateTime().subscribe( dateTime =>{
@@ -65,9 +101,22 @@ export class UserPagePage implements OnInit {
       console.log(this.primerNombre);
       console.log(this.primerApellido);
       console.log(this.userID);
+      this.segundoNombre = params['segundoNombre'];
+      this.segundoApellido = params['segundoApellido'];
+      this.telefono = params['telefono'];
+      this.id = params['id'];
+
     });
 
     this.getConductoresDisponibles();
+
+
+    this.new_primerNombre = this.primerNombre;
+    this.new_primerApellido = this.primerApellido;
+    this.new_segundoNombre = this.segundoNombre;
+    this.new_segundoApellido = this.segundoApellido;
+    this.new_telefono = this.telefono;
+
 
     // vista solo accesible para tipo_usuario = 3
     const userStorage = localStorage.getItem('tipo_usuario');
@@ -103,6 +152,7 @@ export class UserPagePage implements OnInit {
     this.router.navigate(['login']);
   }
 
+
   getConductoresDisponibles() {
     this.servicio.getConductorDisponible().subscribe(
       (data: any[]) => {
@@ -122,6 +172,9 @@ export class UserPagePage implements OnInit {
     }
   }
 
+
+
+
   buscarConductor() {
     // Limpiar resultados de búsqueda anteriores
     this.resultadoBusqueda = [];
@@ -130,14 +183,17 @@ export class UserPagePage implements OnInit {
     this.conductorNoEncontrado = false;
     this.conductorInactivoDetalles = null;
 
+
     if (!this.busquedaConductor.trim()) {
       return;
     }
 
     console.log('Buscar conductor:', this.busquedaConductor);
 
+
     // Buscar entre los conductores activos y disponibles
     let conductorActivo = this.conductores.find(conductor =>
+
       conductor.usuario.primer_nombre.toLowerCase().includes(this.busquedaConductor.toLowerCase())
     );
 
@@ -199,49 +255,36 @@ export class UserPagePage implements OnInit {
 
 
 
+  toggleAgendamiento(event: any) {
+    this.showInputAgendamiento = event
+  }
+
+  toggleConductor(event: any) {
+    this.showInputConductor = event.detail.checked;
+  }
+
+
+  setModalSolicitudViaje(estado: boolean) {
+    this.isModalSolicitudViajeOpen = estado
+  }
 
 
 
+  setModalModificarDatosOpen(estado: boolean) {
+    this.isModalModificarDatosOpen = estado;
+  }
 
+  modificarDatos() {
+    const new_datos = {
+      primer_nombre: this.new_primerNombre,
+      segundo_nombre: this.new_segundoNombre,
+      primer_apellido: this.new_primerApellido,
+      segundo_apellido: this.new_segundoApellido,
+      telefono: this.new_telefono
+    };
+
+    this.servicio.UpdateDatos(this.id!, new_datos);
+    this.setModalModificarDatosOpen(false);
+  }
 
 }
-
-
-
- 
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-  
-  
-  
-  
-
-
-
-  
-
