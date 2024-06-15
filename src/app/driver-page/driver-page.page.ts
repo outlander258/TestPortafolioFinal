@@ -19,6 +19,9 @@ import { ServiceService } from '../service/service.service';
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class DriverPagePage implements OnInit {
+  solicitudPendiente: any = null;
+  fechaHora : Date | undefined;
+
   // Variable para almacenar el estado de disponibilidad del conductor
   isAvailable: boolean = true;
   idConductor:number = 0;
@@ -55,6 +58,7 @@ export class DriverPagePage implements OnInit {
 
 
 
+
   constructor(
     private router: Router,
     private toastController: ToastController,
@@ -64,8 +68,29 @@ export class DriverPagePage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.servicio.getDateTime().subscribe( dateTime =>{
+      this.fechaHora= dateTime
+    })
 
-    
+    this.servicio.getRequestObservable().subscribe(solicitud =>{
+      if(solicitud){
+        this.solicitudPendiente = solicitud;
+        this.showSolicitudPopup();
+
+      }
+    })
+
+
+  
+
+
+
+
+
+  
+   
+
+
     // Recuperar la disponibilidad del conductor desde localStorage
 
     const storedAvailability = localStorage.getItem('isAvailable');
@@ -127,25 +152,10 @@ export class DriverPagePage implements OnInit {
   
 
 
-
-
-
   
 
 
   };
-
-
-
-
-
-
-
-
- 
-
-
-
 
 
 
@@ -209,6 +219,34 @@ ngAfterViewInit() {
     this.servicio.UpdateDatos(this.id!, new_datos);
     this.setModalModificarDatosOpen(false);
   }
+
+
+  aceptarSolicitud() {
+    // Aquí puedes implementar la lógica para aceptar la solicitud
+    console.log('Solicitud aceptada');
+    // Si necesitas realizar alguna acción, puedes hacerlo aquí
+  
+    // Una vez aceptada la solicitud, oculta el popup
+    this.solicitudPendiente = null;
+  }
+  
+  rechazarSolicitud() {
+    console.log('Solicitud rechazada');
+    this.solicitudPendiente = null;
+  
+    // Aquí puedes añadir la lógica para eliminar la solicitud del almacenamiento local o base de datos
+    this.servicio.eliminarSolicitud(this.idConductor);
+  }
+  showSolicitudPopup() {
+    if (this.solicitudPendiente) {
+      // Lógica para mostrar el pop-up en la interfaz de usuario
+      alert(`Solicitud de ${this.solicitudPendiente.nombre} ${this.solicitudPendiente.apellido}`);
+    }
+  }
+
+
+
+
 
 
 

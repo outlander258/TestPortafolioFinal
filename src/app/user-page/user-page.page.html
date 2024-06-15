@@ -1,10 +1,5 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>Perfil Usuario/a</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content class="content" [fullscreen]="true">
+  <ion-label>{{ fechaHora | date:'dd/MM/yyyy HH:mm:ss' }}</ion-label>
   <div class="title">
     <h1 class="TitleDrive">Drive</h1>
     <h1 class="TitleLink">Link</h1>
@@ -46,6 +41,7 @@
                 Nombre: {{conductor.usuario.primer_nombre}} {{conductor.usuario.segundo_nombre}}<br>
                 Teléfono: {{conductor.usuario.telefono}}
               </ion-label>
+              <ion-button (click)="solicitarConductor(conductor.id)">Solicitar</ion-button>
             </ion-item>
           </ion-list>
           <ion-item *ngIf="conductores.length === 0">
@@ -70,13 +66,24 @@
         Nombre: {{conductor.usuario.primer_nombre}} {{conductor.usuario.segundo_nombre}}<br>
         Teléfono: {{conductor.usuario.telefono}}
       </ion-label>
+      <ion-button (click)="solicitarConductor(conductor.id)">Solicitar</ion-button>
     </ion-item>
   </ion-list>
-  <ion-item *ngIf="resultadoBusqueda.length === 0 && busquedaRealizada">
+  <ion-item *ngIf="resultadoBusqueda.length === 0 && busquedaRealizada && !conductorInactivo && !conductorNoEncontrado">
     <ion-label>No se encontró el conductor.</ion-label>
   </ion-item>
+
+  <ion-item *ngIf="conductorInactivo">
+    <ion-label>Nombre: {{conductorInactivoDetalles.primer_nombre}} {{conductorInactivoDetalles.primer_apellido}}<br> El Conductor no está disponible en estos momentos</ion-label>
+  </ion-item>
+  <ion-item *ngIf="conductorNoEncontrado">
+    <ion-label>Conductor no encontrado.</ion-label>
+  </ion-item>
+
+
   
   <ion-button expand="block" (click)="setModalSolicitudViaje(true)">Solicitar Viaje</ion-button>
+
   <br><br><br>
    <ion-button class="editar-perfil" expand="block" (click)="setModalModificarDatosOpen(true)">Editar perfil</ion-button>
   <br><br>
