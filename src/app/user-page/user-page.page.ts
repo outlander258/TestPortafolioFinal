@@ -6,8 +6,6 @@ import { Router } from '@angular/router';
 import { ServiceService } from '../service/service.service';
 import { ModelLog } from '../modelo/ModelLog';
 import { ActivatedRoute } from '@angular/router';
-import { AlertController } from '@ionic/angular';
-import { BehaviorSubject } from 'rxjs';
 
 interface ConductorActivo {
   id: number;
@@ -26,11 +24,6 @@ interface ConductorActivo {
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class UserPagePage implements OnInit {
-
-  private requestSubject = new BehaviorSubject<any>(null);
-  fechaHora: Date | undefined;
-  userID : number | undefined;
-
 
 
   // variables para almacenar los datos del conductor
@@ -55,7 +48,6 @@ export class UserPagePage implements OnInit {
   showInputAgendamiento = false
 
 
-
   modalConductor = false;
 
 
@@ -63,12 +55,6 @@ export class UserPagePage implements OnInit {
   busquedaConductor: string = '';
   busquedaRealizada: boolean = false;
   resultadoBusqueda: ConductorActivo[] = [];
-  conductorInactivo: boolean = false;
-  conductorNoEncontrado: boolean = false;
-  conductorInactivoDetalles: any = null;
-
-
-
 
 
 
@@ -76,31 +62,14 @@ export class UserPagePage implements OnInit {
     private router: Router,
     private servicio: ServiceService,
     private route: ActivatedRoute,
-    private alertController: AlertController,
+
   ) { }
 
 
-
   ngOnInit() {
-    this.servicio.getDateTime().subscribe( dateTime =>{
-      this.fechaHora= dateTime
-    })
-
-
-    
-
-
-
-
-
     this.route.queryParams.subscribe(params => {
       this.primerNombre = params['primerNombre'];
       this.primerApellido = params['primerApellido'];
-      this.userID = params['id']
-      console.log(params);
-      console.log(this.primerNombre);
-      console.log(this.primerApellido);
-      console.log(this.userID);
       this.segundoNombre = params['segundoNombre'];
       this.segundoApellido = params['segundoApellido'];
       this.telefono = params['telefono'];
@@ -122,31 +91,8 @@ export class UserPagePage implements OnInit {
     const userStorage = localStorage.getItem('tipo_usuario');
     if (userStorage !== 'USER') {
       this.router.navigate(['/login']);
-
     }
-
-
-    this.getDrivers();
-
-
-
   }
-
-
-  getDrivers() {
-    this.servicio.getDatos().subscribe((data: any[]) => {
-      this.conductores = data.filter(user => user.tipo_usuario === 2); // Cambiado a 2
-      console.log('Conductores:', this.conductores);
-    }, (error: any) => {
-      console.error('Error al obtener los usuarios:', error);
-    });
-  }
-
-
-
-
-
-
 
   logout() {
     this.router.navigate(['login']);
@@ -155,7 +101,7 @@ export class UserPagePage implements OnInit {
 
   getConductoresDisponibles() {
     this.servicio.getConductorDisponible().subscribe(
-      (data: any[]) => {
+      (data: ConductorActivo[]) => {
         this.conductores = data;
         console.log('Conductores disponibles:', this.conductores);
       },
@@ -176,82 +122,22 @@ export class UserPagePage implements OnInit {
 
 
   buscarConductor() {
-    // Limpiar resultados de búsqueda anteriores
-    this.resultadoBusqueda = [];
     this.busquedaRealizada = true;
-    this.conductorInactivo = false;
-    this.conductorNoEncontrado = false;
-    this.conductorInactivoDetalles = null;
-
 
     if (!this.busquedaConductor.trim()) {
+      this.resultadoBusqueda = [];
       return;
     }
 
     console.log('Buscar conductor:', this.busquedaConductor);
-
-
-    // Buscar entre los conductores activos y disponibles
-    let conductorActivo = this.conductores.find(conductor =>
-
+    this.resultadoBusqueda = this.conductores.filter(conductor =>
       conductor.usuario.primer_nombre.toLowerCase().includes(this.busquedaConductor.toLowerCase())
     );
 
-    if (conductorActivo) {
-      // Si se encuentra un conductor activo, mostrarlo en los resultados de búsqueda y detener la función
-      this.resultadoBusqueda = [conductorActivo];
-      console.log('Conductor activo encontrado:', conductorActivo);
-      return;
+    if (this.resultadoBusqueda.length === 0) {
+      console.log('El conductor que buscas no está disponible o no existe');
     }
-
-    // Buscar entre todos los conductores en la base de datos
-    this.servicio.getDatos().subscribe((data: any[]) => {
-      let conductorInactivo = data.find(conductor =>
-        conductor.primer_nombre.toLowerCase().includes(this.busquedaConductor.toLowerCase())
-      );
-
-      if (conductorInactivo) {
-        // Si se encuentra un conductor inactivo, mostrar los datos relevantes en el HTML
-        console.log('Conductor inactivo encontrado:', conductorInactivo);
-        this.conductorInactivo = true;
-        this.conductorInactivoDetalles = conductorInactivo;
-      } else {
-        console.log('El conductor que buscas no está disponible o no existe');
-        this.conductorNoEncontrado = true;
-      }
-    }, (error: any) => {
-      console.error('Error al obtener los usuarios:', error);
-    });
   }
-
-
-
-
-
-
-
-
-
-
-  
-  solicitarConductor(conductorId: number) {
-    // Obtener los datos del usuario solicitante
-    const solicitante = {
-      id: this.userID,
-      nombre: this.primerNombre,
-      apellido: this.primerApellido,
-      conductor_id: conductorId,
-      fecha : this.fechaHora
-    };
-  
-    // Llamar al método del servicio para enviar la solicitud
-    this.servicio.enviarSolicitud(solicitante) // Emitir evento de solicitud
-  
-    // Mostrar en consola (opcional, para depuración)
-    console.log('Solicitud enviada al conductor:', solicitante);
-  }
-
-
 
 
 
