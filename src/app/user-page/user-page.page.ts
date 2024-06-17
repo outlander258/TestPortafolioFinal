@@ -31,8 +31,6 @@ export class UserPagePage implements OnInit {
   fechaHora: Date | undefined;
   userID : number | undefined;
 
-
-
   // variables para almacenar los datos del conductor
   primerNombre: string = '';
   primerApellido: string = '';
@@ -51,13 +49,9 @@ export class UserPagePage implements OnInit {
   // variables para modal
   isModalModificarDatosOpen: boolean = false;
   isModalSolicitudViajeOpen: boolean = false;
-  showInputConductor = false
-  showInputAgendamiento = false
-
-
-
+  showInputConductor = false;
+  showInputAgendamiento = false;
   modalConductor = false;
-
 
   conductores: ConductorActivo[] = [];
   busquedaConductor: string = '';
@@ -67,10 +61,7 @@ export class UserPagePage implements OnInit {
   conductorNoEncontrado: boolean = false;
   conductorInactivoDetalles: any = null;
 
-
-
-
-
+  isLoading: boolean = true; // Variable para el estado de carga
 
   constructor(
     private router: Router,
@@ -79,101 +70,54 @@ export class UserPagePage implements OnInit {
     private alertController: AlertController,
   ) { }
 
-
-
   ngOnInit() {
-    this.servicio.getDateTime().subscribe( dateTime =>{
-      this.fechaHora= dateTime
-    })
-
-
-    
-
-
-
-
+    this.servicio.getDateTime().subscribe(dateTime => {
+      this.fechaHora = dateTime;
+    });
 
     this.route.queryParams.subscribe(params => {
       this.primerNombre = params['primerNombre'];
       this.primerApellido = params['primerApellido'];
-      this.userID = params['id']
-      console.log(params);
-      console.log(this.primerNombre);
-      console.log(this.primerApellido);
-      console.log(this.userID);
+      this.userID = params['id'];
       this.segundoNombre = params['segundoNombre'];
       this.segundoApellido = params['segundoApellido'];
       this.telefono = params['telefono'];
       this.id = params['id'];
-
     });
 
     this.getConductoresDisponibles();
-
-
     this.new_primerNombre = this.primerNombre;
     this.new_primerApellido = this.primerApellido;
     this.new_segundoNombre = this.segundoNombre;
     this.new_segundoApellido = this.segundoApellido;
     this.new_telefono = this.telefono;
 
-
-    // vista solo accesible para tipo_usuario = 3
     const userStorage = localStorage.getItem('tipo_usuario');
     if (userStorage !== 'USER') {
       this.router.navigate(['/login']);
-
     }
-
-
-    this.getDrivers();
-
-
-
   }
-
-
-  getDrivers() {
-    this.servicio.getDatos().subscribe((data: any[]) => {
-      this.conductores = data.filter(user => user.tipo_usuario === 2); // Cambiado a 2
-      console.log('Conductores:', this.conductores);
-    }, (error: any) => {
-      console.error('Error al obtener los usuarios:', error);
-    });
-  }
-
-
-
-
-
-
-
-  logout() {
-    this.router.navigate(['login']);
-  }
-
 
   getConductoresDisponibles() {
+    this.isLoading = true; // Inicia el estado de carga
     this.servicio.getConductorDisponible().subscribe(
       (data: any[]) => {
         this.conductores = data;
+        this.isLoading = false; // Termina el estado de carga
         console.log('Conductores disponibles:', this.conductores);
       },
       (error) => {
         console.error('Error al obtener los conductores disponibles:', error);
+        this.isLoading = false; // Termina el estado de carga incluso si hay un error
       }
     );
   }
 
   setOpenModalConductor(isOpen: boolean) {
-    this.modalConductor = isOpen;
-    if (isOpen) {
-      this.getConductoresDisponibles();
+    if (!this.isLoading) {
+      this.modalConductor = isOpen;
     }
   }
-
-
-
 
   buscarConductor() {
     // Limpiar resultados de búsqueda anteriores
@@ -183,35 +127,28 @@ export class UserPagePage implements OnInit {
     this.conductorNoEncontrado = false;
     this.conductorInactivoDetalles = null;
 
-
     if (!this.busquedaConductor.trim()) {
       return;
     }
 
     console.log('Buscar conductor:', this.busquedaConductor);
 
-
-    // Buscar entre los conductores activos y disponibles
     let conductorActivo = this.conductores.find(conductor =>
-
       conductor.usuario.primer_nombre.toLowerCase().includes(this.busquedaConductor.toLowerCase())
     );
 
     if (conductorActivo) {
-      // Si se encuentra un conductor activo, mostrarlo en los resultados de búsqueda y detener la función
       this.resultadoBusqueda = [conductorActivo];
       console.log('Conductor activo encontrado:', conductorActivo);
       return;
     }
 
-    // Buscar entre todos los conductores en la base de datos
     this.servicio.getDatos().subscribe((data: any[]) => {
       let conductorInactivo = data.find(conductor =>
         conductor.primer_nombre.toLowerCase().includes(this.busquedaConductor.toLowerCase())
       );
 
       if (conductorInactivo) {
-        // Si se encuentra un conductor inactivo, mostrar los datos relevantes en el HTML
         console.log('Conductor inactivo encontrado:', conductorInactivo);
         this.conductorInactivo = true;
         this.conductorInactivoDetalles = conductorInactivo;
@@ -224,51 +161,30 @@ export class UserPagePage implements OnInit {
     });
   }
 
-
-
-
-
-
-
-
-
-
-  
   solicitarConductor(conductorId: number) {
-    // Obtener los datos del usuario solicitante
     const solicitante = {
       id: this.userID,
       nombre: this.primerNombre,
       apellido: this.primerApellido,
       conductor_id: conductorId,
-      fecha : this.fechaHora
+      fecha: this.fechaHora
     };
   
-    // Llamar al método del servicio para enviar la solicitud
-    this.servicio.enviarSolicitud(solicitante) // Emitir evento de solicitud
-  
-    // Mostrar en consola (opcional, para depuración)
+    this.servicio.enviarSolicitud(solicitante);
     console.log('Solicitud enviada al conductor:', solicitante);
   }
 
-
-
-
-
   toggleAgendamiento(event: any) {
-    this.showInputAgendamiento = event
+    this.showInputAgendamiento = event;
   }
 
   toggleConductor(event: any) {
     this.showInputConductor = event.detail.checked;
   }
 
-
   setModalSolicitudViaje(estado: boolean) {
-    this.isModalSolicitudViajeOpen = estado
+    this.isModalSolicitudViajeOpen = estado;
   }
-
-
 
   setModalModificarDatosOpen(estado: boolean) {
     this.isModalModificarDatosOpen = estado;
@@ -287,4 +203,8 @@ export class UserPagePage implements OnInit {
     this.setModalModificarDatosOpen(false);
   }
 
+  logout() {
+    localStorage.removeItem('tipo_usuario');
+    this.router.navigate(['/login']);
+  }
 }
