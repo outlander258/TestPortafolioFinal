@@ -72,13 +72,7 @@ export class DriverPagePage implements OnInit {
       this.fechaHora= dateTime
     })
 
-    this.servicio.getRequestObservable().subscribe(solicitud =>{
-      if(solicitud){
-        this.solicitudPendiente = solicitud;
-        this.showSolicitudPopup();
 
-      }
-    })
 
 
   
@@ -221,28 +215,7 @@ ngAfterViewInit() {
   }
 
 
-  aceptarSolicitud() {
-    // Aquí puedes implementar la lógica para aceptar la solicitud
-    console.log('Solicitud aceptada');
-    // Si necesitas realizar alguna acción, puedes hacerlo aquí
-  
-    // Una vez aceptada la solicitud, oculta el popup
-    this.solicitudPendiente = null;
-  }
-  
-  rechazarSolicitud() {
-    console.log('Solicitud rechazada');
-    this.solicitudPendiente = null;
-  
-    // Aquí puedes añadir la lógica para eliminar la solicitud del almacenamiento local o base de datos
-    this.servicio.eliminarSolicitud(this.idConductor);
-  }
-  showSolicitudPopup() {
-    if (this.solicitudPendiente) {
-      // Lógica para mostrar el pop-up en la interfaz de usuario
-      alert(`Solicitud de ${this.solicitudPendiente.nombre} ${this.solicitudPendiente.apellido}`);
-    }
-  }
+ 
 
 
 

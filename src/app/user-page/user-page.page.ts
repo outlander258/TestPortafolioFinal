@@ -7,7 +7,6 @@ import { ServiceService } from '../service/service.service';
 import { ModelLog } from '../modelo/ModelLog';
 import { ActivatedRoute } from '@angular/router';
 import { AlertController } from '@ionic/angular';
-import { BehaviorSubject } from 'rxjs';
 
 interface ConductorActivo {
   id: number;
@@ -27,7 +26,7 @@ interface ConductorActivo {
 })
 export class UserPagePage implements OnInit {
 
-  private requestSubject = new BehaviorSubject<any>(null);
+
   fechaHora: Date | undefined;
   userID : number | undefined;
 
@@ -161,17 +160,22 @@ export class UserPagePage implements OnInit {
     });
   }
 
-  solicitarConductor(conductorId: number) {
-    const solicitante = {
-      id: this.userID,
-      nombre: this.primerNombre,
-      apellido: this.primerApellido,
+
+  solicitarConductor(conductorId: number, origen: string, destino: string) {
+    const viaje = {
+      solicitante_id: this.userID,
       conductor_id: conductorId,
+      estado: 'pendiente',
+      origen: origen,
+      destino: destino,
       fecha: this.fechaHora
     };
   
-    this.servicio.enviarSolicitud(solicitante);
-    console.log('Solicitud enviada al conductor:', solicitante);
+    this.servicio.registrarViaje(viaje).subscribe(response => {
+      console.log('Viaje registrado:', response);
+    }, error => {
+      console.error('Error al registrar el viaje:', error);
+    });
   }
 
   toggleAgendamiento(event: any) {
