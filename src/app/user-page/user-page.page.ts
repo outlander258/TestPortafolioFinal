@@ -4,9 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { ServiceService } from '../service/service.service';
-import { ModelLog } from '../modelo/ModelLog';
 import { ActivatedRoute } from '@angular/router';
 import { AlertController } from '@ionic/angular';
+import { Travel } from '../modelo/Travel';  // Asegúrate de importar la interfaz Travel
+
+
 
 interface ConductorActivo {
   id: number;
@@ -59,6 +61,9 @@ export class UserPagePage implements OnInit {
   conductorInactivo: boolean = false;
   conductorNoEncontrado: boolean = false;
   conductorInactivoDetalles: any = null;
+   // variables para el nuevo viaje
+   origen: string = '';
+   destino: string = '';
 
   isLoading: boolean = true; // Variable para el estado de carga
 
@@ -161,22 +166,7 @@ export class UserPagePage implements OnInit {
   }
 
 
-  solicitarConductor(conductorId: number, origen: string, destino: string) {
-    const viaje = {
-      solicitante_id: this.userID,
-      conductor_id: conductorId,
-      estado: 'pendiente',
-      origen: origen,
-      destino: destino,
-      fecha: this.fechaHora
-    };
-  
-    this.servicio.registrarViaje(viaje).subscribe(response => {
-      console.log('Viaje registrado:', response);
-    }, error => {
-      console.error('Error al registrar el viaje:', error);
-    });
-  }
+
 
   toggleAgendamiento(event: any) {
     this.showInputAgendamiento = event;
@@ -207,8 +197,76 @@ export class UserPagePage implements OnInit {
     this.setModalModificarDatosOpen(false);
   }
 
+
+
+  solicitarViaje(conductorId: number) {
+    const viaje: Travel = {
+      id: undefined,
+      solicitante_id: this.userID,
+      conductor_id: conductorId,
+      estado: 'pendiente',
+      origen: this.origen,
+      destino: this.destino,
+      fecha: new Date()
+    };
+
+    this.servicio.registrarViaje(viaje).subscribe(
+      response => {
+        console.log('Viaje registrado:', response);
+        this.mostrarPopupSolicitud(conductorId, viaje);
+      },
+      error => {
+        console.error('Error al registrar el viaje:', error);
+      }
+    );
+  }
+
+
+  mostrarPopupSolicitud(conductorId: number, viaje: Travel) {
+    // Lógica para mostrar el popup al conductor específico
+    this.servicio.enviarSolicitud(conductorId, viaje).subscribe(
+      response => {
+        console.log('Solicitud enviada al conductor:', response);
+      },
+      error => {
+        console.error('Error al enviar la solicitud:', error);
+      }
+    );
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
   logout() {
     localStorage.removeItem('tipo_usuario');
     this.router.navigate(['/login']);
   }
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
-import { ModelLog } from '../modelo/ModelLog';
+import { Travel } from '../modelo/Travel';  // Asegúrate de importar la interfaz Travel
 import { ServiceService } from '../service/service.service';
 
 
@@ -19,7 +19,6 @@ import { ServiceService } from '../service/service.service';
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class DriverPagePage implements OnInit {
-  solicitudPendiente: any = null;
   fechaHora : Date | undefined;
 
   // Variable para almacenar el estado de disponibilidad del conductor
@@ -213,6 +212,36 @@ ngAfterViewInit() {
     this.servicio.UpdateDatos(this.id!, new_datos);
     this.setModalModificarDatosOpen(false);
   }
+  mostrarSolicitudPopup(viaje: Travel) {
+    // Lógica para mostrar el popup con la solicitud del viaje
+    // y opciones para aceptar o rechazar
+    // Puedes usar Ionic Alerts o Modals para mostrar la información
+    console.log('Solicitud de viaje recibida:', viaje);
+  }
+
+  // Método para aceptar la solicitud
+  aceptarSolicitud(viaje: Travel) {
+    viaje.estado = 'aceptada';
+    this.actualizarEstadoViaje(viaje);
+  }
+
+  // Método para rechazar la solicitud
+  rechazarSolicitud(viaje: Travel) {
+    viaje.estado = 'rechazada';
+    this.actualizarEstadoViaje(viaje);
+  }
+
+  actualizarEstadoViaje(viaje: Travel) {
+    this.servicio.actualizarViaje(viaje).subscribe(
+      response => {
+        console.log('Estado del viaje actualizado:', response);
+      },
+      error => {
+        console.error('Error al actualizar el estado del viaje:', error);
+      }
+    );
+  }
+}
 
 
  
@@ -224,4 +253,4 @@ ngAfterViewInit() {
 
 
 
-}
+

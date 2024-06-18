@@ -41,7 +41,7 @@
                 Nombre: {{conductor.usuario.primer_nombre}} {{conductor.usuario.segundo_nombre}}<br>
                 Teléfono: {{conductor.usuario.telefono}}
               </ion-label>
-              <ion-button >Solicitar</ion-button>
+              <ion-button (click)="solicitarViaje(conductor.id)">Solicitar</ion-button>
             </ion-item>
           </ion-list>
           <ion-item *ngIf="conductores.length === 0">
@@ -162,19 +162,13 @@
           </ion-item>
           <ion-item *ngIf="showInputAgendamiento">
             <ng-template>
-            <ion-datetime-button presentation="date" datetime="datetime"></ion-datetime-button>
-          </ng-template>
+              <ion-datetime-button presentation="date" datetime="datetime"></ion-datetime-button>
+            </ng-template>
           </ion-item>
-
-
-
         </ion-list>
         <ion-button class="editar-perfil" expand="block" (click)="modificarDatos()">Guardar cambios</ion-button>
       </ion-content>
     </ng-template>
   </ion-modal>
-
-
-
 
 </ion-content>

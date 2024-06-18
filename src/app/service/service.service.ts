@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ModelLog } from '../modelo/ModelLog';
 import { Observable, interval } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Travel } from '../modelo/Travel';  // Asegúrate de importar la interfaz Travel
 
 
 @Injectable({
@@ -131,9 +132,36 @@ export class ServiceService {
 }
 
 
+enviarSolicitud(conductorId: number, viaje: Travel): Observable<any> {
+  // Simular el envío de la solicitud al conductor en tiempo real
+  // Puedes usar un subject o un método similar para notificar al conductor
+  return new Observable(observer => {
+    setTimeout(() => {
+      observer.next({ success: true });
+      observer.complete();
+    }, 1000);
+  });
+}
+
+actualizarViaje(viaje: Travel): Observable<any> {
+  return this.http.patch(`${this.URL}viaje?id=eq.${viaje.id}`, viaje, { headers: this.header });
+}
+
+
+
 
 
 }
+
+
+
+
+
+
+
+
+
+
 
  
 
