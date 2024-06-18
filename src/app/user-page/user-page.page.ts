@@ -6,7 +6,6 @@ import { Router } from '@angular/router';
 import { ServiceService } from '../service/service.service';
 import { ModelLog } from '../modelo/ModelLog';
 import { ActivatedRoute } from '@angular/router';
-import { AlertController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
 
 interface ConductorActivo {
@@ -67,7 +66,7 @@ export class UserPagePage implements OnInit {
     private router: Router,
     private servicio: ServiceService,
     private route: ActivatedRoute,
-    private alertController: AlertController,
+
   ) { }
 
   ngOnInit() {
@@ -98,10 +97,11 @@ export class UserPagePage implements OnInit {
     }
   }
 
+
   getConductoresDisponibles() {
     this.isLoading = true; // Inicia el estado de carga
     this.servicio.getConductorDisponible().subscribe(
-      (data: any[]) => {
+      (data: ConductorActivo[]) => {
         this.conductores = data;
         this.isLoading = false; // Termina el estado de carga
         console.log('Conductores disponibles:', this.conductores);
@@ -120,14 +120,13 @@ export class UserPagePage implements OnInit {
   }
 
   buscarConductor() {
-    // Limpiar resultados de búsqueda anteriores
-    this.resultadoBusqueda = [];
     this.busquedaRealizada = true;
     this.conductorInactivo = false;
     this.conductorNoEncontrado = false;
     this.conductorInactivoDetalles = null;
 
     if (!this.busquedaConductor.trim()) {
+      this.resultadoBusqueda = [];
       return;
     }
 
