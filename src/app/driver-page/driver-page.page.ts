@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { Travel } from '../modelo/Travel';  // Asegúrate de importar la interfaz Travel
 import { ServiceService } from '../service/service.service';
+import { AlertController } from '@ionic/angular/standalone';
 
 
 
@@ -62,7 +63,10 @@ export class DriverPagePage implements OnInit {
     private router: Router,
     private toastController: ToastController,
     private route: ActivatedRoute,
-    private servicio: ServiceService
+    private servicio: ServiceService,
+    private alertController: AlertController,
+    
+    
 
   ) { }
 
@@ -212,12 +216,32 @@ ngAfterViewInit() {
     this.servicio.UpdateDatos(this.id!, new_datos);
     this.setModalModificarDatosOpen(false);
   }
-  mostrarSolicitudPopup(viaje: Travel) {
-    // Lógica para mostrar el popup con la solicitud del viaje
-    // y opciones para aceptar o rechazar
-    // Puedes usar Ionic Alerts o Modals para mostrar la información
-    console.log('Solicitud de viaje recibida:', viaje);
-  }
+
+  async mostrarSolicitudPopup(viaje: Travel) {
+    const alert = await this.alertController.create({
+      header: 'Solicitud de viaje',
+      message: `¿Deseas aceptar la solicitud de viaje de ${viaje.solicitante_id} con destino a ${viaje.destino}?`,
+      buttons: [
+        {
+          text: 'Rechazar',
+          role: 'cancel',
+          handler: () => {
+            this.rechazarSolicitud(viaje);
+          }
+        },
+        {
+          text: 'Aceptar',
+          handler: () => {
+            this.aceptarSolicitud(viaje);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+}
+
+
 
   // Método para aceptar la solicitud
   aceptarSolicitud(viaje: Travel) {
