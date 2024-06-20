@@ -213,14 +213,15 @@ export class UserPagePage implements OnInit {
     this.servicio.solicitarViaje(conductorId, viaje).subscribe(
       response => {
         console.log('Viaje registrado:', response);
-        console.log(conductorId)
-        this.servicio.mostrarPopupSolicitud(conductorId, viaje);
+        console.log(conductorId);
+        // No llames a mostrarPopupSolicitud aquí
       },
       error => {
         console.error('Error al registrar el viaje:', error);
       }
     );
   }
+
 
 
 

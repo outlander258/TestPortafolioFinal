@@ -89,8 +89,11 @@ export class DriverPagePage implements OnInit {
 
     this.servicio.getSolicitudSubject().subscribe(({ conductorId, viaje }) => {
       console.log('Recibido conductorId:', conductorId, 'viaje:', viaje); // Log para depuración
+      this.servicio.mostrarPopupSolicitud;
       this.mostrarSolicitudPopup(conductorId, viaje);
     });
+
+
  
 
 
