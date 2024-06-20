@@ -75,6 +75,18 @@ export class DriverPagePage implements OnInit {
       this.fechaHora= dateTime
     })
 
+    this.idConductor = 5; // O cualquier lógica que uses para obtener el idConductor actual
+
+    if (!this.idConductor) {
+      console.error('idConductor no está inicializado.');
+    }
+
+
+
+
+
+
+
     this.servicio.getSolicitudSubject().subscribe(({ conductorId, viaje }) => {
       console.log('Recibido conductorId:', conductorId, 'viaje:', viaje); // Log para depuración
       this.mostrarSolicitudPopup(conductorId, viaje);
@@ -223,36 +235,41 @@ ngAfterViewInit() {
     this.setModalModificarDatosOpen(false);
   }
 
-  async mostrarSolicitudPopup(conductorId: number, viaje: Travel) {
-    console.log('Verificando viaje:', viaje); // Log para depuración
-    // Verificar si el idConductor de la solicitud coincide con el idConductor actual
-    if (conductorId === this.idConductor) {
-      console.log('idConductor coincide. Mostrando popup.'); // Log para depuración
-      const alert = await this.alertController.create({
-        header: 'Solicitud de viaje',
-        message: `¿Deseas aceptar la solicitud de viaje de ${viaje.solicitante_id} con destino a ${viaje.destino}?`,
-        buttons: [
-          {
-            text: 'Rechazar',
-            role: 'cancel',
-            handler: () => {
-              this.rechazarSolicitud(viaje);
-            }
-          },
-          {
-            text: 'Aceptar',
-            handler: () => {
-              this.aceptarSolicitud(viaje);
-            }
-          }
-        ]
-      });
+  async mostrarSolicitudPopup(conductorId: number | string, viaje: Travel) {
+    // Convertir ambos valores a números
+    const conductorIdNum = Number(conductorId);
+    const viajeConductorIdNum = Number(viaje.conductor_id);
 
-      await alert.present();
+    console.log('conductorIdNum:', conductorIdNum, typeof conductorIdNum);
+    console.log('viajeConductorIdNum:', viajeConductorIdNum, typeof viajeConductorIdNum);
+
+    // Verificar si el idConductor de la solicitud coincide con el idConductor actual
+    if (viajeConductorIdNum === conductorIdNum) {
+        const alert = await this.alertController.create({
+            header: 'Solicitud de viaje',
+            message: `¿Deseas aceptar la solicitud de viaje de ${viaje.solicitante_id} con destino a ${viaje.destino}?`,
+            buttons: [
+                {
+                    text: 'Rechazar',
+                    role: 'cancel',
+                    handler: () => {
+                        this.rechazarSolicitud(viaje);
+                    }
+                },
+                {
+                    text: 'Aceptar',
+                    handler: () => {
+                        this.aceptarSolicitud(viaje);
+                    }
+                }
+            ]
+        });
+
+        await alert.present();
     } else {
-      console.log('idConductor no coincide. No mostrando popup.'); // Log para depuración
+        console.log('idConductor no coincide. No mostrando popup.');
     }
-  }
+}
 
   // Método para aceptar la solicitud
   aceptarSolicitud(viaje: Travel) {

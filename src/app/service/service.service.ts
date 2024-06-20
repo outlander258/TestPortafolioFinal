@@ -133,16 +133,7 @@ export class ServiceService {
 }
 
 
-enviarSolicitud(conductorId: number, viaje: Travel): Observable<any> {
-  // Simular el envío de la solicitud al conductor en tiempo real
-  // Puedes usar un subject o un método similar para notificar al conductor
-  return new Observable(observer => {
-    setTimeout(() => {
-      observer.next({ success: true });
-      observer.complete();
-    }, 1000);
-  });
-}
+
 
 
 mostrarPopupSolicitud(conductorId: number, viaje: Travel) {
@@ -155,7 +146,9 @@ getSolicitudSubject(): Observable<{ conductorId: number, viaje: Travel }> {
 
 
 solicitarViaje(conductorId: number, viaje: Travel): Observable<any> {
+  this.solicitudSubject.next({ conductorId, viaje });
   return this.http.post(`${this.URL}viaje`, viaje, { headers: this.header });
+
 }
 
 
@@ -163,6 +156,14 @@ solicitarViaje(conductorId: number, viaje: Travel): Observable<any> {
 
 actualizarViaje(viaje: Travel): Observable<any> {
   return this.http.patch(`${this.URL}viaje?id=eq.${viaje.id}`, viaje, { headers: this.header });
+}
+
+
+enviarSolicitud(conductorId: number, viaje: Travel) {
+  // Simular el envío de la solicitud al conductor en tiempo real
+  setTimeout(() => {
+    this.solicitudSubject.next({ conductorId, viaje });
+  }, 1000);
 }
 
 
