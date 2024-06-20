@@ -4,7 +4,7 @@ import { ModelLog } from '../modelo/ModelLog';
 import { Observable, interval } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Travel } from '../modelo/Travel';  // Asegúrate de importar la interfaz Travel
-
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +19,7 @@ export class ServiceService {
   header = new HttpHeaders()
     .set('apikey', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndncWFic3hmam90bXVjbWZqcXRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTQ3NjUwNzMsImV4cCI6MjAzMDM0MTA3M30.5i8-v2LiWpbqJLOhR64w0kBSvx4Mh8aSi_UBKCl__nk')
 
+    private solicitudSubject = new Subject<{ conductorId: number, viaje: Travel }>();
 
 
 
@@ -142,6 +143,23 @@ enviarSolicitud(conductorId: number, viaje: Travel): Observable<any> {
     }, 1000);
   });
 }
+
+
+mostrarPopupSolicitud(conductorId: number, viaje: Travel) {
+  this.solicitudSubject.next({ conductorId, viaje });
+}
+
+getSolicitudSubject(): Observable<{ conductorId: number, viaje: Travel }> {
+  return this.solicitudSubject.asObservable();
+}
+
+
+solicitarViaje(conductorId: number, viaje: Travel): Observable<any> {
+  return this.http.post(`${this.URL}viaje`, viaje, { headers: this.header });
+}
+
+
+
 
 actualizarViaje(viaje: Travel): Observable<any> {
   return this.http.patch(`${this.URL}viaje?id=eq.${viaje.id}`, viaje, { headers: this.header });

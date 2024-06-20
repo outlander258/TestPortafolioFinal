@@ -210,37 +210,16 @@ export class UserPagePage implements OnInit {
       fecha: new Date()
     };
 
-    this.servicio.registrarViaje(viaje).subscribe(
+    this.servicio.solicitarViaje(conductorId, viaje).subscribe(
       response => {
         console.log('Viaje registrado:', response);
-        this.mostrarPopupSolicitud(conductorId, viaje);
+        this.servicio.mostrarPopupSolicitud(conductorId, viaje);
       },
       error => {
         console.error('Error al registrar el viaje:', error);
       }
     );
   }
-
-
-  mostrarPopupSolicitud(conductorId: number, viaje: Travel) {
-    // Lógica para mostrar el popup al conductor específico
-    this.servicio.enviarSolicitud(conductorId, viaje).subscribe(
-      response => {
-        console.log('Solicitud enviada al conductor:', response);
-      },
-      error => {
-        console.error('Error al enviar la solicitud:', error);
-      }
-    );
-  }
-
-
-
-
-
-
-
-
 
 
 

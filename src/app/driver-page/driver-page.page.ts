@@ -75,6 +75,12 @@ export class DriverPagePage implements OnInit {
       this.fechaHora= dateTime
     })
 
+    this.servicio.getSolicitudSubject().subscribe(({ conductorId, viaje }) => {
+      console.log('Recibido conductorId:', conductorId, 'viaje:', viaje); // Log para depuración
+      this.mostrarSolicitudPopup(conductorId, viaje);
+    });
+ 
+
 
 
 
@@ -217,31 +223,36 @@ ngAfterViewInit() {
     this.setModalModificarDatosOpen(false);
   }
 
-  async mostrarSolicitudPopup(viaje: Travel) {
-    const alert = await this.alertController.create({
-      header: 'Solicitud de viaje',
-      message: `¿Deseas aceptar la solicitud de viaje de ${viaje.solicitante_id} con destino a ${viaje.destino}?`,
-      buttons: [
-        {
-          text: 'Rechazar',
-          role: 'cancel',
-          handler: () => {
-            this.rechazarSolicitud(viaje);
+  async mostrarSolicitudPopup(conductorId: number, viaje: Travel) {
+    console.log('Verificando viaje:', viaje); // Log para depuración
+    // Verificar si el idConductor de la solicitud coincide con el idConductor actual
+    if (conductorId === this.idConductor) {
+      console.log('idConductor coincide. Mostrando popup.'); // Log para depuración
+      const alert = await this.alertController.create({
+        header: 'Solicitud de viaje',
+        message: `¿Deseas aceptar la solicitud de viaje de ${viaje.solicitante_id} con destino a ${viaje.destino}?`,
+        buttons: [
+          {
+            text: 'Rechazar',
+            role: 'cancel',
+            handler: () => {
+              this.rechazarSolicitud(viaje);
+            }
+          },
+          {
+            text: 'Aceptar',
+            handler: () => {
+              this.aceptarSolicitud(viaje);
+            }
           }
-        },
-        {
-          text: 'Aceptar',
-          handler: () => {
-            this.aceptarSolicitud(viaje);
-          }
-        }
-      ]
-    });
+        ]
+      });
 
-    await alert.present();
-}
-
-
+      await alert.present();
+    } else {
+      console.log('idConductor no coincide. No mostrando popup.'); // Log para depuración
+    }
+  }
 
   // Método para aceptar la solicitud
   aceptarSolicitud(viaje: Travel) {
