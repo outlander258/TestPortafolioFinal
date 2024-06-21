@@ -146,10 +146,11 @@ getSolicitudSubject(): Observable<{ conductorId: number, viaje: Travel }> {
 
 
 solicitarViaje(conductorId: number, viaje: Travel): Observable<any> {
-  this.solicitudSubject.next({ conductorId, viaje });
   return this.http.post(`${this.URL}viaje`, viaje, { headers: this.header });
 
 }
+
+
 
 
 
@@ -173,7 +174,26 @@ verificarDisponibilidad(idConductor: number): Observable<boolean> {
     map(response => response.length > 0)
   );
 }
+
+
+  // Obtener un viaje por ID
+  getViajeById(id: number): Observable<Travel> {
+    return this.http.get<Travel[]>(`${this.URL}viaje?id=eq.${id}`, { headers: this.header })
+      .pipe(
+        map(viajes => viajes[0]) // Devuelve el primer viaje encontrado con el ID
+      );
+  }
 }
+
+
+
+
+
+
+
+
+
+
 
 
 
