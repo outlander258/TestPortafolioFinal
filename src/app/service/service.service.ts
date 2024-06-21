@@ -168,9 +168,18 @@ enviarSolicitud(conductorId: number, viaje: Travel) {
 
 
 
-
-
+verificarDisponibilidad(idConductor: number): Observable<boolean> {
+  return this.http.get<any[]>(`${this.URL}conductor_activo?id=eq.${idConductor}`, { headers: this.header }).pipe(
+    map(response => response.length > 0)
+  );
 }
+}
+
+
+
+
+
+
 
 
 

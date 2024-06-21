@@ -23,7 +23,7 @@ export class DriverPagePage implements OnInit {
   fechaHora : Date | undefined;
 
   // Variable para almacenar el estado de disponibilidad del conductor
-  isAvailable: boolean = true;
+  isAvailable!: boolean;
   idConductor:number = 0;
 
 
@@ -84,6 +84,24 @@ export class DriverPagePage implements OnInit {
 
 
 
+    this.servicio.verificarDisponibilidad(this.idConductor).subscribe((disponibilidad: boolean) => {
+      this.isAvailable = disponibilidad; // Asignar el estado de disponibilidad al botón
+      console.log('Disponibilidad del conductor:', this.isAvailable);
+  
+      // Lógica adicional según el estado de disponibilidad
+      if (this.isAvailable) {
+        console.log("Driver is available");
+      } else {
+        console.log("Driver is not available");
+      }
+    }, error => {
+      console.error('Error verificando disponibilidad:', error);
+    });
+  
+
+
+
+
 
 
 
@@ -93,6 +111,13 @@ export class DriverPagePage implements OnInit {
       this.mostrarSolicitudPopup(conductorId, viaje);
     });
 
+
+
+
+
+
+
+  
 
  
 
@@ -109,13 +134,7 @@ export class DriverPagePage implements OnInit {
    
 
 
-    // Recuperar la disponibilidad del conductor desde localStorage
-
-    const storedAvailability = localStorage.getItem('isAvailable');
-    if (storedAvailability !== null) {
-      this.isAvailable = JSON.parse(storedAvailability);
-    }
-
+    
 
 
 
@@ -188,25 +207,34 @@ ngAfterViewInit() {
   // Variable para almacenar el contenido del card
   cardContent: string = "Añade una breve descripción de tu experiencia como conductor.";
 
+
+
   toggleAvailability(event: CustomEvent) {
     this.isAvailable = event.detail.checked;
-    console.log(this.isAvailable)
-    if(this.isAvailable === true){
-      console.log("Verdad", this.idConductor)
+    console.log("Toggle Availability:", this.isAvailable);
+    console.log("Driver ID:", this.idConductor);
 
-      const datos ={
-        id : this.idConductor
-      }
-      console.log(datos)
-      this.servicio.conductorDisponible(datos);
+    if (this.isAvailable) {
+        console.log("Driver is available");
+        const datos = { id: this.idConductor };
+        this.servicio.conductorDisponible(datos).then(() => {
+            console.log('Conductor marcado como disponible');
+        }).catch(error => {
+            console.error('Error marcando conductor como disponible:', error);
+        });
+    } else {
+        console.log("Driver is not available");
+        this.servicio.conductorNoDisponible(this.idConductor).then(() => {
+            console.log('Conductor marcado como no disponible');
+        }).catch(error => {
+            console.error('Error marcando conductor como no disponible:', error);
+        });
     }
-    if(this.isAvailable===false){
-      console.log("mentira")
-      this.servicio.conductorNoDisponible(this.idConductor);
+}
 
-    }
-   
-  }
+
+
+ 
   // Método para mostrar un toast
   async presentToast(message: string) {
     const toast = await this.toastController.create({
