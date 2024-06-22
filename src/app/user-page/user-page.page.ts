@@ -61,6 +61,7 @@ export class UserPagePage implements OnInit {
   conductorInactivo: boolean = false;
   conductorNoEncontrado: boolean = false;
   conductorInactivoDetalles: any = null;
+  conductorSeleccionado: ConductorActivo | undefined;
   
 
 
@@ -185,10 +186,18 @@ export class UserPagePage implements OnInit {
 
   toggleConductor(event: any) {
     this.showInputConductor = event.detail.checked;
+    if (!this.showInputConductor) {
+      this.conductorSeleccionado = undefined; // Limpiar selección de conductor
+    }
   }
-
   setModalSolicitudViaje(estado: boolean) {
     this.isModalSolicitudViajeOpen = estado;
+    if (!estado) {
+      this.origen = '';
+      this.destino = '';
+      this.tarifa = 0;
+      this.conductorSeleccionado = undefined; // Limpiar selección de conductor
+    }
   }
 
   setModalModificarDatosOpen(estado: boolean) {
@@ -210,30 +219,32 @@ export class UserPagePage implements OnInit {
 
 
 
-  solicitarViaje(conductorId: number) {
-    const viaje: Travel = {
-      id: undefined,
-      solicitante_id: this.userID,
-      conductor_id: conductorId,
-      estado: 'pendiente',
-      origen: this.origen,
-      destino: this.destino,
-      fecha: new Date(),
-      tarifa: this.tarifa  // Aquí se usa la tarifa ingresada por el usuario
-    };
+  solicitarViaje() {
+    if (this.conductorSeleccionado) {
+      const viaje: Travel = {
+        id: undefined,
+        solicitante_id: this.userID,
+        conductor_id: this.conductorSeleccionado.id,
+        estado: 'pendiente',
+        origen: this.origen,
+        destino: this.destino,
+        fecha: new Date(),
+        tarifa: this.tarifa  // Aquí se usa la tarifa ingresada por el usuario
+      };
   
-    this.servicio.solicitarViaje(conductorId, viaje).subscribe(
-      response => {
-        console.log('Viaje registrado:', response);
-        console.log(conductorId);
-        // No llames a mostrarPopupSolicitud aquí
-      },
-      error => {
-        console.error('Error al registrar el viaje:', error);
-      }
-    );
+      this.servicio.solicitarViaje(this.conductorSeleccionado.id, viaje).subscribe(
+        response => {
+          console.log('Viaje registrado:', response);
+          this.setModalSolicitudViaje(false); // Cerrar el modal después de solicitar el viaje
+        },
+        error => {
+          console.error('Error al registrar el viaje:', error);
+        }
+      );
+    } else {
+      console.error('No hay conductor seleccionado.');
+    }
   }
-
 
 
 
