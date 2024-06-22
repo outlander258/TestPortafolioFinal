@@ -209,9 +209,9 @@ export class UserPagePage implements OnInit {
       origen: this.origen,
       destino: this.destino,
       fecha: new Date(),
-      tarifa: this.tarifa
+      tarifa: this.tarifa  // Aquí se usa la tarifa ingresada por el usuario
     };
-
+  
     this.servicio.solicitarViaje(conductorId, viaje).subscribe(
       response => {
         console.log('Viaje registrado:', response);
@@ -223,7 +223,6 @@ export class UserPagePage implements OnInit {
       }
     );
   }
-
 
 
 

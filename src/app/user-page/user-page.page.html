@@ -41,6 +41,7 @@
                 Nombre: {{conductor.usuario.primer_nombre}} {{conductor.usuario.segundo_nombre}}<br>
                 Teléfono: {{conductor.usuario.telefono}}
               </ion-label>
+              <ion-input [(ngModel)]="tarifa" type="number" placeholder="Ingrese la tarifa"></ion-input>
               <ion-button (click)="solicitarViaje(conductor.id)">Solicitar</ion-button>
             </ion-item>
           </ion-list>
