@@ -186,7 +186,9 @@ export class UserPagePage implements OnInit {
 
   toggleConductor(event: any) {
     this.showInputConductor = event.detail.checked;
-    if (!this.showInputConductor) {
+    if (this.showInputConductor) {
+      this.getConductoresDisponibles(); // Consulta por los conductores disponibles
+    } else {
       this.conductorSeleccionado = undefined; // Limpiar selección de conductor
     }
   }
