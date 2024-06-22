@@ -84,10 +84,12 @@ export class DriverPagePage implements OnInit {
 
 
 
-    this.servicio.verificarDisponibilidad(this.idConductor).subscribe((disponibilidad: boolean) => {
+    this.servicio.verificarDisponibilidad(Number(this.idConductor)).subscribe((disponibilidad: boolean) => {
       this.isAvailable = disponibilidad; // Asignar el estado de disponibilidad al botón
       console.log('Disponibilidad del conductor:', this.isAvailable);
-  
+      console.log(this.idConductor)
+      console.log(this.isAvailable)
+    
       // Lógica adicional según el estado de disponibilidad
       if (this.isAvailable) {
         console.log("Driver is available");
@@ -97,8 +99,6 @@ export class DriverPagePage implements OnInit {
     }, error => {
       console.error('Error verificando disponibilidad:', error);
     });
-  
-
 
 
 
