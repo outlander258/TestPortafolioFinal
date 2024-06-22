@@ -1,6 +1,6 @@
 export interface Travel{
     id: number | undefined;
-    solicitante_id : number | undefined;
+    solicitante_id : any;
     conductor_id : number | undefined;
     estado : string;
     origen : string;
