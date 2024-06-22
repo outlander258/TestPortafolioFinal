@@ -4,7 +4,7 @@ import { ModelLog } from '../modelo/ModelLog';
 import { Observable, interval } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Travel } from '../modelo/Travel';  // Asegúrate de importar la interfaz Travel
-import { Subject } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +19,7 @@ export class ServiceService {
   header = new HttpHeaders()
     .set('apikey', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndncWFic3hmam90bXVjbWZqcXRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTQ3NjUwNzMsImV4cCI6MjAzMDM0MTA3M30.5i8-v2LiWpbqJLOhR64w0kBSvx4Mh8aSi_UBKCl__nk')
 
-    private solicitudSubject = new Subject<{ conductorId: number, viaje: Travel }>();
+
 
 
 
@@ -136,13 +136,8 @@ export class ServiceService {
 
 
 
-mostrarPopupSolicitud(conductorId: number, viaje: Travel) {
-  this.solicitudSubject.next({ conductorId, viaje });
-}
 
-getSolicitudSubject(): Observable<{ conductorId: number, viaje: Travel }> {
-  return this.solicitudSubject.asObservable();
-}
+
 
 
 solicitarViaje(conductorId: number, viaje: Travel): Observable<any> {
@@ -160,12 +155,6 @@ actualizarViaje(viaje: Travel): Observable<any> {
 }
 
 
-enviarSolicitud(conductorId: number, viaje: Travel) {
-  // Simular el envío de la solicitud al conductor en tiempo real
-  setTimeout(() => {
-    this.solicitudSubject.next({ conductorId, viaje });
-  }, 1000);
-}
 
 
 
@@ -176,13 +165,7 @@ verificarDisponibilidad(idConductor: number): Observable<boolean> {
 }
 
 
-  // Obtener un viaje por ID
-  getViajeById(id: number): Observable<Travel> {
-    return this.http.get<Travel[]>(`${this.URL}viaje?id=eq.${id}`, { headers: this.header })
-      .pipe(
-        map(viajes => viajes[0]) // Devuelve el primer viaje encontrado con el ID
-      );
-  }
+
 }
 
 

@@ -64,6 +64,7 @@ export class UserPagePage implements OnInit {
    // variables para el nuevo viaje
    origen: string = '';
    destino: string = '';
+   tarifa: number = 0;
 
   isLoading: boolean = true; // Variable para el estado de carga
 
@@ -207,7 +208,8 @@ export class UserPagePage implements OnInit {
       estado: 'pendiente',
       origen: this.origen,
       destino: this.destino,
-      fecha: new Date()
+      fecha: new Date(),
+      tarifa: this.tarifa
     };
 
     this.servicio.solicitarViaje(conductorId, viaje).subscribe(
