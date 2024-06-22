@@ -158,7 +158,7 @@
             <ion-datetime-button datetime="datetime" presentation="date"></ion-datetime-button>
             <ion-modal [keepContentsMounted]="true">
               <ng-template>
-                <ion-datetime id="datetime" presentation="date" [showDefaultButtons]="true"></ion-datetime>
+                <ion-datetime id="datetime" presentation="date" [showDefaultButtons]="true" (ionChange)="onFechaSeleccionada($event)"></ion-datetime>
               </ng-template>
             </ion-modal>
           </ion-item>

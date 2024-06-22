@@ -5,7 +5,6 @@ import { IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { ServiceService } from '../service/service.service';
 import { ActivatedRoute } from '@angular/router';
-import { AlertController } from '@ionic/angular';
 import { Travel } from '../modelo/Travel';  // Asegúrate de importar la interfaz Travel
 
 
@@ -69,6 +68,7 @@ export class UserPagePage implements OnInit {
    origen: string = '';
    destino: string = '';
    tarifa: number = 0;
+   fechaSeleccionada: Date | null = null; // Campo para almacenar la fecha seleccionada
 
   isLoading: boolean = true; // Variable para el estado de carga
 
@@ -76,7 +76,7 @@ export class UserPagePage implements OnInit {
     private router: Router,
     private servicio: ServiceService,
     private route: ActivatedRoute,
-    private alertController: AlertController,
+
   ) { }
 
   ngOnInit() {
@@ -221,29 +221,44 @@ export class UserPagePage implements OnInit {
 
   solicitarViaje() {
     if (this.conductorSeleccionado) {
-      const viaje: Travel = {
-        id: undefined,
-        solicitante_id: this.userID,
-        conductor_id: this.conductorSeleccionado.id,
-        estado: 'pendiente',
-        origen: this.origen,
-        destino: this.destino,
-        fecha: new Date(),
-        tarifa: this.tarifa  // Aquí se usa la tarifa ingresada por el usuario
-      };
-  
-      this.servicio.solicitarViaje(this.conductorSeleccionado.id, viaje).subscribe(
-        response => {
-          console.log('Viaje registrado:', response);
-          this.setModalSolicitudViaje(false); // Cerrar el modal después de solicitar el viaje
-        },
-        error => {
-          console.error('Error al registrar el viaje:', error);
+        let fechaViaje: Date;
+
+        if (this.showInputAgendamiento && this.fechaSeleccionada) {
+            fechaViaje = new Date(this.fechaSeleccionada);
+        } else {
+            fechaViaje = new Date();
         }
-      );
+
+        const viaje: Travel = {
+            id: undefined,
+            solicitante_id: this.userID,
+            conductor_id: this.conductorSeleccionado.id,
+            estado: 'pendiente',
+            origen: this.origen,
+            destino: this.destino,
+            fecha: fechaViaje,
+            tarifa: this.tarifa  // Aquí se usa la tarifa ingresada por el usuario
+        };
+
+        this.servicio.solicitarViaje(this.conductorSeleccionado.id, viaje).subscribe(
+            response => {
+                console.log('Viaje registrado:', response);
+                this.setModalSolicitudViaje(false); // Cerrar el modal después de solicitar el viaje
+            },
+            error => {
+                console.error('Error al registrar el viaje:', error);
+            }
+        );
     } else {
-      console.error('No hay conductor seleccionado.');
+        console.error('No hay conductor seleccionado.');
     }
+}
+
+  onFechaSeleccionada(event: CustomEvent) {
+    // Esta función se llama cuando se selecciona una fecha en el ion-datetime
+    const fechaSeleccionada = event.detail.value;
+    // Haz lo que necesites con la fecha seleccionada
+    console.log('Fecha seleccionada:', fechaSeleccionada);
   }
 
 
