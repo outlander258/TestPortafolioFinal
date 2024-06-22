@@ -161,6 +161,11 @@
           <ion-item>
             <p>espacio para implementar GPS con punto de destino</p>
           </ion-item>
+          <ion-item >
+            <p>Ingrese la tarifa del viaje</p>
+            
+            <ion-input [(ngModel)]="tarifa" type="number" placeholder="Ingrese la tarifa"></ion-input>
+          </ion-item>
           <ion-item>
             <ion-toggle (ionChange)="toggleAgendamiento($event)">viaje inmediato o agendado?</ion-toggle>
           </ion-item>
