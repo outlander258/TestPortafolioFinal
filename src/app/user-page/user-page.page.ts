@@ -61,6 +61,9 @@ export class UserPagePage implements OnInit {
   conductorInactivo: boolean = false;
   conductorNoEncontrado: boolean = false;
   conductorInactivoDetalles: any = null;
+  
+
+
    // variables para el nuevo viaje
    origen: string = '';
    destino: string = '';
@@ -165,6 +168,13 @@ export class UserPagePage implements OnInit {
       console.error('Error al obtener los usuarios:', error);
     });
   }
+  
+
+
+
+
+
+
 
 
 
