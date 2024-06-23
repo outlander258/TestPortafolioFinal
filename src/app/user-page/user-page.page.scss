@@ -65,3 +65,11 @@
     justify-content: center;
 }
 
+
+.modal-input ion-label {
+    display: block;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

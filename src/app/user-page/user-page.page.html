@@ -125,6 +125,16 @@
           <ion-item>
             <ion-input [(ngModel)]="tarifa" type="number" placeholder="Ingrese la tarifa"> Ingrese la tarifa del viaje </ion-input>
           </ion-item>
+          
+          <ion-item class="modal-input">
+            <ion-label>Ingrese el punto de partida</ion-label>
+            <ion-input [(ngModel)]="origen"></ion-input>
+        </ion-item>
+        <ion-item class="modal-input">
+            <ion-label>Ingrese su destino</ion-label>
+            <ion-input [(ngModel)]="destino"></ion-input>
+        </ion-item>
+
           <ion-item>
             <ion-toggle (ionChange)="toggleAgendamiento($event)">¿Viaje inmediato o agendado?</ion-toggle>
           </ion-item>
