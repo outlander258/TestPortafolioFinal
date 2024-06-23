@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ModelLog } from '../modelo/ModelLog';
 import { Observable, interval, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Travel } from '../modelo/Travel';
 
 
 @Injectable({
@@ -154,66 +155,25 @@ export class ServiceService {
     // O en el caso de usar una base de datos:
     // this.httpClient.delete(`url_api/solicitudes/${idConductor}`).subscribe();
   }
+
+
+
+  viajeEspecifico(id:number){
+    return this.http.get<Travel[]>(`${this.URL}viaje?select=*,solicitante_id(*)&estado=eq.pendiente&conductor_id=eq.${id}`, { headers: this.header });
+  }
+
+  viajeGeneral(): Observable<Travel[]> {
+    return this.http.get<Travel[]>(`${this.URL}viaje?select=*,solicitante_id(*)&estado=eq.pendiente&conductor_id=is.null`, { headers: this.header });
+  }
+
+  updateViaje(valor: string, id_viaje: any): Observable<any> {
+    const body = { estado: valor };
+    return this.http.patch<any>(`${this.URL}viaje?id=eq.${id_viaje}`, body, { headers: this.header });
+  }
+
+
+
+
+
+
 }
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

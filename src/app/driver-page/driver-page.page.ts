@@ -4,8 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
-import { ModelLog } from '../modelo/ModelLog';
 import { ServiceService } from '../service/service.service';
+import { AlertController } from '@ionic/angular';
+import { Travel } from '../modelo/Travel'
 
 
 
@@ -20,11 +21,11 @@ import { ServiceService } from '../service/service.service';
 })
 export class DriverPagePage implements OnInit {
   solicitudPendiente: any = null;
-  fechaHora : Date | undefined;
+  fechaHora: Date | undefined;
 
   // Variable para almacenar el estado de disponibilidad del conductor
   isAvailable: boolean = true;
-  idConductor:number = 0;
+  idConductor: number = 0;
 
 
 
@@ -49,8 +50,10 @@ export class DriverPagePage implements OnInit {
 
   // variables para modal
   isModalModificarDatosOpen: boolean = false;
+  isModalViajeOpen: boolean = false;
 
-
+  //variable para modal de viajes
+  selectedTravel: Travel | null = null;
 
 
 
@@ -63,17 +66,19 @@ export class DriverPagePage implements OnInit {
     private router: Router,
     private toastController: ToastController,
     private route: ActivatedRoute,
-    private servicio: ServiceService
+    private servicio: ServiceService,
+    private alerta: AlertController,
 
   ) { }
 
   ngOnInit() {
-    this.servicio.getDateTime().subscribe( dateTime =>{
-      this.fechaHora= dateTime
-    })
 
-    this.servicio.getRequestObservable().subscribe(solicitud =>{
-      if(solicitud){
+    this.iniciarConsultaPeriodica()
+
+
+
+    this.servicio.getRequestObservable().subscribe(solicitud => {
+      if (solicitud) {
         this.solicitudPendiente = solicitud;
         this.showSolicitudPopup();
 
@@ -81,14 +86,14 @@ export class DriverPagePage implements OnInit {
     })
 
 
-  
 
 
 
 
 
-  
-   
+
+
+
 
 
     // Recuperar la disponibilidad del conductor desde localStorage
@@ -132,7 +137,7 @@ export class DriverPagePage implements OnInit {
       this.telefono = params['telefono'];
       this.id = params['id'];
       this.idConductor = params['id'];
-  
+
       console.log(params);
       console.log(this.primerNombre);
       console.log(this.primerApellido);
@@ -141,31 +146,17 @@ export class DriverPagePage implements OnInit {
       console.log(this.telefono);
       console.log(this.id);
     });
-  
+
     // asignacion de variables para cambion en caso de no ingresar dato nuevo
-  
+
     this.new_primerNombre = this.primerNombre;
     this.new_primerApellido = this.primerApellido;
     this.new_segundoNombre = this.segundoNombre;
     this.new_segundoApellido = this.segundoApellido;
     this.new_telefono = this.telefono;
-  
-
-
-  
-
 
   };
 
-
-
-
-
-
-
-ngAfterViewInit() {
-
-}
 
   // Variable para almacenar el contenido del card
   cardContent: string = "Añade una breve descripción de tu experiencia como conductor.";
@@ -173,21 +164,21 @@ ngAfterViewInit() {
   toggleAvailability(event: CustomEvent) {
     this.isAvailable = event.detail.checked;
     console.log(this.isAvailable)
-    if(this.isAvailable === true){
+    if (this.isAvailable === true) {
       console.log("Verdad", this.idConductor)
 
-      const datos ={
-        id : this.idConductor
+      const datos = {
+        id: this.idConductor
       }
       console.log(datos)
       this.servicio.conductorDisponible(datos);
     }
-    if(this.isAvailable===false){
+    if (this.isAvailable === false) {
       console.log("mentira")
       this.servicio.conductorNoDisponible(this.idConductor);
 
     }
-   
+
   }
   // Método para mostrar un toast
   async presentToast(message: string) {
@@ -196,9 +187,10 @@ ngAfterViewInit() {
       duration: 1000
     });
     toast.present();
-    }
+  }
 
   logout() {
+    this.servicio.conductorNoDisponible(this.idConductor);
     this.router.navigate(['login']);
   }
 
@@ -225,15 +217,15 @@ ngAfterViewInit() {
     // Aquí puedes implementar la lógica para aceptar la solicitud
     console.log('Solicitud aceptada');
     // Si necesitas realizar alguna acción, puedes hacerlo aquí
-  
+
     // Una vez aceptada la solicitud, oculta el popup
     this.solicitudPendiente = null;
   }
-  
+
   rechazarSolicitud() {
     console.log('Solicitud rechazada');
     this.solicitudPendiente = null;
-  
+
     // Aquí puedes añadir la lógica para eliminar la solicitud del almacenamiento local o base de datos
     this.servicio.eliminarSolicitud(this.idConductor);
   }
@@ -245,10 +237,104 @@ ngAfterViewInit() {
   }
 
 
+  iniciarConsultaPeriodica() {
+    setInterval(() => {
+      if (this.isAvailable) {
+        console.log("consulta")
+        this.consultarViajes();
+      }
+    }, 30000); // 30000 ms = 30 segundos
+  }
+
+  consultarViajes() {
+
+    this.servicio.viajeEspecifico(this.idConductor).subscribe(
+      (viajes: Travel[]) => {
+        if (viajes.length > 0) {
+          this.mostrarPopUp(viajes[0], 'Viaje Específico');
+        }
+      },
+      error => console.error(error)
+    );
+
+    this.servicio.viajeGeneral().subscribe(
+      (viajes: Travel[]) => {
+        if (viajes.length > 0) {
+          this.mostrarPopUp(viajes[0], 'Viaje General');
+        }
+      },
+      error => console.error(error)
+    );
+  }
+
+  async mostrarPopUp(travel: Travel, tipo: string) {
+    console.log(travel)
+    const alert = await this.alerta.create({
+      header: `Nuevo ${tipo}`,
+      subHeader: `Viaje ID: ${travel.id}`,
+      message: `
+        Solicitante: ${travel.solicitante_id.primer_nombre + " " + travel.solicitante_id.primer_apellido}
+        Fecha: ${new Date(travel.fecha).toLocaleString()}
+        Tarifa: ${travel.tarifa}
+      `,
+      buttons: [
+        {
+          text: 'Descartar',
+          role: 'cancel'
+        },
+        {
+          text: 'Detalles',
+          handler: () => {
+            this.abrirModalDetalles(travel);
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
 
 
+  setModalviajeOpen(valor: boolean) {
+    this.isModalViajeOpen = valor;
+  }
+  abrirModalDetalles(travel: Travel) {
+    this.selectedTravel = travel;
+    this.isModalViajeOpen = true;
+  }
 
+  aceptarViaje() {
+    if (this.selectedTravel?.id) {
+      this.servicio.updateViaje("aceptado", this.selectedTravel.id).subscribe(
+        response => {
+          console.log('Viaje aceptado exitosamente:', response);
+          this.setModalviajeOpen(false);
+        },
+        error => {
+          console.error('Error al aceptar el viaje:', error);
+          // Opcional: manejar el error (mostrar mensaje al usuario, etc.)
+        }
+      );
+    } else {
+      console.error('No se ha seleccionado ningún viaje.');
+    }
+  }
+  
 
-
+  cancelarViaje() {
+    if (this.selectedTravel?.id) {
+      this.servicio.updateViaje("cancelado", this.selectedTravel.id).subscribe(
+        response => {
+          console.log('Viaje cancelado exitosamente:', response);
+          this.setModalviajeOpen(false);
+        },
+        error => {
+          console.error('Error al cancelar el viaje:', error);
+          // Opcional: manejar el error (mostrar mensaje al usuario, etc.)
+        }
+      );
+    } else {
+      console.error('No se ha seleccionado ningún viaje.');
+    }
+  }
 
 }

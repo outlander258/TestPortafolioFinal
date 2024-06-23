@@ -74,19 +74,47 @@
   </ion-modal>
 
   <!-- Modal para mostrar la solicitud de servicio en tiempo real -->
-  <ion-modal [isOpen]="solicitudPendiente !== null">
+  <ion-modal [isOpen]="isModalViajeOpen">
     <ng-template>
       <ion-header>
         <ion-toolbar>
           <ion-title>Solicitud de Servicio</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="setModalviajeOpen(false)">Cancelar</ion-button>
+          </ion-buttons>
         </ion-toolbar>
       </ion-header>
-      <ion-content class="ion-padding">
-        <p>Solicitud de {{ solicitudPendiente?.nombre }} {{ solicitudPendiente?.apellido }}</p>
-        <p>Fecha y hora de la solicitud: {{ solicitudPendiente?.fecha | date:'dd/MM/yyyy HH:mm:ss' }}</p>
-        
-        <ion-button expand="block" (click)="aceptarSolicitud()">Aceptar</ion-button>
-        <ion-button expand="block" (click)="rechazarSolicitud()">Rechazar</ion-button>
+      <ion-content *ngIf="selectedTravel">
+        <ion-list>
+          <ion-item>
+            <ion-label>Nombre: {{ selectedTravel.solicitante_id.primer_nombre }} {{ selectedTravel.solicitante_id.primer_apellido }}</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>Teléfono: {{ selectedTravel.solicitante_id.telefono }}</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>Origen: {{ selectedTravel.origen }}</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>Destino: {{ selectedTravel.destino }}</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>Fecha: {{ selectedTravel.fecha | date: 'short' }}</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>Tarifa: {{ selectedTravel.tarifa }}</ion-label>
+          </ion-item>
+        </ion-list>
+        <ion-footer>
+          <ion-toolbar>
+            <ion-buttons slot="start">
+              <ion-button (click)="aceptarViaje()">Aceptar</ion-button>
+            </ion-buttons>
+            <ion-buttons slot="end">
+              <ion-button (click)="cancelarViaje()">Cancelar</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-footer>
       </ion-content>
     </ng-template>
   </ion-modal>
