@@ -68,7 +68,7 @@ export class UserPagePage implements OnInit {
    origen: string = '';
    destino: string = '';
    tarifa: number = 0;
-   fechaSeleccionada: Date | null = null; // Campo para almacenar la fecha seleccionada
+   fechaSeleccionada='';
 
   isLoading: boolean = true; // Variable para el estado de carga
 
@@ -238,7 +238,7 @@ export class UserPagePage implements OnInit {
             estado: 'pendiente',
             origen: this.origen,
             destino: this.destino,
-            fecha: fechaViaje,
+            fecha: this.fechaSeleccionada,
             tarifa: this.tarifa  // Aquí se usa la tarifa ingresada por el usuario
         };
 
@@ -256,11 +256,12 @@ export class UserPagePage implements OnInit {
     }
 }
 
-  onFechaSeleccionada(event: CustomEvent) {
-    // Esta función se llama cuando se selecciona una fecha en el ion-datetime
-    const fechaSeleccionada = event.detail.value;
-    // Haz lo que necesites con la fecha seleccionada
-    console.log('Fecha seleccionada:', fechaSeleccionada);
+
+
+
+  manejarCambioFecha(event: any) {
+    const fecha = new Date(event.detail.value);
+    this.fechaSeleccionada = fecha.toISOString().split('T')[0];
   }
 
 

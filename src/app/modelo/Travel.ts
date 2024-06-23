@@ -5,7 +5,7 @@ export interface Travel{
     estado : string;
     origen : string;
     destino : string;
-    fecha : Date;
+    fecha : string;
     tarifa : number;
 
 
