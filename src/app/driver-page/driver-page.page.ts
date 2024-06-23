@@ -4,9 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
-import { Travel } from '../modelo/Travel';  // Asegúrate de importar la interfaz Travel
 import { ServiceService } from '../service/service.service';
-import { AlertController } from '@ionic/angular/standalone';
+import { AlertController } from '@ionic/angular';
+import { Travel } from '../modelo/Travel'
 
 
 
@@ -20,11 +20,12 @@ import { AlertController } from '@ionic/angular/standalone';
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class DriverPagePage implements OnInit {
-  fechaHora : Date | undefined;
+  solicitudPendiente: any = null;
+  fechaHora: Date | undefined;
 
   // Variable para almacenar el estado de disponibilidad del conductor
-  isAvailable!: boolean;
-  idConductor:number = 0;
+  isAvailable: boolean = true;
+  idConductor: number = 0;
 
 
 
@@ -49,8 +50,10 @@ export class DriverPagePage implements OnInit {
 
   // variables para modal
   isModalModificarDatosOpen: boolean = false;
+  isModalViajeOpen: boolean = false;
 
-
+  //variable para modal de viajes
+  selectedTravel: Travel | null = null;
 
 
 
@@ -64,22 +67,18 @@ export class DriverPagePage implements OnInit {
     private toastController: ToastController,
     private route: ActivatedRoute,
     private servicio: ServiceService,
-    private alertController: AlertController,
-    
-    
+    private alerta: AlertController,
 
   ) { }
 
   ngOnInit() {
-    this.servicio.getDateTime().subscribe( dateTime =>{
-      this.fechaHora= dateTime
-    })
 
-    this.idConductor = 5; // O cualquier lógica que uses para obtener el idConductor actual
+    this.iniciarConsultaPeriodica()
 
-    if (!this.idConductor) {
-      console.error('idConductor no está inicializado.');
-    }
+
+
+
+
 
 
 
@@ -118,14 +117,14 @@ export class DriverPagePage implements OnInit {
 
 
 
-  
 
 
 
 
 
-  
-   
+
+
+
 
 
     
@@ -163,7 +162,7 @@ export class DriverPagePage implements OnInit {
       this.telefono = params['telefono'];
       this.id = params['id'];
       this.idConductor = params['id'];
-  
+
       console.log(params);
       console.log(this.primerNombre);
       console.log(this.primerApellido);
@@ -172,31 +171,18 @@ export class DriverPagePage implements OnInit {
       console.log(this.telefono);
       console.log(this.id);
     });
-  
+
     // asignacion de variables para cambion en caso de no ingresar dato nuevo
-  
+
     this.new_primerNombre = this.primerNombre;
     this.new_primerApellido = this.primerApellido;
     this.new_segundoNombre = this.segundoNombre;
     this.new_segundoApellido = this.segundoApellido;
     this.new_telefono = this.telefono;
-  
-
-
-  
-
 
   };
+  
 
-
-
-
-
-
-
-ngAfterViewInit() {
-
-}
 
   // Variable para almacenar el contenido del card
   cardContent: string = "Añade una breve descripción de tu experiencia como conductor.";
@@ -205,30 +191,23 @@ ngAfterViewInit() {
 
   toggleAvailability(event: CustomEvent) {
     this.isAvailable = event.detail.checked;
-    console.log("Toggle Availability:", this.isAvailable);
-    console.log("Driver ID:", this.idConductor);
+    console.log(this.isAvailable)
+    if (this.isAvailable === true) {
+      console.log("Verdad", this.idConductor)
 
-    if (this.isAvailable) {
-        console.log("Driver is available");
-        const datos = { id: this.idConductor };
-        this.servicio.conductorDisponible(datos).then(() => {
-            console.log('Conductor marcado como disponible');
-        }).catch(error => {
-            console.error('Error marcando conductor como disponible:', error);
-        });
-    } else {
-        console.log("Driver is not available");
-        this.servicio.conductorNoDisponible(this.idConductor).then(() => {
-            console.log('Conductor marcado como no disponible');
-        }).catch(error => {
-            console.error('Error marcando conductor como no disponible:', error);
-        });
+      const datos = {
+        id: this.idConductor
+      }
+      console.log(datos)
+      this.servicio.conductorDisponible(datos);
     }
-}
+    if (this.isAvailable === false) {
+      console.log("mentira")
+      this.servicio.conductorNoDisponible(this.idConductor);
 
+    }
 
-
- 
+  }
   // Método para mostrar un toast
   async presentToast(message: string) {
     const toast = await this.toastController.create({
@@ -236,9 +215,10 @@ ngAfterViewInit() {
       duration: 1000
     });
     toast.present();
-    }
+  }
 
   logout() {
+    this.servicio.conductorNoDisponible(this.idConductor);
     this.router.navigate(['login']);
   }
 
@@ -261,10 +241,131 @@ ngAfterViewInit() {
   }
 
 
+  aceptarSolicitud() {
+    // Aquí puedes implementar la lógica para aceptar la solicitud
+    console.log('Solicitud aceptada');
+    // Si necesitas realizar alguna acción, puedes hacerlo aquí
+
+    // Una vez aceptada la solicitud, oculta el popup
+    this.solicitudPendiente = null;
+  }
+
+  rechazarSolicitud() {
+    console.log('Solicitud rechazada');
+    this.solicitudPendiente = null;
+  }
+  showSolicitudPopup() {
+    if (this.solicitudPendiente) {
+      // Lógica para mostrar el pop-up en la interfaz de usuario
+      alert(`Solicitud de ${this.solicitudPendiente.nombre} ${this.solicitudPendiente.apellido}`);
+    }
+  }
+
+
+  iniciarConsultaPeriodica() {
+    setInterval(() => {
+      if (this.isAvailable) {
+        console.log("consulta")
+        this.consultarViajes();
+      }
+    }, 30000); // 30000 ms = 30 segundos
+  }
+
+  consultarViajes() {
+
+    this.servicio.viajeEspecifico(this.idConductor).subscribe(
+      (viajes: Travel[]) => {
+        if (viajes.length > 0) {
+          this.mostrarPopUp(viajes[0], 'Viaje Específico');
+        }
+      },
+      error => console.error(error)
+    );
+
+    this.servicio.viajeGeneral().subscribe(
+      (viajes: Travel[]) => {
+        if (viajes.length > 0) {
+          this.mostrarPopUp(viajes[0], 'Viaje General');
+        }
+      },
+      error => console.error(error)
+    );
+  }
+
+  async mostrarPopUp(travel: Travel, tipo: string) {
+    console.log(travel)
+    const alert = await this.alerta.create({
+      header: `Nuevo ${tipo}`,
+      subHeader: `Viaje ID: ${travel.id}`,
+      message: `
+        Solicitante: ${travel.solicitante_id.primer_nombre + " " + travel.solicitante_id.primer_apellido}
+        Fecha: ${new Date(travel.fecha).toLocaleString()}
+        Tarifa: ${travel.tarifa}
+      `,
+      buttons: [
+        {
+          text: 'Descartar',
+          role: 'cancel'
+        },
+        {
+          text: 'Detalles',
+          handler: () => {
+            this.abrirModalDetalles(travel);
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+
+  setModalviajeOpen(valor: boolean) {
+    this.isModalViajeOpen = valor;
+  }
+  abrirModalDetalles(travel: Travel) {
+    this.selectedTravel = travel;
+    this.isModalViajeOpen = true;
+  }
+
+  aceptarViaje() {
+    if (this.selectedTravel?.id) {
+      this.servicio.updateViaje("aceptado", this.selectedTravel.id).subscribe(
+        response => {
+          console.log('Viaje aceptado exitosamente:', response);
+          this.setModalviajeOpen(false);
+        },
+        error => {
+          console.error('Error al aceptar el viaje:', error);
+          // Opcional: manejar el error (mostrar mensaje al usuario, etc.)
+        }
+      );
+    } else {
+      console.error('No se ha seleccionado ningún viaje.');
+    }
+  }
+  
+
+  cancelarViaje() {
+    if (this.selectedTravel?.id) {
+      this.servicio.updateViaje("cancelado", this.selectedTravel.id).subscribe(
+        response => {
+          console.log('Viaje cancelado exitosamente:', response);
+          this.setModalviajeOpen(false);
+        },
+        error => {
+          console.error('Error al cancelar el viaje:', error);
+          // Opcional: manejar el error (mostrar mensaje al usuario, etc.)
+        }
+      );
+    } else {
+      console.error('No se ha seleccionado ningún viaje.');
+    }
+  }
+
 }
 
 
- 
+
 
 
 

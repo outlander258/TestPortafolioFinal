@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ModelLog } from '../modelo/ModelLog';
 import { Observable, interval } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Travel } from '../modelo/Travel';  // Asegúrate de importar la interfaz Travel
+import { Travel } from '../modelo/Travel';
 
 
 @Injectable({
@@ -150,9 +150,7 @@ solicitarViaje(conductorId: number, viaje: Travel): Observable<any> {
 
 
 
-actualizarViaje(viaje: Travel): Observable<any> {
-  return this.http.patch(`${this.URL}viaje?id=eq.${viaje.id}`, viaje, { headers: this.header });
-}
+
 
 
 
@@ -166,92 +164,23 @@ verificarDisponibilidad(idConductor: number): Observable<boolean> {
 
 
 
+
+  viajeEspecifico(id:number){
+    return this.http.get<Travel[]>(`${this.URL}viaje?select=*,solicitante_id(*)&estado=eq.pendiente&conductor_id=eq.${id}`, { headers: this.header });
+  }
+
+  viajeGeneral(): Observable<Travel[]> {
+    return this.http.get<Travel[]>(`${this.URL}viaje?select=*,solicitante_id(*)&estado=eq.pendiente&conductor_id=is.null`, { headers: this.header });
+  }
+
+  updateViaje(valor: string, id_viaje: any): Observable<any> {
+    const body = { estado: valor };
+    return this.http.patch<any>(`${this.URL}viaje?id=eq.${id_viaje}`, body, { headers: this.header });
+  }
+
+
+
+
+
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

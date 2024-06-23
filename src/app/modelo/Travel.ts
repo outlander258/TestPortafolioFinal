@@ -7,8 +7,4 @@ export interface Travel{
     destino : string;
     fecha : string;
     tarifa : number;
-
-
-
-
 }
