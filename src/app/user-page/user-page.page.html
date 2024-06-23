@@ -134,6 +134,7 @@
             <ion-label>Ingrese su destino</ion-label>
             <ion-input [(ngModel)]="destino"></ion-input>
         </ion-item>
+      
 
           <ion-item>
             <ion-toggle (ionChange)="toggleAgendamiento($event)">¿Viaje inmediato o agendado?</ion-toggle>
@@ -147,7 +148,7 @@
             </ion-modal>
           </ion-item>
         </ion-list>
-        <ion-button expand="block" (click)="solicitarViaje()">Solicitar Viaje</ion-button>
+        <ion-button (click)="solicitarViaje(origen, destino)">Solicitar Viaje</ion-button>
       </ion-content>
     </ng-template>
   </ion-modal>

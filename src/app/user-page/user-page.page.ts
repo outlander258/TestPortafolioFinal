@@ -221,7 +221,7 @@ export class UserPagePage implements OnInit {
 
 
 
-  solicitarViaje() {
+  solicitarViaje(origen: string, destino: string) {
     if (this.conductorSeleccionado) {
         let fechaViaje: Date;
 
@@ -236,8 +236,8 @@ export class UserPagePage implements OnInit {
             solicitante_id: this.userID,
             conductor_id: this.conductorSeleccionado.id,
             estado: 'pendiente',
-            origen: this.origen,
-            destino: this.destino,
+            origen: origen,
+            destino: destino,
             fecha: this.fechaSeleccionada,
             tarifa: this.tarifa  // Aquí se usa la tarifa ingresada por el usuario
         };
