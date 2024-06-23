@@ -25,7 +25,7 @@
     <br>
 
     <div class="toggle-container">
-      <ion-toggle class="disponibilidad" [(ngModel)]="isAvailable" labelPlacement="stacked" alignment="start" (ionChange)="toggleAvailability($event)">Disponibilidad</ion-toggle>
+      <ion-toggle class="disponibilidad" [checked]="isAvailable" labelPlacement="stacked" alignment="start" (ionChange)="toggleAvailability($event)">Disponibilidad</ion-toggle>
     </div>
   </ion-header>
   <br><br>
@@ -72,23 +72,4 @@
       </ion-content>
     </ng-template>
   </ion-modal>
-
-  <!-- Modal para mostrar la solicitud de servicio en tiempo real -->
-  <ion-modal [isOpen]="solicitudPendiente !== null">
-    <ng-template>
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>Solicitud de Servicio</ion-title>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content class="ion-padding">
-        <p>Solicitud de {{ solicitudPendiente?.nombre }} {{ solicitudPendiente?.apellido }}</p>
-        <p>Fecha y hora de la solicitud: {{ solicitudPendiente?.fecha | date:'dd/MM/yyyy HH:mm:ss' }}</p>
-        
-        <ion-button expand="block" (click)="aceptarSolicitud()">Aceptar</ion-button>
-        <ion-button expand="block" (click)="rechazarSolicitud()">Rechazar</ion-button>
-      </ion-content>
-    </ng-template>
-  </ion-modal>
-
 </ion-content>

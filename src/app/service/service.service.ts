@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ModelLog } from '../modelo/ModelLog';
-import { Observable, interval, BehaviorSubject } from 'rxjs';
+import { Observable, interval } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Travel } from '../modelo/Travel';  // Asegúrate de importar la interfaz Travel
 
 
 @Injectable({
@@ -11,13 +12,13 @@ import { map } from 'rxjs/operators';
 export class ServiceService {
 
   URL = 'https://wgqabsxfjotmucmfjqtn.supabase.co/rest/v1/';
-  private requestSubject = new BehaviorSubject<any>(null);
 
   constructor(private http: HttpClient) { }
 
 
   header = new HttpHeaders()
     .set('apikey', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndncWFic3hmam90bXVjbWZqcXRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTQ3NjUwNzMsImV4cCI6MjAzMDM0MTA3M30.5i8-v2LiWpbqJLOhR64w0kBSvx4Mh8aSi_UBKCl__nk')
+
 
 
 
@@ -126,35 +127,72 @@ export class ServiceService {
 
 
 
-    // Método para obtener la solicitud en tiempo real
-    getRequestObservable(): Observable<any> {
-      return this.requestSubject.asObservable();
-    }
-
-
-  // Método para registrar el viaje una vez aceptado
-  registrarViaje(viaje: any): Observable<any> {
-    return this.http.post<any>(`${this.URL}viaje`, viaje, { headers: this.header });
-  }
-
-  enviarSolicitud(solicitante: any) {
-    // Lógica para enviar la solicitud al conductor
-    // Aquí puedes usar un BehaviorSubject para simular el envío en tiempo real
-    this.requestSubject.next(solicitante);
-  
-    // Si tienes un sistema de notificaciones o sockets, puedes integrarlo aquí
-    // Ejemplo: this.socket.emit('nuevaSolicitud', solicitante);
-  }
-
-
-
-  eliminarSolicitud(idConductor: number) {
-    // Aquí puedes implementar la lógica para eliminar la solicitud del almacenamiento local o base de datos
-    localStorage.removeItem(`solicitud_${idConductor}`);
-    // O en el caso de usar una base de datos:
-    // this.httpClient.delete(`url_api/solicitudes/${idConductor}`).subscribe();
-  }
+ // Registro de un viaje
+ registrarViaje(viaje: any): Observable<any> {
+  return this.http.post(`${this.URL}viaje`, viaje, { headers: this.header });
 }
+
+
+
+
+
+
+
+
+
+solicitarViaje(conductorId: number, viaje: Travel): Observable<any> {
+  return this.http.post(`${this.URL}viaje`, viaje, { headers: this.header });
+
+}
+
+
+
+
+
+
+actualizarViaje(viaje: Travel): Observable<any> {
+  return this.http.patch(`${this.URL}viaje?id=eq.${viaje.id}`, viaje, { headers: this.header });
+}
+
+
+
+
+
+verificarDisponibilidad(idConductor: number): Observable<boolean> {
+  return this.http.get<any[]>(`${this.URL}conductor_activo?id=eq.${idConductor}`, { headers: this.header }).pipe(
+    map(response => response.length > 0)
+  );
+}
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
  
 

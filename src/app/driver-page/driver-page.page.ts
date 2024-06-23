@@ -4,8 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
-import { ModelLog } from '../modelo/ModelLog';
+import { Travel } from '../modelo/Travel';  // Asegúrate de importar la interfaz Travel
 import { ServiceService } from '../service/service.service';
+import { AlertController } from '@ionic/angular/standalone';
 
 
 
@@ -19,11 +20,10 @@ import { ServiceService } from '../service/service.service';
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class DriverPagePage implements OnInit {
-  solicitudPendiente: any = null;
   fechaHora : Date | undefined;
 
   // Variable para almacenar el estado de disponibilidad del conductor
-  isAvailable: boolean = true;
+  isAvailable!: boolean;
   idConductor:number = 0;
 
 
@@ -63,7 +63,10 @@ export class DriverPagePage implements OnInit {
     private router: Router,
     private toastController: ToastController,
     private route: ActivatedRoute,
-    private servicio: ServiceService
+    private servicio: ServiceService,
+    private alertController: AlertController,
+    
+    
 
   ) { }
 
@@ -72,13 +75,47 @@ export class DriverPagePage implements OnInit {
       this.fechaHora= dateTime
     })
 
-    this.servicio.getRequestObservable().subscribe(solicitud =>{
-      if(solicitud){
-        this.solicitudPendiente = solicitud;
-        this.showSolicitudPopup();
+    this.idConductor = 5; // O cualquier lógica que uses para obtener el idConductor actual
 
+    if (!this.idConductor) {
+      console.error('idConductor no está inicializado.');
+    }
+
+
+
+
+    this.servicio.verificarDisponibilidad(Number(this.idConductor)).subscribe((disponibilidad: boolean) => {
+      this.isAvailable = disponibilidad; // Asignar el estado de disponibilidad al botón
+      console.log('Disponibilidad del conductor:', this.isAvailable);
+      console.log(this.idConductor)
+      console.log(this.isAvailable)
+    
+      // Lógica adicional según el estado de disponibilidad
+      if (this.isAvailable) {
+        console.log("Driver is available");
+      } else {
+        console.log("Driver is not available");
       }
-    })
+    }, error => {
+      console.error('Error verificando disponibilidad:', error);
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+ 
+
+
 
 
   
@@ -91,13 +128,7 @@ export class DriverPagePage implements OnInit {
    
 
 
-    // Recuperar la disponibilidad del conductor desde localStorage
-
-    const storedAvailability = localStorage.getItem('isAvailable');
-    if (storedAvailability !== null) {
-      this.isAvailable = JSON.parse(storedAvailability);
-    }
-
+    
 
 
 
@@ -170,25 +201,34 @@ ngAfterViewInit() {
   // Variable para almacenar el contenido del card
   cardContent: string = "Añade una breve descripción de tu experiencia como conductor.";
 
+
+
   toggleAvailability(event: CustomEvent) {
     this.isAvailable = event.detail.checked;
-    console.log(this.isAvailable)
-    if(this.isAvailable === true){
-      console.log("Verdad", this.idConductor)
+    console.log("Toggle Availability:", this.isAvailable);
+    console.log("Driver ID:", this.idConductor);
 
-      const datos ={
-        id : this.idConductor
-      }
-      console.log(datos)
-      this.servicio.conductorDisponible(datos);
+    if (this.isAvailable) {
+        console.log("Driver is available");
+        const datos = { id: this.idConductor };
+        this.servicio.conductorDisponible(datos).then(() => {
+            console.log('Conductor marcado como disponible');
+        }).catch(error => {
+            console.error('Error marcando conductor como disponible:', error);
+        });
+    } else {
+        console.log("Driver is not available");
+        this.servicio.conductorNoDisponible(this.idConductor).then(() => {
+            console.log('Conductor marcado como no disponible');
+        }).catch(error => {
+            console.error('Error marcando conductor como no disponible:', error);
+        });
     }
-    if(this.isAvailable===false){
-      console.log("mentira")
-      this.servicio.conductorNoDisponible(this.idConductor);
+}
 
-    }
-   
-  }
+
+
+ 
   // Método para mostrar un toast
   async presentToast(message: string) {
     const toast = await this.toastController.create({
@@ -221,34 +261,16 @@ ngAfterViewInit() {
   }
 
 
-  aceptarSolicitud() {
-    // Aquí puedes implementar la lógica para aceptar la solicitud
-    console.log('Solicitud aceptada');
-    // Si necesitas realizar alguna acción, puedes hacerlo aquí
-  
-    // Una vez aceptada la solicitud, oculta el popup
-    this.solicitudPendiente = null;
-  }
-  
-  rechazarSolicitud() {
-    console.log('Solicitud rechazada');
-    this.solicitudPendiente = null;
-  
-    // Aquí puedes añadir la lógica para eliminar la solicitud del almacenamiento local o base de datos
-    this.servicio.eliminarSolicitud(this.idConductor);
-  }
-  showSolicitudPopup() {
-    if (this.solicitudPendiente) {
-      // Lógica para mostrar el pop-up en la interfaz de usuario
-      alert(`Solicitud de ${this.solicitudPendiente.nombre} ${this.solicitudPendiente.apellido}`);
-    }
-  }
-
-
-
-
-
-
-
-
 }
+
+
+ 
+
+
+
+
+
+
+
+
+

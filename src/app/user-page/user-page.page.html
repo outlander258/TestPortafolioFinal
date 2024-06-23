@@ -16,73 +16,49 @@
         <ion-card-title>{{ primerNombre }} {{ primerApellido }}</ion-card-title>
         <ion-card-subtitle>[tipo de usuario]</ion-card-subtitle>
       </ion-card-header>
-
       <ion-card-content>
         Here's a small text description for the card content. Nothing more, nothing less.
       </ion-card-content>
     </ion-card>
     <br>
   </ion-header>
-
-  <div class="input-container">
-    <ion-button class="buscar-chofer" expand="block" (click)="setOpenModalConductor(true)">
-      Mostrar conductores disponibles
-    </ion-button>
-
-    <ion-modal [isOpen]="modalConductor">
-      <ng-template>
-        <ion-header>
-          <ion-toolbar>
-            <ion-title>Conductores</ion-title>
-            <ion-buttons slot="end">
-              <ion-button (click)="setOpenModalConductor(false)">Cerrar</ion-button>
-            </ion-buttons>
-          </ion-toolbar>
-        </ion-header>
-        <ion-content class="ion-padding">
-          <ion-list *ngIf="conductores.length > 0">
-            <ion-item *ngFor="let conductor of conductores">
-              <ion-label>
-                Nombre: {{conductor.usuario.primer_nombre}} {{conductor.usuario.segundo_nombre}}<br>
-                Teléfono: {{conductor.usuario.telefono}}
-              </ion-label>
-            </ion-item>
-          </ion-list>
-          <ion-item *ngIf="conductores.length === 0">
-            <ion-label>No hay conductores disponibles.</ion-label>
-          </ion-item>
-        </ion-content>
-      </ng-template>
-    </ion-modal>
-  </div>
-
+  
   <br><br><br>
-
+  
   <ion-item>
     <ion-input [(ngModel)]="busquedaConductor" placeholder="Ingrese nombre del conductor"></ion-input>
     <ion-button expand="block" (click)="buscarConductor()">Buscar Conductor</ion-button>
   </ion-item>
   <br><br>
-
+  
   <ion-list *ngIf="resultadoBusqueda.length > 0">
     <ion-item *ngFor="let conductor of resultadoBusqueda">
       <ion-label>
         Nombre: {{conductor.usuario.primer_nombre}} {{conductor.usuario.segundo_nombre}}<br>
         Teléfono: {{conductor.usuario.telefono}}
       </ion-label>
+      <ion-button >Solicitar</ion-button>
     </ion-item>
   </ion-list>
   <ion-item *ngIf="resultadoBusqueda.length === 0 && busquedaRealizada">
     <ion-label>No se encontró el conductor.</ion-label>
   </ion-item>
-
+  
+  <ion-item *ngIf="conductorInactivo">
+    <ion-label>Nombre: {{conductorInactivoDetalles.primer_nombre}} {{conductorInactivoDetalles.primer_apellido}}<br> El Conductor no está disponible en estos momentos</ion-label>
+  </ion-item>
+  <ion-item *ngIf="conductorNoEncontrado">
+    <ion-label>Conductor no encontrado.</ion-label>
+  </ion-item>
+  
   <ion-button expand="block" (click)="setModalSolicitudViaje(true)">Solicitar Viaje</ion-button>
+  
   <br><br><br>
   <ion-button class="editar-perfil" expand="block" (click)="setModalModificarDatosOpen(true)">Editar perfil</ion-button>
   <br><br>
   <ion-button class="cerrar-sesion" expand="block" (click)="logout()">Cerrar sesión</ion-button>
   <br><br>
-
+  
   <!-- modal con formulario para modificar datos de conductor -->
   <ion-modal [isOpen]="isModalModificarDatosOpen">
     <ng-template>
@@ -95,7 +71,6 @@
         </ion-toolbar>
       </ion-header>
       <ion-content class="ion-padding">
-
         <ion-list>
           <ion-item>
             <ion-label>Primer Nombre</ion-label>
@@ -136,52 +111,34 @@
         </ion-toolbar>
       </ion-header>
       <ion-content class="ion-padding">
-
         <ion-list>
           <ion-item>
-            <ion-toggle (ionChange)="toggleConductor($event)">Desea un conductor especifico?</ion-toggle>
+            <ion-toggle (ionChange)="toggleConductor($event)">Desea un conductor específico?</ion-toggle>
           </ion-item>
           <ion-item *ngIf="showInputConductor">
-           
-              <ion-select label="Chofer" label-placement="floating" *ngIf="conductores.length > 0">
-              <ion-item *ngFor="let conductor of conductores">
-
-                <ion-select-option>
-                  {{conductor.usuario.primer_nombre}} {{conductor.usuario.segundo_nombre}}
-                </ion-select-option>
-
-              </ion-item>
-              </ion-select>
-
-            <ion-item *ngIf="conductores.length === 0">
-              <ion-label>No hay conductores disponibles.</ion-label>
-            </ion-item>
+            <ion-select [(ngModel)]="conductorSeleccionado" interface="popover" placeholder="Seleccione un conductor">
+              <ion-select-option *ngFor="let conductor of conductores" [value]="conductor">
+                {{conductor.usuario.primer_nombre}} {{conductor.usuario.segundo_nombre}}
+              </ion-select-option>
+            </ion-select>
           </ion-item>
           <ion-item>
-            <p>espacio para implementar GPS con punto de origen</p>
+            <ion-input [(ngModel)]="tarifa" type="number" placeholder="Ingrese la tarifa"> Ingrese la tarifa del viaje </ion-input>
           </ion-item>
           <ion-item>
-            <p>espacio para implementar GPS con punto de destino</p>
-          </ion-item>
-          <ion-item>
-            <ion-toggle (ionChange)="toggleAgendamiento($event)">viaje inmediato o agendado?</ion-toggle>
+            <ion-toggle (ionChange)="toggleAgendamiento($event)">¿Viaje inmediato o agendado?</ion-toggle>
           </ion-item>
           <ion-item *ngIf="showInputAgendamiento">
             <ion-datetime-button datetime="datetime" presentation="date"></ion-datetime-button>
-
             <ion-modal [keepContentsMounted]="true">
               <ng-template>
-                <ion-datetime id="datetime" presentation="date" [showDefaultButtons]="true"></ion-datetime>
+                <ion-datetime id="datetime" presentation="date" [showDefaultButtons]="true" (ionChange)="manejarCambioFecha($event)" ></ion-datetime>
               </ng-template>
             </ion-modal>
           </ion-item>
-
-
-
         </ion-list>
-        <ion-button class="editar-perfil" expand="block" (click)="modificarDatos()">Guardar cambios</ion-button>
+        <ion-button expand="block" (click)="solicitarViaje()">Solicitar Viaje</ion-button>
       </ion-content>
     </ng-template>
   </ion-modal>
-
-</ion-content>
+  </ion-content>

@@ -4,9 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { ServiceService } from '../service/service.service';
-import { ModelLog } from '../modelo/ModelLog';
 import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { Travel } from '../modelo/Travel';  // Asegúrate de importar la interfaz Travel
+
+
 
 interface ConductorActivo {
   id: number;
@@ -26,7 +27,7 @@ interface ConductorActivo {
 })
 export class UserPagePage implements OnInit {
 
-  private requestSubject = new BehaviorSubject<any>(null);
+
   fechaHora: Date | undefined;
   userID : number | undefined;
 
@@ -59,6 +60,15 @@ export class UserPagePage implements OnInit {
   conductorInactivo: boolean = false;
   conductorNoEncontrado: boolean = false;
   conductorInactivoDetalles: any = null;
+  conductorSeleccionado: ConductorActivo | undefined;
+  
+
+
+   // variables para el nuevo viaje
+   origen: string = '';
+   destino: string = '';
+   tarifa: number = 0;
+   fechaSeleccionada='';
 
   isLoading: boolean = true; // Variable para el estado de carga
 
@@ -159,19 +169,16 @@ export class UserPagePage implements OnInit {
       console.error('Error al obtener los usuarios:', error);
     });
   }
-
-  solicitarConductor(conductorId: number) {
-    const solicitante = {
-      id: this.userID,
-      nombre: this.primerNombre,
-      apellido: this.primerApellido,
-      conductor_id: conductorId,
-      fecha: this.fechaHora
-    };
   
-    this.servicio.enviarSolicitud(solicitante);
-    console.log('Solicitud enviada al conductor:', solicitante);
-  }
+
+
+
+
+
+
+
+
+
 
   toggleAgendamiento(event: any) {
     this.showInputAgendamiento = event;
@@ -179,10 +186,20 @@ export class UserPagePage implements OnInit {
 
   toggleConductor(event: any) {
     this.showInputConductor = event.detail.checked;
+    if (this.showInputConductor) {
+      this.getConductoresDisponibles(); // Consulta por los conductores disponibles
+    } else {
+      this.conductorSeleccionado = undefined; // Limpiar selección de conductor
+    }
   }
-
   setModalSolicitudViaje(estado: boolean) {
     this.isModalSolicitudViajeOpen = estado;
+    if (!estado) {
+      this.origen = '';
+      this.destino = '';
+      this.tarifa = 0;
+      this.conductorSeleccionado = undefined; // Limpiar selección de conductor
+    }
   }
 
   setModalModificarDatosOpen(estado: boolean) {
@@ -202,8 +219,75 @@ export class UserPagePage implements OnInit {
     this.setModalModificarDatosOpen(false);
   }
 
+
+
+  solicitarViaje() {
+    if (this.conductorSeleccionado) {
+        let fechaViaje: Date;
+
+        if (this.showInputAgendamiento && this.fechaSeleccionada) {
+            fechaViaje = new Date(this.fechaSeleccionada);
+        } else {
+            fechaViaje = new Date();
+        }
+
+        const viaje: Travel = {
+            id: undefined,
+            solicitante_id: this.userID,
+            conductor_id: this.conductorSeleccionado.id,
+            estado: 'pendiente',
+            origen: this.origen,
+            destino: this.destino,
+            fecha: this.fechaSeleccionada,
+            tarifa: this.tarifa  // Aquí se usa la tarifa ingresada por el usuario
+        };
+
+        this.servicio.solicitarViaje(this.conductorSeleccionado.id, viaje).subscribe(
+            response => {
+                console.log('Viaje registrado:', response);
+                this.setModalSolicitudViaje(false); // Cerrar el modal después de solicitar el viaje
+            },
+            error => {
+                console.error('Error al registrar el viaje:', error);
+            }
+        );
+    } else {
+        console.error('No hay conductor seleccionado.');
+    }
+}
+
+
+
+
+  manejarCambioFecha(event: any) {
+    const fecha = new Date(event.detail.value);
+    this.fechaSeleccionada = fecha.toISOString().split('T')[0];
+  }
+
+
+
+
   logout() {
     localStorage.removeItem('tipo_usuario');
     this.router.navigate(['/login']);
   }
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
