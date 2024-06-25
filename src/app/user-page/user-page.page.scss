@@ -67,9 +67,10 @@
 
 
 .modal-input ion-label {
-    display: block;
-    width: 100%;
+    display: inline-block;
+    width: auto;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-}
+    margin-right: 10px;
+  }
