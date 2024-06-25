@@ -11,20 +11,20 @@
   <ion-header cl="Header" collapse="condense">
 
 
-    <ion-toolbar>
+
       <ion-title class="PageTitle" size="large">
        
         <p class="TitleDrive">Drive</p>
         <p class="TitleLink">Link</p>
       </ion-title>
-    </ion-toolbar>
+
 
 
   </ion-header>
 
   <div class="Welcome">
     <p>
-      <ion-label>{{ fechaHora | date:'dd/MM/yyyy HH:mm:ss' }}</ion-label>
+      <!-- <ion-label>{{ fechaHora | date:'dd/MM/yyyy HH:mm:ss' }}</ion-label> -->
 
       <ion-title class="PageTitle" size="large">Bienvenido/a <br> {{ primerNombre }}</ion-title>
       ¡Bienvenido/a al equipo administrativo de nuestra aplicación! Tu papel es fundamental para garantizar que nuestra plataforma
@@ -54,5 +54,5 @@
   </ion-list>
   <br><br><br>
   <ion-button class="cerrar-sesion" expand="block" (click)="logout()">Cerrar sesión</ion-button>
-  <br>
+  <br><br>
 </ion-content>

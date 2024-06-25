@@ -14,7 +14,7 @@
     <ion-card>
       <ion-card-header>
         <ion-card-title>{{ primerNombre }} {{ primerApellido }}</ion-card-title>
-        <ion-card-subtitle>[tipo de usuario]</ion-card-subtitle>
+        <ion-card-subtitle>Solicitante</ion-card-subtitle>
       </ion-card-header>
       <ion-card-content>
         Here's a small text description for the card content. Nothing more, nothing less.
@@ -51,7 +51,7 @@
     <ion-label>Conductor no encontrado.</ion-label>
   </ion-item>
   
-  <ion-button expand="block" (click)="setModalSolicitudViaje(true)">Solicitar Viaje</ion-button>
+  <ion-button class="SolicitarViaje" expand="block" (click)="setModalSolicitudViaje(true)">Solicitar Viaje</ion-button>
   
   <br><br><br>
   <ion-button class="editar-perfil" expand="block" (click)="setModalModificarDatosOpen(true)">Editar perfil</ion-button>
