@@ -221,14 +221,15 @@ export class UserPagePage implements OnInit {
 
 
 
-  solicitarViaje() {
+  solicitarViaje(origen: string, destino: string) {
     if (this.conductorSeleccionado) {
-        let fechaViaje: Date;
+        let fechaViaje: string;
 
         if (this.showInputAgendamiento && this.fechaSeleccionada) {
-            fechaViaje = new Date(this.fechaSeleccionada);
+            fechaViaje = this.fechaSeleccionada;
         } else {
-            fechaViaje = new Date();
+            const now = new Date();
+            fechaViaje = now.toISOString(); // Convertir la fecha actual a formato string ISO
         }
 
         const viaje: Travel = {
@@ -236,10 +237,10 @@ export class UserPagePage implements OnInit {
             solicitante_id: this.userID,
             conductor_id: this.conductorSeleccionado.id,
             estado: 'pendiente',
-            origen: this.origen,
-            destino: this.destino,
-            fecha: this.fechaSeleccionada,
-            tarifa: this.tarifa  // Aquí se usa la tarifa ingresada por el usuario
+            origen: origen,
+            destino: destino,
+            fecha: fechaViaje, // Usar fechaViaje que ahora siempre tendrá un valor
+            tarifa: this.tarifa
         };
 
         this.servicio.solicitarViaje(this.conductorSeleccionado.id, viaje).subscribe(
@@ -255,7 +256,6 @@ export class UserPagePage implements OnInit {
         console.error('No hay conductor seleccionado.');
     }
 }
-
 
 
 
