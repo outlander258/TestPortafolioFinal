@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { ServiceService } from '../service/service.service';
+import { ModelLog } from '../modelo/ModelLog';
+import { lastValueFrom } from 'rxjs';
+
 
 @Component({
   selector: 'app-register-driver',
@@ -28,7 +32,7 @@ export class RegisterDriverPage implements OnInit {
 
 
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private servicio: ServiceService, private alertController: AlertController) { }
 
   ngOnInit() {
 
@@ -39,105 +43,112 @@ export class RegisterDriverPage implements OnInit {
   }
 
 
-  ValidarFormDriver() {
-    console.log('Nombre : ', this.NameDriver);
-    console.log('Apellido : ', this.AppDriver);
-    console.log('RUN : ', this.RunDriver);
-    console.log('Dirección : ', this.DirectDriver)
-    console.log('Contraseña : ', this.PassDriver);
-    console.log('Confir Contaseña : ', this.ConfirmDriver);
-    console.log('número de contacto : ', this.CelDriver);
-
-    if (!this.NameDriver?.trim()) {
-      alert('Por favor, ingresa tu nombre.');
+  async registerDriver() {
+    if (
+      !this.NameDriver||
+      !this.AppDriver ||
+      !this.RunDriver ||
+      !this.EmailDriver ||
+      !this.PassDriver ||
+      !this.ConfirmDriver ||
+      !this.CelDriver
+    ) {
+      this.presentAlert('Error', 'Por favor, complete todos los campos.');
       return;
-    }
-
-    if (this.NameDriver.length < 8) {
-      alert('El nombre debe tener al menos 8 caracteres.');
-      return;
-    }
-
-    if (!this.AppDriver?.trim()) {
-      alert('Por favor, ingresa tu apellido');
-      return;
-    }
-
-    if (this.AppDriver.length < 6) {
-      alert('El apellido debe contener al menos 6 caracteres');
-      return;
-    }
-
-    if (!this.RunDriver?.trim()) {
-      alert('Por favor, ingresa tu RUN ');
-      return;
-    }
-
-    if (this.RunDriver.length < 7) {
-      alert('Ingresa tu RUN sin dígito verificador : EJEMPLO : 18033767');
-      return;
-    }
-
-    if (!this.EmailDriver?.trim()) {
-      alert('Ingresa un Email para tu registro')
     }
 
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!emailPattern.test(this.EmailDriver || '')) {
-      alert('La dirección de correo electrónico no es válida. Por favor, inténtalo de nuevo.');
+    if (!emailPattern.test(this.EmailDriver)) {
+      this.presentAlert('Error', 'La dirección de correo electrónico no es válida. Por favor, inténtalo de nuevo.');
       return;
     }
 
-
-
-
-
-    if (!this.DirectDriver?.trim()) {
-      alert('Ingresa tu dirección')
+    if (!this.NameDriver || this.NameDriver.trim().length === 0 || this.NameDriver.trim().split(' ').length > 1) {
+      this.presentAlert('Error', 'El primer nombre debe ser un solo nombre sin espacios.');
+      return;
     }
 
-    if (!this.PassDriver?.trim()) {
-      alert('Por favor, ingresa tu contraseña.');
+    if (!this.AppDriver || this.AppDriver.trim().length === 0 || this.AppDriver.trim().split(' ').length > 1) {
+      this.presentAlert('Error', 'El primer apellido debe ser un solo apellido sin espacios.');
+      return;
+    }
+
+    const rutPattern = /^[1-9][0-9]{0,1}\.?[0-9]{3}\.?[0-9]{3}-[0-9kK]{1}$/;
+    if (!this.RunDriver || !rutPattern.test(this.RunDriver)) {
+      this.presentAlert('Error', 'El RUT es obligatorio y debe estar en el formato correcto (12.345.678-9).');
       return;
     }
 
     if (this.PassDriver.length < 7) {
-      alert('La contraseña debe tener al menos 7 caracteres.');
+      this.presentAlert('Error', 'La contraseña debe tener al menos 7 caracteres.');
       return;
     }
-
 
     if (!/[A-Z]/.test(this.PassDriver)) {
-      alert('La contraseña debe contener al menos una mayúscula.');
+      this.presentAlert('Error', 'La contraseña debe contener al menos una mayúscula.');
       return;
     }
-
 
     if (!/[$&+,:;=?@#|'<>.^*()%!-]/.test(this.PassDriver)) {
-      alert('La contraseña debe contener al menos un caracter especial.');
-      return;
-    }
-
-    if (!this.ConfirmDriver) {
-      alert('Por favor, confirma tu contraseña.');
+      this.presentAlert('Error', 'La contraseña debe contener al menos un caracter especial.');
       return;
     }
 
     if (this.PassDriver !== this.ConfirmDriver) {
-      alert('Las contraseñas no coinciden. Por favor, inténtalo de nuevo.');
-      return;
-    }
-
-    if (!this.CelDriver?.trim()) {
-      alert('Por favor, ingresa tu número de celular.');
+      this.presentAlert('Error', 'Las contraseñas no coinciden. Por favor, inténtalo de nuevo.');
       return;
     }
 
     const celular = Number(this.CelDriver);
     if (isNaN(celular) || celular.toString().length < 8 || celular.toString().length > 9) {
-      alert('Asegurate de ingresar un número válido, debe contener entre 8 y 9 dígitos.');
+      this.presentAlert('Error', 'Asegurate de ingresar un número válido, debe contener entre 8 y 9 dígitos.');
       return;
     }
+
+
+    
+
+    const newUser: ModelLog = {
+      id: undefined,
+      primer_nombre: this.NameDriver,
+      segundo_nombre: '',
+      tipo_usuario: 2, 
+      primer_apellido:this.AppDriver,
+      segundo_apellido: '',
+      rut: this.RunDriver,
+      telefono: this.CelDriver,
+      email: this.EmailDriver,
+      contraseña: this.PassDriver,
+      verificado: false,
+    };
+
+    try {
+      const response = await lastValueFrom(this.servicio.addUser(newUser));
+      console.log('Registro de usuario exitoso:', response);
+      this.presentAlert('Éxito', 'Usuario registrado exitosamente');
+    } catch (error) {
+      console.error('Error al registrar usuario:', error);
+      this.presentAlert('Error', 'Hubo un error al registrar el usuario');
+    }
+  }
+
+  async presentAlert(header: string, message: string) {
+    const alert = await this.alertController.create({
+      header: header,
+      message: message,
+      buttons: ['OK']
+    });
+
+    await alert.present();
+  }
+
+
+
+
+
+  }
+
+ 
 
     
 
@@ -145,8 +156,7 @@ export class RegisterDriverPage implements OnInit {
 
 
 
-    console.log('Registro exitoso');
+   
 
 
-  }
-}
+  
