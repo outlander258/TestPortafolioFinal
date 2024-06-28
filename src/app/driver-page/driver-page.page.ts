@@ -24,7 +24,7 @@ export class DriverPagePage implements OnInit {
   fechaHora: Date | undefined;
 
   // Variable para almacenar el estado de disponibilidad del conductor
-  isAvailable: boolean = true;
+  isAvailable: boolean = false;
   idConductor: number = 0;
 
 
