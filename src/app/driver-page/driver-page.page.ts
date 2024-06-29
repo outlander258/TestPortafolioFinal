@@ -26,6 +26,7 @@ export class DriverPagePage implements OnInit {
   // Variable para almacenar el estado de disponibilidad del conductor
   isAvailable: boolean = false;
   idConductor: number = 0;
+  licencias: any[] = [];
 
 
 
@@ -73,61 +74,9 @@ export class DriverPagePage implements OnInit {
 
   ngOnInit() {
 
-    this.iniciarConsultaPeriodica()
+    this.iniciarConsultaPeriodica();
 
 
-
-
-
-
-
-
-
-    this.servicio.verificarDisponibilidad(Number(this.idConductor)).subscribe((disponibilidad: boolean) => {
-      this.isAvailable = disponibilidad; // Asignar el estado de disponibilidad al botón
-      console.log('Disponibilidad del conductor:', this.isAvailable);
-      console.log(this.idConductor)
-      console.log(this.isAvailable)
-    
-      // Lógica adicional según el estado de disponibilidad
-      if (this.isAvailable) {
-        console.log("Driver is available");
-      } else {
-        console.log("Driver is not available");
-      }
-    }, error => {
-      console.error('Error verificando disponibilidad:', error);
-    });
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
 
 
 

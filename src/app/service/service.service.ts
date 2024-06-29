@@ -156,11 +156,7 @@ solicitarViaje(conductorId: number, viaje: Travel): Observable<any> {
 
 
 
-verificarDisponibilidad(idConductor: number): Observable<boolean> {
-  return this.http.get<any[]>(`${this.URL}conductor_activo?id=eq.${idConductor}`, { headers: this.header }).pipe(
-    map(response => response.length > 0)
-  );
-}
+
 
 
 
@@ -177,6 +173,14 @@ verificarDisponibilidad(idConductor: number): Observable<boolean> {
     const body = { estado: valor };
     return this.http.patch<any>(`${this.URL}viaje?id=eq.${id_viaje}`, body, { headers: this.header });
   }
+
+
+
+
+    // Nueva función para obtener licencias asociadas al id de un conductor
+    getLicenciasByConductorId(idConductor: any): Observable<any[]> {
+      return this.http.get<any[]>(`${this.URL}registro_conductor?select=licencia&id_conductor=eq.${idConductor}`, { headers: this.header });
+    }
 
 
 
