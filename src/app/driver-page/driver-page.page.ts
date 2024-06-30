@@ -26,7 +26,7 @@ export class DriverPagePage implements OnInit {
   // Variable para almacenar el estado de disponibilidad del conductor
   isAvailable: boolean = false;
   idConductor: number = 0;
-  licencias: any[] = [];
+ 
 
 
 

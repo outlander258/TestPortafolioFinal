@@ -65,6 +65,8 @@ export class UserPagePage implements OnInit {
 
 
    // variables para el nuevo viaje
+   tiposDeLicencia = ['Tipo A', 'Tipo B', 'Tipo C', 'Tipo D']; // Añade los tipos de licencia necesarios
+   tipoLicenciaSeleccionada: string ='';
    origen: string = '';
    destino: string = '';
    tarifa: number = 0;
