@@ -177,11 +177,9 @@ solicitarViaje(conductorId: number, viaje: Travel): Observable<any> {
 
 
 
-    // Nueva función para obtener licencias asociadas al id de un conductor
-    getLicenciasByConductorId(idConductor: any): Observable<any[]> {
-      return this.http.get<any[]>(`${this.URL}registro_conductor?select=licencia&id_conductor=eq.${idConductor}`, { headers: this.header });
-    }
-
+  getLicenciasByConductorId(idConductor: any): Observable<any[]> {
+    return this.http.get<any[]>(`${this.URL}registro_conductor?select=licencia&usuario=eq.${idConductor}&autorizacion=eq.true`, { headers: this.header });
+  }
 
 
 

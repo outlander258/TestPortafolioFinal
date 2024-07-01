@@ -22,6 +22,7 @@ import { Travel } from '../modelo/Travel'
 export class DriverPagePage implements OnInit {
   solicitudPendiente: any = null;
   fechaHora: Date | undefined;
+  licencias: any[] = []; // Nueva variable para almacenar las licencias
 
   // Variable para almacenar el estado de disponibilidad del conductor
   isAvailable: boolean = false;
@@ -75,6 +76,10 @@ export class DriverPagePage implements OnInit {
   ngOnInit() {
 
     this.iniciarConsultaPeriodica();
+
+
+
+    this.getLicencias();
 
 
 
@@ -142,7 +147,7 @@ export class DriverPagePage implements OnInit {
     this.isAvailable = event.detail.checked;
     console.log(this.isAvailable)
     if (this.isAvailable === true) {
-      console.log("Verdad", this.idConductor)
+      console.log("Conductor disponible", this.idConductor)
 
       const datos = {
         id: this.idConductor
@@ -151,7 +156,7 @@ export class DriverPagePage implements OnInit {
       this.servicio.conductorDisponible(datos);
     }
     if (this.isAvailable === false) {
-      console.log("mentira")
+      console.log("Conductor no disponible", this.idConductor)
       this.servicio.conductorNoDisponible(this.idConductor);
 
     }
@@ -310,6 +315,37 @@ export class DriverPagePage implements OnInit {
       console.error('No se ha seleccionado ningún viaje.');
     }
   }
+
+
+  getLicencias(): void {
+    this.idConductor = 2;
+    this.servicio.getLicenciasByConductorId(this.idConductor).subscribe(
+      (data) => {
+        this.licencias = data;
+        console.log('Licencias obtenidas:', this.licencias);
+      },
+      (error) => {
+        console.error('Error al obtener licencias:', error);
+      }
+    );
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
 
