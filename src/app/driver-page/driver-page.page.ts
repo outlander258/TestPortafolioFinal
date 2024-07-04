@@ -287,6 +287,18 @@ export class DriverPagePage implements OnInit {
         response => {
           console.log('Viaje aceptado exitosamente:', response);
           this.setModalviajeOpen(false);
+  
+          // Simulación de redirección a WhatsApp
+          const solicitanteTelefono = this.selectedTravel?.solicitante_id?.telefono;
+          const solicitanteNombre = this.selectedTravel?.solicitante_id?.primer_nombre + " " + this.selectedTravel?.solicitante_id?.primer_apellido;
+          const mensaje = `Hola ${solicitanteNombre}, he aceptado tu solicitud de viaje. Nos vemos pronto.`;
+          
+          if (solicitanteTelefono) {
+            const whatsappUrl = `https://wa.me/${solicitanteTelefono}?text=${encodeURIComponent(mensaje)}`;
+            window.open(whatsappUrl, '_blank');
+          } else {
+            console.error('No se ha encontrado el número de teléfono del solicitante.');
+          }
         },
         error => {
           console.error('Error al aceptar el viaje:', error);
@@ -297,7 +309,6 @@ export class DriverPagePage implements OnInit {
       console.error('No se ha seleccionado ningún viaje.');
     }
   }
-  
 
   cancelarViaje() {
     if (this.selectedTravel?.id) {
@@ -318,11 +329,11 @@ export class DriverPagePage implements OnInit {
 
 
   getLicencias(): void {
-    this.idConductor = 2;
     this.servicio.getLicenciasByConductorId(this.idConductor).subscribe(
       (data) => {
+        console.log(this.idConductor)
         this.licencias = data;
-        console.log('Licencias obtenidas:', this.licencias);
+        console.log('Licencias obtenidas:', data);
       },
       (error) => {
         console.error('Error al obtener licencias:', error);
