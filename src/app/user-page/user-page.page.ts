@@ -71,6 +71,7 @@ export class UserPagePage implements OnInit {
    destino: string = '';
    tarifa: number = 0;
    fechaSeleccionada='';
+   mensajeSolicitante ='';
 
   isLoading: boolean = true; // Variable para el estado de carga
 
@@ -222,43 +223,53 @@ export class UserPagePage implements OnInit {
   }
 
 
-
-  solicitarViaje(origen: string, destino: string) {
-    if (this.conductorSeleccionado) {
-        let fechaViaje: string;
-
-        if (this.showInputAgendamiento && this.fechaSeleccionada) {
-            fechaViaje = this.fechaSeleccionada;
-        } else {
-            const now = new Date();
-            fechaViaje = now.toISOString(); // Convertir la fecha actual a formato string ISO
-        }
-
-        const viaje: Travel = {
-            id: undefined,
-            solicitante_id: this.userID,
-            conductor_id: this.conductorSeleccionado.id,
-            estado: 'pendiente',
-            origen: origen,
-            destino: destino,
-            fecha: fechaViaje, // Usar fechaViaje que ahora siempre tendrá un valor
-            tarifa: this.tarifa
-        };
-
-        this.servicio.solicitarViaje(this.conductorSeleccionado.id, viaje).subscribe(
-            response => {
-                console.log('Viaje registrado:', response);
-                this.setModalSolicitudViaje(false); // Cerrar el modal después de solicitar el viaje
-            },
-            error => {
-                console.error('Error al registrar el viaje:', error);
-            }
-        );
-    } else {
-        console.error('No hay conductor seleccionado.');
+  solicitarViaje() {
+    if (!this.conductorSeleccionado) {
+      console.error('No hay conductor seleccionado.');
+      return;
     }
-}
-
+  
+    if (!this.tarifa) {
+      console.error('La tarifa es obligatoria.');
+      return;
+    }
+  
+    if (!this.mensajeSolicitante) {
+      console.error('El mensaje es obligatorio.');
+      return;
+    }
+  
+    let fechaViaje: string;
+  
+    if (this.showInputAgendamiento && this.fechaSeleccionada) {
+      fechaViaje = this.fechaSeleccionada;
+    } else {
+      const now = new Date();
+      fechaViaje = now.toISOString(); // Convertir la fecha actual a formato string ISO
+    }
+  
+    const viaje: Travel = {
+      id: undefined,
+      solicitante_id: this.userID,
+      conductor_id: this.conductorSeleccionado.id,
+      estado: 'pendiente',
+      origen: 'punto de partida omitido', // Puedes dejar este campo vacío o con un valor por defecto
+      destino: 'destino omitido', // Puedes dejar este campo vacío o con un valor por defecto
+      fecha: fechaViaje, // Usar fechaViaje que ahora siempre tendrá un valor
+      tarifa: this.tarifa,
+      mensaje: this.mensajeSolicitante // Agregar el mensaje aquí
+    };
+  
+    this.servicio.solicitarViaje(this.conductorSeleccionado.id, viaje).subscribe(
+      response => {
+        console.log('Viaje registrado:', response);
+        this.setModalSolicitudViaje(false); // Cerrar el modal después de solicitar el viaje
+      },
+      error => {
+        console.error('Error al registrar el viaje:', error);
+      }
+    );
+  }
 
 
   manejarCambioFecha(event: any) {

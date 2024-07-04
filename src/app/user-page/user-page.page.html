@@ -98,62 +98,49 @@
     </ng-template>
   </ion-modal>
 
-
-  <!-- modal con formulario para solicitar viaje -->
-<ion-modal [isOpen]="isModalSolicitudViajeOpen">
-  <ng-template>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>SOLICITA VIAJES</ion-title>
-        <ion-buttons slot="end">
-          <ion-button (click)="setModalSolicitudViaje(false)">Cancelar</ion-button>
-        </ion-buttons>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content class="ion-padding">
-      <ion-list>
-        <ion-item>
-          <ion-toggle (ionChange)="toggleConductor($event)">Desea un conductor específico?</ion-toggle>
-        </ion-item>
-        <ion-item *ngIf="showInputConductor">
-          <ion-select [(ngModel)]="tipoLicenciaSeleccionada" placeholder="Seleccione tipo de licencia">
-            <ion-select-option *ngFor="let tipo of tiposDeLicencia" [value]="tipo">
-              {{tipo}}
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
-        <ion-item *ngIf="showInputConductor">
-          <ion-select [(ngModel)]="conductorSeleccionado" interface="popover" placeholder="Seleccione un conductor">
-            <ion-select-option *ngFor="let conductor of conductores" [value]="conductor">
-              {{conductor.usuario.primer_nombre}} {{conductor.usuario.segundo_nombre}}
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
-        <ion-item>
-          <ion-input [(ngModel)]="tarifa" type="number" placeholder="Ingrese la tarifa"> Ingrese la tarifa del viaje </ion-input>
-        </ion-item>
-        <ion-item class="modal-input">
-          <ion-label position="stacked">Ingrese el punto de partida</ion-label>
-          <ion-input [(ngModel)]="origen"></ion-input>
-        </ion-item>
-        <ion-item class="modal-input">
-          <ion-label position="stacked">Ingrese su destino</ion-label>
-          <ion-input [(ngModel)]="destino"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-toggle (ionChange)="toggleAgendamiento($event)">¿Viaje inmediato o agendado?</ion-toggle>
-        </ion-item>
-        <ion-item *ngIf="showInputAgendamiento">
-          <ion-datetime-button datetime="datetime" presentation="date"></ion-datetime-button>
-          <ion-modal [keepContentsMounted]="true">
-            <ng-template>
-              <ion-datetime id="datetime" presentation="date" [showDefaultButtons]="true" (ionChange)="manejarCambioFecha($event)"></ion-datetime>
-            </ng-template>
-          </ion-modal>
-        </ion-item>
-      </ion-list>
-      <ion-button (click)="solicitarViaje(origen, destino)">Solicitar Viaje</ion-button>
-    </ion-content>
-  </ng-template>
-</ion-modal>
+  <ion-modal [isOpen]="isModalSolicitudViajeOpen">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>SOLICITA VIAJES</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="setModalSolicitudViaje(false)">Cancelar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-list>
+          <ion-item>
+            <ion-toggle (ionChange)="toggleConductor($event)">¿Desea un conductor específico?</ion-toggle>
+          </ion-item>
+          <ion-item *ngIf="showInputConductor">
+            <ion-select [(ngModel)]="conductorSeleccionado" interface="popover" placeholder="Seleccione un conductor" required>
+              <ion-select-option *ngFor="let conductor of conductores" [value]="conductor">
+                {{conductor.usuario.primer_nombre}} {{conductor.usuario.segundo_nombre}}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-input [(ngModel)]="tarifa" type="number" placeholder="Ingrese la tarifa" required>Ingrese la tarifa del viaje</ion-input>
+          </ion-item>
+          <ion-item class="modal-input">
+            <ion-label position="stacked">Ingrese un mensaje o descripción</ion-label>
+            <ion-textarea [(ngModel)]="mensajeSolicitante" maxlength="500" required></ion-textarea>
+          </ion-item>
+          <ion-item>
+            <ion-toggle (ionChange)="toggleAgendamiento($event)">¿Viaje inmediato o agendado?</ion-toggle>
+          </ion-item>
+          <ion-item *ngIf="showInputAgendamiento">
+            <ion-datetime-button datetime="datetime" presentation="date"></ion-datetime-button>
+            <ion-modal [keepContentsMounted]="true">
+              <ng-template>
+                <ion-datetime id="datetime" presentation="date" [showDefaultButtons]="true" (ionChange)="manejarCambioFecha($event)"></ion-datetime>
+              </ng-template>
+            </ion-modal>
+          </ion-item>
+        </ion-list>
+        <ion-button (click)="solicitarViaje()">Solicitar Viaje</ion-button>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>
