@@ -22,10 +22,12 @@ import { Travel } from '../modelo/Travel'
 export class DriverPagePage implements OnInit {
   solicitudPendiente: any = null;
   fechaHora: Date | undefined;
+  licencias: any[] = []; // Nueva variable para almacenar las licencias
 
   // Variable para almacenar el estado de disponibilidad del conductor
-  isAvailable: boolean = true;
+  isAvailable: boolean = false;
   idConductor: number = 0;
+ 
 
 
 
@@ -73,61 +75,13 @@ export class DriverPagePage implements OnInit {
 
   ngOnInit() {
 
-    this.iniciarConsultaPeriodica()
+    this.iniciarConsultaPeriodica();
 
 
 
 
 
 
-
-
-
-    this.servicio.verificarDisponibilidad(Number(this.idConductor)).subscribe((disponibilidad: boolean) => {
-      this.isAvailable = disponibilidad; // Asignar el estado de disponibilidad al botón
-      console.log('Disponibilidad del conductor:', this.isAvailable);
-      console.log(this.idConductor)
-      console.log(this.isAvailable)
-    
-      // Lógica adicional según el estado de disponibilidad
-      if (this.isAvailable) {
-        console.log("Driver is available");
-      } else {
-        console.log("Driver is not available");
-      }
-    }, error => {
-      console.error('Error verificando disponibilidad:', error);
-    });
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
 
 
 
@@ -193,7 +147,7 @@ export class DriverPagePage implements OnInit {
     this.isAvailable = event.detail.checked;
     console.log(this.isAvailable)
     if (this.isAvailable === true) {
-      console.log("Verdad", this.idConductor)
+      console.log("Conductor disponible", this.idConductor)
 
       const datos = {
         id: this.idConductor
@@ -202,7 +156,7 @@ export class DriverPagePage implements OnInit {
       this.servicio.conductorDisponible(datos);
     }
     if (this.isAvailable === false) {
-      console.log("mentira")
+      console.log("Conductor no disponible", this.idConductor)
       this.servicio.conductorNoDisponible(this.idConductor);
 
     }
@@ -299,7 +253,7 @@ export class DriverPagePage implements OnInit {
       subHeader: `Viaje ID: ${travel.id}`,
       message: `
         Solicitante: ${travel.solicitante_id.primer_nombre + " " + travel.solicitante_id.primer_apellido}
-        Fecha: ${new Date(travel.fecha).toLocaleString()}
+        Fecha: ${new Date(travel.fecha).toLocaleDateString()}
         Tarifa: ${travel.tarifa}
       `,
       buttons: [
@@ -333,6 +287,18 @@ export class DriverPagePage implements OnInit {
         response => {
           console.log('Viaje aceptado exitosamente:', response);
           this.setModalviajeOpen(false);
+  
+          // Simulación de redirección a WhatsApp
+          const solicitanteTelefono = this.selectedTravel?.solicitante_id?.telefono;
+          const solicitanteNombre = this.selectedTravel?.solicitante_id?.primer_nombre + " " + this.selectedTravel?.solicitante_id?.primer_apellido;
+          const mensaje = `Hola ${solicitanteNombre}, he aceptado tu solicitud de viaje. Nos vemos pronto.`;
+          
+          if (solicitanteTelefono) {
+            const whatsappUrl = `https://wa.me/${solicitanteTelefono}?text=${encodeURIComponent(mensaje)}`;
+            window.open(whatsappUrl, '_blank');
+          } else {
+            console.error('No se ha encontrado el número de teléfono del solicitante.');
+          }
         },
         error => {
           console.error('Error al aceptar el viaje:', error);
@@ -343,7 +309,6 @@ export class DriverPagePage implements OnInit {
       console.error('No se ha seleccionado ningún viaje.');
     }
   }
-  
 
   cancelarViaje() {
     if (this.selectedTravel?.id) {
@@ -361,6 +326,7 @@ export class DriverPagePage implements OnInit {
       console.error('No se ha seleccionado ningún viaje.');
     }
   }
+
 
 }
 

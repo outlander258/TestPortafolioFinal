@@ -3,8 +3,7 @@ export interface Travel{
     solicitante_id : any;
     conductor_id : number | undefined;
     estado : string;
-    origen : string;
-    destino : string;
     fecha : string;
     tarifa : number;
+    mensaje : string;
 }
