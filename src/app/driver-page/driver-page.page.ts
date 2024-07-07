@@ -253,7 +253,7 @@ export class DriverPagePage implements OnInit {
       subHeader: `Viaje ID: ${travel.id}`,
       message: `
         Solicitante: ${travel.solicitante_id.primer_nombre + " " + travel.solicitante_id.primer_apellido}
-        Fecha: ${new Date(travel.fecha).toLocaleString()}
+        Fecha: ${new Date(travel.fecha).toLocaleDateString()}
         Tarifa: ${travel.tarifa}
       `,
       buttons: [

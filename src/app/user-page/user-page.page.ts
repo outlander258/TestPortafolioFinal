@@ -253,9 +253,7 @@ export class UserPagePage implements OnInit {
       solicitante_id: this.userID,
       conductor_id: this.conductorSeleccionado.id,
       estado: 'pendiente',
-      origen: 'punto de partida omitido', // Puedes dejar este campo vacío o con un valor por defecto
-      destino: 'destino omitido', // Puedes dejar este campo vacío o con un valor por defecto
-      fecha: fechaViaje, // Usar fechaViaje que ahora siempre tendrá un valor
+       fecha: fechaViaje, // Usar fechaViaje que ahora siempre tendrá un valor
       tarifa: this.tarifa,
       mensaje: this.mensajeSolicitante // Agregar el mensaje aquí
     };

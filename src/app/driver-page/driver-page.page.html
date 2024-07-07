@@ -93,13 +93,11 @@
             <ion-label>Teléfono: {{ selectedTravel.solicitante_id.telefono }}</ion-label>
           </ion-item>
           <ion-item>
-            <ion-label>Origen: {{ selectedTravel.origen }}</ion-label>
+            <ion-label>Mensaje: {{ selectedTravel.mensaje }}</ion-label>
           </ion-item>
+    
           <ion-item>
-            <ion-label>Destino: {{ selectedTravel.destino }}</ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-label>Fecha: {{ selectedTravel.fecha | date: 'short' }}</ion-label>
+            <ion-label>Fecha: {{ selectedTravel.fecha | date: 'dd/MM/YYYY' }}</ion-label>
           </ion-item>
           <ion-item>
             <ion-label>Tarifa: {{ selectedTravel.tarifa }}</ion-label>
