@@ -291,7 +291,7 @@ export class DriverPagePage implements OnInit {
           // Simulación de redirección a WhatsApp
           const solicitanteTelefono = this.selectedTravel?.solicitante_id?.telefono;
           const solicitanteNombre = this.selectedTravel?.solicitante_id?.primer_nombre + " " + this.selectedTravel?.solicitante_id?.primer_apellido;
-          const mensaje = `Hola ${solicitanteNombre}, he aceptado tu solicitud de viaje. Nos vemos pronto.`;
+          const mensaje = `Hola ${solicitanteNombre}, he aceptado tu solicitud. Nos vemos pronto.`;
           
           if (solicitanteTelefono) {
             const whatsappUrl = `https://wa.me/${solicitanteTelefono}?text=${encodeURIComponent(mensaje)}`;

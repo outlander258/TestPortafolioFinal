@@ -16,7 +16,9 @@ import { lastValueFrom } from 'rxjs';
 })
 export class RegisterUserPage implements OnInit {
   NameUser: string | undefined;
+  secondNameUser: string | undefined; // Añadir segundo nombre
   AppUser: string | undefined;
+  secondAppUser: string | undefined; // Añadir segundo apellido
   RunUser: string | undefined;
   EmailUser: string | undefined;
   PassUser: string | undefined;
@@ -35,74 +37,86 @@ export class RegisterUserPage implements OnInit {
       !this.EmailUser ||
       !this.PassUser ||
       !this.ConfirmUser ||
-      !this.CelUser
+      !this.CelUser ||
+      !this.secondNameUser || // Añadir validación para segundo nombre
+      !this.secondAppUser // Añadir validación para segundo apellido
     ) {
       this.presentAlert('Error', 'Por favor, complete todos los campos.');
       return;
     }
-
+  
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailPattern.test(this.EmailUser)) {
       this.presentAlert('Error', 'La dirección de correo electrónico no es válida. Por favor, inténtalo de nuevo.');
       return;
     }
-
-    if (!this.NameUser || this.NameUser.trim().length === 0 || this.NameUser.trim().split(' ').length > 1) {
+  
+    if (!this.NameUser.trim().length || this.NameUser.trim().split(' ').length > 1) {
       this.presentAlert('Error', 'El primer nombre debe ser un solo nombre sin espacios.');
       return;
     }
-
-    if (!this.AppUser || this.AppUser.trim().length === 0 || this.AppUser.trim().split(' ').length > 1) {
+  
+    if (!this.AppUser.trim().length || this.AppUser.trim().split(' ').length > 1) {
       this.presentAlert('Error', 'El primer apellido debe ser un solo apellido sin espacios.');
       return;
     }
-
+  
+    if (!this.secondNameUser.trim().length || this.secondNameUser.trim().split(' ').length > 1) {
+      this.presentAlert('Error', 'El segundo nombre debe ser un solo nombre sin espacios.');
+      return;
+    }
+  
+    if (!this.secondAppUser.trim().length || this.secondAppUser.trim().split(' ').length > 1) {
+      this.presentAlert('Error', 'El segundo apellido debe ser un solo apellido sin espacios.');
+      return;
+    }
+  
     const rutPattern = /^[1-9][0-9]{0,1}\.?[0-9]{3}\.?[0-9]{3}-[0-9kK]{1}$/;
     if (!this.RunUser || !rutPattern.test(this.RunUser)) {
       this.presentAlert('Error', 'El RUT es obligatorio y debe estar en el formato correcto (12.345.678-9).');
       return;
     }
-
+  
     if (this.PassUser.length < 7) {
       this.presentAlert('Error', 'La contraseña debe tener al menos 7 caracteres.');
       return;
     }
-
+  
     if (!/[A-Z]/.test(this.PassUser)) {
       this.presentAlert('Error', 'La contraseña debe contener al menos una mayúscula.');
       return;
     }
-
+  
     if (!/[$&+,:;=?@#|'<>.^*()%!-]/.test(this.PassUser)) {
       this.presentAlert('Error', 'La contraseña debe contener al menos un caracter especial.');
       return;
     }
-
+  
     if (this.PassUser !== this.ConfirmUser) {
       this.presentAlert('Error', 'Las contraseñas no coinciden. Por favor, inténtalo de nuevo.');
       return;
     }
-
+  
     const celular = Number(this.CelUser);
     if (isNaN(celular) || celular.toString().length < 8 || celular.toString().length > 9) {
       this.presentAlert('Error', 'Asegurate de ingresar un número válido, debe contener entre 8 y 9 dígitos.');
       return;
     }
-
+  
     const newUser: ModelLog = {
       id: undefined,
       primer_nombre: this.NameUser,
-      segundo_nombre: '',
+      segundo_nombre: this.secondNameUser, // Añadir segundo nombre
       tipo_usuario: 3, // Tipo de usuario para register-user
-      primer_apellido:this.AppUser,
-      segundo_apellido: '',
+      primer_apellido: this.AppUser,
+      segundo_apellido: this.secondAppUser, // Añadir segundo apellido
       rut: this.RunUser,
       telefono: this.CelUser,
       email: this.EmailUser,
       contraseña: this.PassUser,
       verificado: true,
     };
-
+  
     try {
       const response = await lastValueFrom(this.servicio.addUser(newUser));
       console.log('Registro de usuario exitoso:', response);
@@ -112,14 +126,14 @@ export class RegisterUserPage implements OnInit {
       this.presentAlert('Error', 'Hubo un error al registrar el usuario');
     }
   }
-
+  
   async presentAlert(header: string, message: string) {
     const alert = await this.alertController.create({
       header: header,
       message: message,
       buttons: ['OK']
     });
-
+  
     await alert.present();
   }
 
