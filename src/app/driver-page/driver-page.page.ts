@@ -139,7 +139,7 @@ export class DriverPagePage implements OnInit {
 
 
   // Variable para almacenar el contenido del card
-  cardContent: string = "Añade una breve descripción de tu experiencia como conductor.";
+  cardContent: string = "Mantente disponible para poder recibir solicitudes de viajes.";
 
 
 
