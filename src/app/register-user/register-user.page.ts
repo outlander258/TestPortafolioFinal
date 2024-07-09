@@ -114,7 +114,7 @@ export class RegisterUserPage implements OnInit {
       telefono: this.CelUser,
       email: this.EmailUser,
       contraseña: this.PassUser,
-      verificado: true,
+      verificado: false,
     };
   
     try {

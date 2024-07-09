@@ -51,7 +51,7 @@
     <ion-label>Conductor no encontrado.</ion-label>
   </ion-item>
   
-  <ion-button class="SolicitarViaje" expand="block" (click)="setModalSolicitudViaje(true)">Solicitar Viaje</ion-button>
+  <ion-button class="SolicitarViaje" expand="block" (click)="setModalSolicitudViaje(true)">Solicitar Servicio</ion-button>
   
   <br><br><br>
   <ion-button class="editar-perfil" expand="block" (click)="setModalModificarDatosOpen(true)">Editar perfil</ion-button>
@@ -102,7 +102,7 @@
     <ng-template>
       <ion-header>
         <ion-toolbar>
-          <ion-title>SOLICITA VIAJES</ion-title>
+          <ion-title>SOLICITA SERVICIO</ion-title>
           <ion-buttons slot="end">
             <ion-button (click)="setModalSolicitudViaje(false)">Cancelar</ion-button>
           </ion-buttons>
@@ -139,7 +139,7 @@
             </ion-modal>
           </ion-item>
         </ion-list>
-        <ion-button (click)="solicitarViaje()">Solicitar Viaje</ion-button>
+        <ion-button (click)="solicitarViaje()">Solicitar Servicio</ion-button>
       </ion-content>
     </ng-template>
   </ion-modal>
