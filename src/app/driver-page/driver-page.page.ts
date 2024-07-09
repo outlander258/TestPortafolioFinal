@@ -222,7 +222,7 @@ export class DriverPagePage implements OnInit {
         console.log("consulta")
         this.consultarViajes();
       }
-    }, 30000); // 30000 ms = 30 segundos
+    }, 40000); // 40000 ms = 40 segundos
   }
 
   consultarViajes() {
